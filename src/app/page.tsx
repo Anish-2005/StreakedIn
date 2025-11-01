@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Head from 'next/head';
 import { motion, AnimatePresence } from 'framer-motion';
+import Link from 'next/link';
 import { 
   Target, 
   TrendingUp, 
@@ -146,6 +147,7 @@ export default function Home() {
               >
                 Get Started
               </motion.button>
+              <Link href="/dashboard" className="px-4 py-2 bg-slate-800/50 backdrop-blur-md border border-slate-700/50 rounded-lg text-white font-medium hover:shadow-sm">Dashboard</Link>
             </div>
 
             {/* Mobile Menu Button */}

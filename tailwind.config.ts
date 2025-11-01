@@ -9,6 +9,7 @@ module.exports = {
     extend: {
       animation: {
         'float': 'float 6s ease-in-out infinite',
+        'pulse-slow': 'pulse 3s ease-in-out infinite',
       },
       keyframes: {
         float: {
