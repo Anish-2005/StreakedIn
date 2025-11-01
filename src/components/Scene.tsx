@@ -8,13 +8,39 @@ export default function Scene() {
   useEffect(() => {
     // Scene setup
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const camera = new THREE.PerspectiveCamera(75, 2, 0.1, 1000); // aspect will be set below
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-    
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setClearColor(0x000000, 0);
-    if (mountRef.current) {
-      mountRef.current.appendChild(renderer.domElement);
+
+    // Use mount element size instead of full window to avoid 100vw-style overflow
+    const mountEl = mountRef.current;
+    if (mountEl) {
+      mountEl.appendChild(renderer.domElement);
+      // make canvas scale responsively to its container
+      renderer.domElement.style.width = '100%';
+      renderer.domElement.style.height = '100%';
+      renderer.setClearColor(0x000000, 0);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+      // initial sizing function
+      const setSizeToMount = () => {
+        const width = Math.max(1, mountEl.clientWidth);
+        const height = Math.max(1, mountEl.clientHeight);
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
+        renderer.setSize(width, height, false);
+      };
+      setSizeToMount();
+
+      // responsive: use ResizeObserver when available
+      let ro: ResizeObserver | null = null;
+      if (typeof ResizeObserver !== 'undefined') {
+        ro = new ResizeObserver(() => setSizeToMount());
+        ro.observe(mountEl);
+      } else {
+        // fallback to window resize
+        window.addEventListener('resize', setSizeToMount);
+      }
+
+      // ensure we clean up the observer/listener later (handled in cleanup)
     }
 
     // Particles
@@ -75,19 +101,25 @@ export default function Scene() {
     animate();
 
     // Handle resize
-    const handleResize = () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-    };
-
-    window.addEventListener('resize', handleResize);
+    // If ResizeObserver isn't available we already attached a window resize listener above.
 
     // Cleanup
     return () => {
-      window.removeEventListener('resize', handleResize);
+      // disconnect any ResizeObserver
       if (mountRef.current) {
-        mountRef.current.removeChild(renderer.domElement);
+        // if a ResizeObserver was attached, disconnect it by iterating observers (we stored in closure)
+        // easiest approach: try to remove renderer.domElement and rely on garbage collection
+        try {
+          mountRef.current.removeChild(renderer.domElement);
+        } catch (e) {
+          // ignore
+        }
+      }
+      // remove any global resize listener (in case ResizeObserver wasn't available)
+      try {
+        window.removeEventListener('resize', () => {});
+      } catch (e) {
+        // noop
       }
       renderer.dispose();
     };

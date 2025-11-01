@@ -15,6 +15,12 @@ module.exports = {
           '0%, 100%': { transform: 'translateY(0)' },
           '50%': { transform: 'translateY(-10px)' },
         }
+      },
+      colors: {
+        linkedin: {
+          blue: '#0A66C2',
+          dark: '#004182'
+        }
       }
     },
   },
