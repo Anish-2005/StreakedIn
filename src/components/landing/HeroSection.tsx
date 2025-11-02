@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Award, ArrowRight, Play, ChevronDown } from 'lucide-react';
 import dynamic from 'next/dynamic';
+import { Button } from '../common';
 
 // Dynamically import Three.js to avoid SSR issues
 const Scene = dynamic(() => import('../Scene'), {
@@ -76,23 +77,33 @@ export default function HeroSection() {
             transition={{ delay: 0.7, duration: 0.8 }}
             className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-8"
           >
-            <motion.button
-              className="px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl text-white font-semibold text-lg hover:shadow-2xl hover:shadow-blue-500/25 transition-all duration-200 flex items-center space-x-2"
+            <motion.div
               whileHover={{ scale: 1.05, boxShadow: "0 20px 40px -10px rgba(59, 130, 246, 0.4)" }}
               whileTap={{ scale: 0.95 }}
             >
-              <span>Start Your Journey</span>
-              <ArrowRight className="w-5 h-5" />
-            </motion.button>
+              <Button
+                variant="primary"
+                size="lg"
+                className="px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-600 hover:shadow-2xl hover:shadow-blue-500/25"
+                icon={<ArrowRight className="w-5 h-5" />}
+              >
+                Start Your Journey
+              </Button>
+            </motion.div>
 
-            <motion.button
-              className="px-8 py-4 bg-slate-800/50 backdrop-blur-md border border-slate-700/50 rounded-xl text-white font-semibold text-lg hover:bg-slate-700/50 transition-all duration-200 flex items-center space-x-2"
+            <motion.div
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              <Play className="w-5 h-5" />
-              <span>Watch Demo</span>
-            </motion.button>
+              <Button
+                variant="outline"
+                size="lg"
+                className="px-8 py-4 bg-slate-800/50 backdrop-blur-md border-slate-700/50 hover:bg-slate-700/50"
+                icon={<Play className="w-5 h-5" />}
+              >
+                Watch Demo
+              </Button>
+            </motion.div>
           </motion.div>
 
           {/* Stats */}

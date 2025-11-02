@@ -2,6 +2,7 @@ import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { TrendingUp, Menu, X } from 'lucide-react';
+import { Button } from '../common';
 
 interface NavigationProps {
   isMenuOpen: boolean;
@@ -47,22 +48,28 @@ export default function Navigation({ isMenuOpen, setIsMenuOpen }: NavigationProp
           {/* CTA Buttons */}
           <div className="hidden md:flex items-center space-x-4">
             <Link href="/login">
-              <motion.button
-                className="px-4 py-2 text-slate-300 hover:text-white transition-colors duration-200 font-medium"
+              <motion.div
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                Sign In
-              </motion.button>
+                <Button variant="ghost" size="sm">
+                  Sign In
+                </Button>
+              </motion.div>
             </Link>
             <Link href="/login">
-              <motion.button
-                className="px-6 py-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg text-white font-medium hover:shadow-lg hover:shadow-blue-500/25 transition-all duration-200"
+              <motion.div
                 whileHover={{ scale: 1.05, boxShadow: "0 10px 30px -10px rgba(59, 130, 246, 0.5)" }}
                 whileTap={{ scale: 0.95 }}
               >
-                Get Started
-              </motion.button>
+                <Button
+                  variant="primary"
+                  size="sm"
+                  className="bg-gradient-to-r from-blue-500 to-purple-600 hover:shadow-lg hover:shadow-blue-500/25"
+                >
+                  Get Started
+                </Button>
+              </motion.div>
             </Link>
           </div>
 
@@ -98,14 +105,18 @@ export default function Navigation({ isMenuOpen, setIsMenuOpen }: NavigationProp
               ))}
               <div className="pt-4 space-y-3 border-t border-slate-700/50">
                 <Link href="/login">
-                  <button className="w-full text-center py-2 text-slate-300 hover:text-white transition-colors duration-200 font-medium">
+                  <Button variant="ghost" size="sm" className="w-full">
                     Sign In
-                  </button>
+                  </Button>
                 </Link>
                 <Link href="/login">
-                  <button className="w-full text-center py-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg text-white font-medium">
+                  <Button
+                    variant="primary"
+                    size="sm"
+                    className="w-full bg-gradient-to-r from-blue-500 to-purple-600"
+                  >
                     Get Started
-                  </button>
+                  </Button>
                 </Link>
               </div>
             </div>

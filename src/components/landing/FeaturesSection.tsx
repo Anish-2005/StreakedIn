@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Target, BarChart3, TrendingUp, Calendar } from 'lucide-react';
+import { Card } from '../common';
 
 const features = [
   {
@@ -59,13 +60,16 @@ export default function FeaturesSection() {
               whileHover={{ y: -10, transition: { duration: 0.3 } }}
               className="group"
             >
-              <div className="bg-slate-800/30 backdrop-blur-md border border-slate-700/50 rounded-2xl p-6 h-full transition-all duration-300 group-hover:bg-slate-800/50 group-hover:border-slate-600/50">
+              <Card
+                hover
+                className="h-full transition-all duration-300 group-hover:bg-slate-800/50 group-hover:border-slate-600/50"
+              >
                 <div className={`w-14 h-14 bg-gradient-to-r ${feature.color} rounded-xl flex items-center justify-center text-white mb-4 group-hover:scale-110 transition-transform duration-300`}>
                   {feature.icon}
                 </div>
                 <h3 className="text-xl font-semibold text-white mb-3">{feature.title}</h3>
                 <p className="text-slate-300 leading-relaxed">{feature.description}</p>
-              </div>
+              </Card>
             </motion.div>
           ))}
         </div>

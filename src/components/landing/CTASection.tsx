@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { Button } from '../common';
 
 export default function CTASection() {
   return (
@@ -17,13 +18,13 @@ export default function CTASection() {
           <p className="text-xl text-slate-300 mb-8 max-w-2xl mx-auto">
             Join StreakedIn today and start achieving your goals with professional-grade productivity tracking.
           </p>
-          <motion.button
-            className="px-12 py-4 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl text-white font-semibold text-lg hover:shadow-2xl hover:shadow-blue-500/25 transition-all duration-200"
-            whileHover={{ scale: 1.05, boxShadow: "0 20px 40px -10px rgba(59, 130, 246, 0.4)" }}
-            whileTap={{ scale: 0.95 }}
+          <Button
+            size="lg"
+            animated
+            className="px-12 py-4 text-lg"
           >
             Start Free Trial
-          </motion.button>
+          </Button>
           <p className="text-slate-400 mt-4">
             No credit card required • 14-day free trial
           </p>
