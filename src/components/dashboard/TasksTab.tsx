@@ -14,16 +14,37 @@ interface Task {
   dueDate?: string;
 }
 
-interface TasksTabProps {
-  tasks: Task[];
-  setTasks: (tasks: Task[]) => void;
-}
+interface TasksTabProps {}
 
-export default function TasksTab({ tasks, setTasks }: TasksTabProps) {
+export default function TasksTab({}: TasksTabProps) {
   const { user } = useAuth();
+  const [tasks, setTasks] = useState<Task[]>([]);
   const [newTaskTitle, setNewTaskTitle] = useState<string>('');
   const [newTaskPriority, setNewTaskPriority] = useState<string>('medium');
   const [newTaskDueDate, setNewTaskDueDate] = useState<string>('');
+
+  useEffect(() => {
+    if (!user) return;
+
+    const q = query(
+      collection(db, 'tasks'),
+      where('userId', '==', user.uid),
+      orderBy('createdAt', 'desc')
+    );
+
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const tasksData: Task[] = [];
+      querySnapshot.forEach((doc) => {
+        tasksData.push({
+          id: doc.id,
+          ...doc.data()
+        } as Task);
+      });
+      setTasks(tasksData);
+    });
+
+    return () => unsubscribe();
+  }, [user]);
 
   const addTask = async () => {
     if (!newTaskTitle.trim() || !user) return;
