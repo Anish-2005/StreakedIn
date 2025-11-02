@@ -158,12 +158,27 @@ export default function Dashboard() {
     ]);
   }, []);
 
+  // User profile state
+  const [userProfile, setUserProfile] = useState<{ plan?: string; role?: string } | null>(null);
+
   // Firestore tasks integration
   useEffect(() => {
     if (!user) {
       setTasks([]);
+      setUserProfile(null);
       return;
     }
+
+    // Fetch user profile
+    const userProfileRef = doc(db, 'users', user.uid);
+    const unsubscribeProfile = onSnapshot(userProfileRef, (doc) => {
+      if (doc.exists()) {
+        setUserProfile(doc.data() as { plan?: string; role?: string });
+      } else {
+        // Create default profile
+        setUserProfile({ plan: 'Professional Plan', role: 'User' });
+      }
+    });
 
     const tasksQuery = query(
       collection(db, 'tasks'),
@@ -171,7 +186,7 @@ export default function Dashboard() {
       orderBy('createdAt', 'desc')
     );
 
-    const unsubscribe = onSnapshot(tasksQuery, (snapshot) => {
+    const unsubscribeTasks = onSnapshot(tasksQuery, (snapshot) => {
       const tasksData = snapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data()
@@ -179,7 +194,10 @@ export default function Dashboard() {
       setTasks(tasksData);
     });
 
-    return () => unsubscribe();
+    return () => {
+      unsubscribeProfile();
+      unsubscribeTasks();
+    };
   }, [user]);
 
   if (loading) {
@@ -332,12 +350,13 @@ Would you like me to create specific tasks for these recommendations?`);
         <div className="border-t border-slate-700/50 p-4">
           <div className="flex items-center space-x-3">
             <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold">
-              JD
+              {user?.displayName ? user.displayName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) : 
+               user?.email ? user.email[0].toUpperCase() : 'U'}
             </div>
             {isSidebarOpen && (
               <div className="flex-1 min-w-0">
-                <div className="font-semibold text-white text-sm">John Doe</div>
-                <div className="text-slate-400 text-xs">Product Manager</div>
+                <div className="font-semibold text-white text-sm">{user?.displayName || user?.email || 'User'}</div>
+                <div className="text-slate-400 text-xs">{userProfile?.plan || 'Professional Plan'}</div>
               </div>
             )}
           </div>
@@ -376,11 +395,12 @@ Would you like me to create specific tasks for these recommendations?`);
             {/* User Menu */}
             <div className="flex items-center space-x-3">
               <div className="text-right">
-                <div className="font-semibold text-white text-sm">John Doe</div>
-                <div className="text-slate-400 text-xs">Professional Plan</div>
+                <div className="font-semibold text-white text-sm">{user?.displayName || user?.email || 'User'}</div>
+                <div className="text-slate-400 text-xs">{userProfile?.plan || 'Professional Plan'}</div>
               </div>
               <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">
-                JD
+                {user?.displayName ? user.displayName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) : 
+                 user?.email ? user.email[0].toUpperCase() : 'U'}
               </div>
             </div>
           </div>
@@ -683,7 +703,7 @@ Would you like me to create specific tasks for these recommendations?`);
                         <label className="text-slate-300 text-sm mb-2 block">Display Name</label>
                         <input 
                           type="text" 
-                          defaultValue="John Doe" 
+                          defaultValue={user?.displayName || ''} 
                           className="w-full border border-slate-700/50 rounded-lg px-3 py-2 bg-slate-900/20 text-white focus:outline-none focus:ring-2 focus:ring-blue-500/60 focus:border-transparent"
                         />
                       </div>
@@ -691,7 +711,7 @@ Would you like me to create specific tasks for these recommendations?`);
                         <label className="text-slate-300 text-sm mb-2 block">Email</label>
                         <input 
                           type="email" 
-                          defaultValue="john.doe@example.com" 
+                          defaultValue={user?.email || ''} 
                           className="w-full border border-slate-700/50 rounded-lg px-3 py-2 bg-slate-900/20 text-white focus:outline-none focus:ring-2 focus:ring-blue-500/60 focus:border-transparent"
                         />
                       </div>
