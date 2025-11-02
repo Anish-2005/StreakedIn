@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import Head from 'next/head';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { 
   Target, 
   TrendingUp, 
@@ -20,6 +21,7 @@ import {
   X
 } from 'lucide-react';
 import dynamic from 'next/dynamic';
+import { useAuth } from '../contexts/AuthContext';
 
 // Dynamically import Three.js to avoid SSR issues
 const Scene = dynamic(() => import('../components/Scene'), {
@@ -31,6 +33,29 @@ export default function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeTestimonial, setActiveTestimonial] = useState(0);
   const featuresRef = useRef(null);
+  const { user, loading } = useAuth();
+  const router = useRouter();
+
+  // Redirect authenticated users to dashboard
+  useEffect(() => {
+    if (!loading && user) {
+      router.push('/dashboard');
+    }
+  }, [user, loading, router]);
+
+  // Show loading while checking auth
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-white border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
+
+  // Don't render anything if user is authenticated (will redirect)
+  if (user) {
+    return null;
+  }
 
   const features = [
     {
@@ -133,21 +158,24 @@ export default function Home() {
 
             {/* CTA Buttons */}
             <div className="hidden md:flex items-center space-x-4">
-              <motion.button
-                className="px-4 py-2 text-slate-300 hover:text-white transition-colors duration-200 font-medium"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                Sign In
-              </motion.button>
-              <motion.button
-                className="px-6 py-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg text-white font-medium hover:shadow-lg hover:shadow-blue-500/25 transition-all duration-200"
-                whileHover={{ scale: 1.05, boxShadow: "0 10px 30px -10px rgba(59, 130, 246, 0.5)" }}
-                whileTap={{ scale: 0.95 }}
-              >
-                Get Started
-              </motion.button>
-              <Link href="/dashboard" className="px-4 py-2 bg-slate-800/50 backdrop-blur-md border border-slate-700/50 rounded-lg text-white font-medium hover:shadow-sm">Dashboard</Link>
+              <Link href="/login">
+                <motion.button
+                  className="px-4 py-2 text-slate-300 hover:text-white transition-colors duration-200 font-medium"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  Sign In
+                </motion.button>
+              </Link>
+              <Link href="/login">
+                <motion.button
+                  className="px-6 py-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg text-white font-medium hover:shadow-lg hover:shadow-blue-500/25 transition-all duration-200"
+                  whileHover={{ scale: 1.05, boxShadow: "0 10px 30px -10px rgba(59, 130, 246, 0.5)" }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  Get Started
+                </motion.button>
+              </Link>
             </div>
 
             {/* Mobile Menu Button */}
