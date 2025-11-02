@@ -2,6 +2,7 @@
 import { motion } from 'framer-motion';
 import { TrendingUp, Target, Clock, Users, Plus, Brain } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import { Card, StatsCard, Badge, ProgressBar, Button } from '../common';
 
 interface Goal {
   id: number;
@@ -49,36 +50,44 @@ export default function OverviewTab({ setActiveTab }: OverviewTabProps) {
     >
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {[
-          { title: 'Productivity Score', value: '87%', change: '+5%', icon: <TrendingUp className="w-6 h-6" />, color: 'text-green-400' },
-          { title: 'Goals Completed', value: '12/20', change: '60%', icon: <Target className="w-6 h-6" />, color: 'text-blue-400' },
-          { title: 'Tasks Due', value: '8', change: '2 overdue', icon: <Clock className="w-6 h-6" />, color: 'text-orange-400' },
-          { title: 'Network Growth', value: '+24', change: 'This week', icon: <Users className="w-6 h-6" />, color: 'text-purple-400' }
-        ].map((stat, index) => (
-          <div key={index} className="bg-slate-800/30 backdrop-blur-md border border-slate-700/50 rounded-xl p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-slate-300 text-sm">{stat.title}</p>
-                <p className="text-2xl font-bold text-white mt-1">{stat.value}</p>
-                <p className={`text-sm ${stat.color} mt-1`}>{stat.change}</p>
-              </div>
-              <div className={`p-3 rounded-lg bg-slate-900/30 ${stat.color}`}>
-                {stat.icon}
-              </div>
-            </div>
-          </div>
-        ))}
+        <StatsCard
+          title="Productivity Score"
+          value="87%"
+          change="+5%"
+          icon={<TrendingUp className="w-6 h-6" />}
+          color="text-green-400"
+        />
+        <StatsCard
+          title="Goals Completed"
+          value="12/20"
+          change="60%"
+          icon={<Target className="w-6 h-6" />}
+          color="text-blue-400"
+        />
+        <StatsCard
+          title="Tasks Due"
+          value="8"
+          change="2 overdue"
+          icon={<Clock className="w-6 h-6" />}
+          color="text-orange-400"
+        />
+        <StatsCard
+          title="Network Growth"
+          value="+24"
+          change="This week"
+          icon={<Users className="w-6 h-6" />}
+          color="text-purple-400"
+        />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Goals Progress */}
-        <div className="lg:col-span-2 bg-slate-800/30 backdrop-blur-md border border-slate-700/50 rounded-xl p-6">
+        <Card className="lg:col-span-2">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-lg font-semibold text-white">Goals Progress</h2>
-            <button className="flex items-center space-x-2 text-white/90 hover:text-white transition-colors">
-              <Plus className="w-4 h-4" />
-              <span>Add Goal</span>
-            </button>
+            <Button variant="ghost" size="sm" icon={<Plus className="w-4 h-4" />}>
+              Add Goal
+            </Button>
           </div>
           <div className="space-y-4">
             {goals.map((goal) => (
@@ -87,30 +96,24 @@ export default function OverviewTab({ setActiveTab }: OverviewTabProps) {
                   <div className="flex items-center space-x-3">
                     <h3 className="font-semibold text-white">{goal.title}</h3>
                     {goal.aiSuggested && (
-                      <span className="flex items-center space-x-1 px-2 py-1 bg-purple-900/30 text-purple-300 rounded-full text-xs">
-                        <Brain className="w-3 h-3" />
-                        <span>AI Suggested</span>
-                      </span>
+                      <Badge variant="purple" size="sm" icon={<Brain className="w-3 h-3" />}>
+                        AI Suggested
+                      </Badge>
                     )}
                   </div>
                   <span className="text-sm text-slate-400">Due {goal.deadline}</span>
                 </div>
                 <div className="flex items-center space-x-4">
-                  <div className="flex-1 bg-slate-700/40 rounded-full h-2">
-                    <div
-                      className="bg-gradient-to-r from-blue-500 to-purple-600 h-2 rounded-full transition-all duration-500"
-                      style={{ width: `${goal.progress}%` }}
-                    ></div>
-                  </div>
+                  <ProgressBar value={goal.progress} className="flex-1" />
                   <span className="text-sm font-semibold text-slate-300">{goal.progress}%</span>
                 </div>
               </div>
             ))}
           </div>
-        </div>
+        </Card>
 
         {/* Quick Actions */}
-        <div className="bg-slate-800/30 backdrop-blur-md border border-slate-700/50 rounded-xl p-6">
+        <Card>
           <h2 className="text-lg font-semibold text-white mb-6">Quick Actions</h2>
           <div className="space-y-3">
             {[
@@ -119,17 +122,18 @@ export default function OverviewTab({ setActiveTab }: OverviewTabProps) {
               { icon: <Brain className="w-5 h-5" />, label: 'AI Suggestions', action: () => setActiveTab('ai-assistant') },
               { icon: <TrendingUp className="w-5 h-5" />, label: 'Export Report', action: () => {} }
             ].map((action, index) => (
-              <button
+              <Button
                 key={index}
+                variant="outline"
+                className="w-full justify-start"
+                icon={action.icon}
                 onClick={action.action}
-                className="w-full flex items-center space-x-3 p-3 text-left rounded-lg border border-slate-700/50 hover:border-blue-500/60 hover:bg-slate-700/40 transition-all duration-200"
               >
-                <div className="text-blue-400">{action.icon}</div>
-                <span className="font-medium text-slate-300">{action.label}</span>
-              </button>
+                {action.label}
+              </Button>
             ))}
           </div>
-        </div>
+        </Card>
       </div>
     </motion.div>
   );

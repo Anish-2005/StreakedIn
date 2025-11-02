@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { db } from '../../lib/firebase';
 import { collection, addDoc, updateDoc, deleteDoc, doc, query, where, onSnapshot, orderBy } from 'firebase/firestore';
+import { Card, Button, Input, Select, Badge, Checkbox } from '../common';
 
 interface Task {
   id: string;
@@ -88,6 +89,15 @@ export default function TasksTab({}: TasksTabProps) {
     }
   };
 
+  const getPriorityVariant = (priority: string) => {
+    switch (priority) {
+      case 'high': return 'error';
+      case 'medium': return 'warning';
+      case 'low': return 'success';
+      default: return 'default';
+    }
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -104,57 +114,53 @@ export default function TasksTab({}: TasksTabProps) {
       </div>
 
       {/* New Task Form */}
-      <div className="bg-slate-800/30 backdrop-blur-md border border-slate-700/50 rounded-xl p-6">
+      <Card>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <input
-            type="text"
+          <Input
+            placeholder="Task title..."
             value={newTaskTitle}
             onChange={(e) => setNewTaskTitle(e.target.value)}
-            placeholder="Task title..."
-            className="col-span-2 w-full border border-slate-700/50 rounded-lg px-3 py-2 bg-slate-900/20 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/60 focus:border-transparent"
+            className="col-span-2"
           />
-          <select
+          <Select
             value={newTaskPriority}
             onChange={(e) => setNewTaskPriority(e.target.value)}
-            className="w-full border border-slate-700/50 rounded-lg px-3 py-2 bg-slate-900/20 text-white focus:outline-none focus:ring-2 focus:ring-blue-500/60 focus:border-transparent"
           >
             <option value="low">Low Priority</option>
             <option value="medium">Medium Priority</option>
             <option value="high">High Priority</option>
-          </select>
-          <input
+          </Select>
+          <Input
             type="date"
             value={newTaskDueDate}
             onChange={(e) => setNewTaskDueDate(e.target.value)}
-            className="w-full border border-slate-700/50 rounded-lg px-3 py-2 bg-slate-900/20 text-white focus:outline-none focus:ring-2 focus:ring-blue-500/60 focus:border-transparent"
           />
         </div>
         <div className="flex justify-end mt-4">
-          <button
-            onClick={addTask}
-            className="px-6 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:opacity-90 transition-opacity"
-          >
+          <Button onClick={addTask}>
             Add Task
-          </button>
+          </Button>
         </div>
-      </div>
+      </Card>
 
       {/* Tasks List */}
       <div className="space-y-3">
         {tasks.length === 0 ? (
-          <div className="bg-slate-800/30 backdrop-blur-md border border-slate-700/50 rounded-xl p-8 text-center text-slate-400">
-            <CheckSquare className="w-12 h-12 mx-auto mb-4 opacity-50" />
-            <p>No tasks yet. Create your first task above!</p>
-          </div>
+          <Card className="text-center py-8">
+            <CheckSquare className="w-12 h-12 mx-auto mb-4 opacity-50 text-slate-400" />
+            <p className="text-slate-400">No tasks yet. Create your first task above!</p>
+          </Card>
         ) : (
           tasks.map((task) => (
-            <div key={task.id} className="bg-slate-800/30 backdrop-blur-md border border-slate-700/50 rounded-xl p-4 flex items-center justify-between hover:border-slate-600/50 transition-colors">
+            <Card
+              key={task.id}
+              hover
+              className="flex items-center justify-between"
+            >
               <div className="flex items-center space-x-4">
-                <input
-                  type="checkbox"
+                <Checkbox
                   checked={task.completed}
                   onChange={() => toggleTask(task.id)}
-                  className="w-5 h-5 rounded border-slate-600 bg-slate-700/50 text-blue-500 focus:ring-blue-500/60"
                 />
                 <div>
                   <div className={`font-medium text-lg ${task.completed ? 'line-through text-slate-400' : 'text-white'}`}>
@@ -166,23 +172,19 @@ export default function TasksTab({}: TasksTabProps) {
                 </div>
               </div>
               <div className="flex items-center space-x-4">
-                <div className={`px-3 py-1 rounded-full text-sm font-medium ${
-                  task.priority === 'high'
-                    ? 'bg-red-500/20 text-red-300 border border-red-500/30'
-                    : task.priority === 'medium'
-                    ? 'bg-yellow-500/20 text-yellow-300 border border-yellow-500/30'
-                    : 'bg-green-500/20 text-green-300 border border-green-500/30'
-                }`}>
+                <Badge variant={getPriorityVariant(task.priority || 'medium')}>
                   {task.priority}
-                </div>
-                <button
+                </Badge>
+                <Button
+                  variant="ghost"
+                  size="sm"
                   onClick={() => deleteTask(task.id)}
-                  className="p-2 hover:bg-red-500/20 rounded-lg text-red-400 hover:text-red-300 transition-colors"
+                  className="text-red-400 hover:text-red-300 hover:bg-red-500/20 p-2"
                 >
                   <Trash2 className="w-4 h-4" />
-                </button>
+                </Button>
               </div>
-            </div>
+            </Card>
           ))
         )}
       </div>
