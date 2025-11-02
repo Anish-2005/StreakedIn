@@ -12,6 +12,7 @@ interface SidebarProps {
   setActiveTab: (tab: string) => void;
   isSidebarOpen: boolean;
   setIsSidebarOpen: (open: boolean) => void;
+  isMobile?: boolean;
 }
 
 interface UserProfileData {
@@ -19,7 +20,7 @@ interface UserProfileData {
   role?: string;
 }
 
-export default function Sidebar({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }: SidebarProps) {
+export default function Sidebar({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen, isMobile = false }: SidebarProps) {
   const { user } = useAuth();
   const [userProfile, setUserProfile] = useState<UserProfileData | null>(null);
 
@@ -42,8 +43,10 @@ export default function Sidebar({ activeTab, setActiveTab, isSidebarOpen, setIsS
   }, [user]);
 
   return (
-    <div className={`fixed inset-y-0 left-0 z-50 bg-slate-800/30 backdrop-blur-md border-r border-slate-700/50 transition-all duration-300 ${
-      isSidebarOpen ? 'w-64' : 'w-20'
+    <div className={`fixed inset-y-0 left-0 z-50 bg-slate-800/95 backdrop-blur-md border-r border-slate-700/50 transition-all duration-300 ${
+      isMobile
+        ? `w-64 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`
+        : `${isSidebarOpen ? 'w-64' : 'w-20'}`
     }`}>
       {/* Logo */}
       <div className="flex items-center justify-between h-16 px-4 border-b border-gray-200">

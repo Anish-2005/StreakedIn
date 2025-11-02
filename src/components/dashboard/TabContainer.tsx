@@ -11,11 +11,12 @@ import AnalyticsTab from './AnalyticsTab';
 interface TabContainerProps {
   activeTab: string;
   setActiveTab: (tab: string) => void;
+  isMobile?: boolean;
 }
 
-export default function TabContainer({ activeTab, setActiveTab }: TabContainerProps) {
+export default function TabContainer({ activeTab, setActiveTab, isMobile = false }: TabContainerProps) {
   return (
-    <main className="p-6">
+    <main className={`${isMobile ? 'p-4' : 'p-6'}`}>
       <AnimatePresence mode="wait">
         {activeTab === 'overview' && (
           <OverviewTab setActiveTab={setActiveTab} />

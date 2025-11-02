@@ -32,13 +32,29 @@ export default function Dashboard() {
   const router = useRouter();
 
   const [activeTab, setActiveTab] = useState<string>('overview');
-  const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false); // Start closed on mobile
+  const [isMobile, setIsMobile] = useState<boolean>(false);
 
   useEffect(() => {
     if (!loading && !user) {
       router.push('/login');
     }
   }, [user, loading, router]);
+
+  // Handle responsive sidebar
+  useEffect(() => {
+    const checkMobile = () => {
+      const mobile = window.innerWidth < 768; // md breakpoint
+      setIsMobile(mobile);
+      if (mobile) {
+        setIsSidebarOpen(false); // Close sidebar on mobile by default
+      } else {
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // User profile state
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
@@ -93,11 +109,16 @@ export default function Dashboard() {
         setActiveTab={setActiveTab}
         isSidebarOpen={isSidebarOpen}
         setIsSidebarOpen={setIsSidebarOpen}
+        isMobile={isMobile}
       />
 
       {/* Main Content */}
       <div className={`transition-all duration-300 ${
-        isSidebarOpen ? 'ml-64' : 'ml-20'
+        isMobile
+          ? 'ml-0'
+          : isSidebarOpen
+            ? 'ml-64'
+            : 'ml-20'
       }`}>
         <TopBar
           activeTab={activeTab}
@@ -105,10 +126,12 @@ export default function Dashboard() {
           userProfile={userProfile}
           onSearch={handleSearch}
           onNotificationsClick={handleNotificationsClick}
+          onMenuClick={() => setIsSidebarOpen(!isSidebarOpen)}
+          isMobile={isMobile}
         />
 
         {/* Breadcrumb Navigation */}
-        <div className="px-6 py-4 border-b border-slate-700/50">
+        <div className="px-4 sm:px-6 py-4 border-b border-slate-700/50">
           <Breadcrumb
             items={[
               { label: 'Dashboard', href: '/dashboard' },
@@ -120,8 +143,17 @@ export default function Dashboard() {
         <TabContainer
           activeTab={activeTab}
           setActiveTab={setActiveTab}
+          isMobile={isMobile}
         />
       </div>
+
+      {/* Mobile Overlay */}
+      {isMobile && isSidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 z-40 md:hidden"
+          onClick={() => setIsSidebarOpen(false)}
+        />
+      )}
     </div>
   );
 }
