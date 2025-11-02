@@ -409,9 +409,9 @@ Would you like me to create specific tasks for these recommendations?`);
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                   {/* AI Chat */}
-                  <div className="lg:col-span-2 bg-white rounded-xl border border-gray-200 shadow-sm">
-                    <div className="p-4 border-b border-gray-200">
-                      <h3 className="font-semibold text-gray-900">Chat with AI Assistant</h3>
+                  <div className="lg:col-span-2 bg-slate-800/30 backdrop-blur-md border border-slate-700/50 rounded-xl shadow-sm">
+                    <div className="p-4 border-b border-slate-700/50">
+                      <h3 className="font-semibold text-white">Chat with AI Assistant</h3>
                     </div>
                     
                     {/* Chat Messages */}
@@ -420,7 +420,7 @@ Would you like me to create specific tasks for these recommendations?`);
                         <>
                           {/* User Message */}
                           <div className="flex justify-end">
-                            <div className="bg-[#0A66C2] text-white rounded-2xl rounded-br-none px-4 py-2 max-w-xs">
+                            <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-2xl rounded-br-none px-4 py-2 max-w-xs">
                               {aiPrompt}
                             </div>
                           </div>
@@ -430,8 +430,8 @@ Would you like me to create specific tasks for these recommendations?`);
                             <div className="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center flex-shrink-0">
                               <Bot className="w-4 h-4 text-white" />
                             </div>
-                            <div className="bg-gray-100 rounded-2xl rounded-bl-none px-4 py-3 flex-1">
-                              <div className="whitespace-pre-line text-gray-700">
+                            <div className="bg-slate-900/20 rounded-2xl rounded-bl-none px-4 py-3 flex-1">
+                              <div className="whitespace-pre-line text-slate-300">
                                 {aiResponse}
                               </div>
                               <div className="flex space-x-2 mt-3">
@@ -449,28 +449,28 @@ Would you like me to create specific tasks for these recommendations?`);
                           </div>
                         </>
                       ) : (
-                        <div className="text-center text-gray-500 py-12">
-                          <Brain className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-                          <p>Ask me anything about your productivity, goals, or schedule!</p>
-                        </div>
+                        <div className="text-center text-slate-400 py-12">
+                            <Brain className="w-12 h-12 text-slate-500 mx-auto mb-4" />
+                            <p>Ask me anything about your productivity, goals, or schedule!</p>
+                          </div>
                       )}
                     </div>
 
                     {/* Input Area */}
-                    <div className="p-4 border-t border-gray-200">
+                    <div className="p-4 border-t border-slate-700/50">
                       <div className="flex space-x-2">
                         <input
                           type="text"
                           value={aiPrompt}
                           onChange={(e) => setAiPrompt(e.target.value)}
                           placeholder="Ask for productivity advice, goal suggestions, or schedule optimization..."
-                          className="flex-1 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#0A66C2] focus:border-transparent"
+                          className="flex-1 border border-slate-700/50 rounded-lg px-4 py-2 bg-slate-800/30 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/60 focus:border-transparent"
                           onKeyPress={(e) => e.key === 'Enter' && handleAiPrompt()}
                         />
                         <button
                           onClick={handleAiPrompt}
                           disabled={isAiLoading}
-                          className="px-6 py-2 bg-[#0A66C2] text-white rounded-lg hover:bg-[#004182] transition-colors disabled:opacity-50 flex items-center space-x-2"
+                          className="px-6 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:opacity-95 transition-colors disabled:opacity-50 flex items-center space-x-2"
                         >
                           {isAiLoading ? (
                             <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -485,8 +485,8 @@ Would you like me to create specific tasks for these recommendations?`);
                   {/* Quick Prompts */}
                   <div className="space-y-6">
                     {/* Quick AI Prompts */}
-                    <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
-                      <h3 className="font-semibold text-gray-900 mb-4">Quick Prompts</h3>
+                    <div className="bg-slate-800/30 backdrop-blur-md border border-slate-700/50 rounded-xl p-6">
+                      <h3 className="font-semibold text-white mb-4">Quick Prompts</h3>
                       <div className="space-y-2">
                         {quickAiPrompts.map((prompt, index) => (
                           <button
@@ -495,7 +495,7 @@ Would you like me to create specific tasks for these recommendations?`);
                               setAiPrompt(prompt);
                               handleAiPrompt();
                             }}
-                            className="w-full text-left p-3 rounded-lg border border-gray-200 hover:border-[#0A66C2] hover:bg-blue-50 transition-all duration-200 text-sm text-gray-700"
+                            className="w-full text-left p-3 rounded-lg border border-slate-700/50 hover:border-blue-500/60 hover:bg-slate-700/40 transition-all duration-200 text-sm text-slate-300"
                           >
                             {prompt}
                           </button>
@@ -504,8 +504,8 @@ Would you like me to create specific tasks for these recommendations?`);
                     </div>
 
                     {/* AI Features */}
-                    <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
-                      <h3 className="font-semibold text-gray-900 mb-4">AI Features</h3>
+                    <div className="bg-slate-800/30 backdrop-blur-md border border-slate-700/50 rounded-xl p-6">
+                      <h3 className="font-semibold text-white mb-4">AI Features</h3>
                       <div className="space-y-3">
                         {[
                           { icon: <Zap className="w-4 h-4" />, label: 'Auto Goal Setting', enabled: true },
@@ -515,8 +515,8 @@ Would you like me to create specific tasks for these recommendations?`);
                         ].map((feature, index) => (
                           <div key={index} className="flex items-center justify-between">
                             <div className="flex items-center space-x-3">
-                              <div className="text-[#0A66C2]">{feature.icon}</div>
-                              <span className="text-sm text-gray-700">{feature.label}</span>
+                              <div className="text-blue-400">{feature.icon}</div>
+                              <span className="text-sm text-slate-300">{feature.label}</span>
                             </div>
                             <label className="relative inline-flex items-center cursor-pointer">
                               <input type="checkbox" className="sr-only peer" defaultChecked={feature.enabled} />
@@ -599,8 +599,8 @@ Would you like me to create specific tasks for these recommendations?`);
                   {/* Notification Settings */}
                   <div className="space-y-6">
                     {/* Notification Channels */}
-                    <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
-                      <h3 className="font-semibold text-gray-900 mb-4">Notification Channels</h3>
+                    <div className="bg-slate-800/30 backdrop-blur-md border border-slate-700/50 rounded-xl p-6">
+                      <h3 className="font-semibold text-white mb-4">Notification Channels</h3>
                       <div className="space-y-4">
                         {[
                           { icon: <Mail className="w-4 h-4" />, label: 'Email Notifications', enabled: true },
@@ -623,8 +623,8 @@ Would you like me to create specific tasks for these recommendations?`);
                     </div>
 
                     {/* AI Reminder Suggestions */}
-                    <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
-                      <h3 className="font-semibold text-gray-900 mb-4">AI Reminder Suggestions</h3>
+                    <div className="bg-slate-800/30 backdrop-blur-md border border-slate-700/50 rounded-xl p-6">
+                      <h3 className="font-semibold text-white mb-4">AI Reminder Suggestions</h3>
                       <div className="space-y-3">
                         {[
                           'Set daily progress check-in',
@@ -744,15 +744,15 @@ Would you like me to create specific tasks for these recommendations?`);
                   {/* Goal Creation & AI */}
                   <div className="space-y-6">
                     {/* Quick Goal Creation */}
-                    <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
-                      <h3 className="font-semibold text-gray-900 mb-4">Quick Goal Setup</h3>
+                    <div className="bg-slate-800/30 backdrop-blur-md border border-slate-700/50 rounded-xl p-6">
+                      <h3 className="font-semibold text-white mb-4">Quick Goal Setup</h3>
                       <div className="space-y-3">
                         <input
                           type="text"
                           placeholder="Goal title..."
-                          className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#0A66C2] focus:border-transparent"
+                          className="w-full border border-slate-700/50 rounded-lg px-3 py-2 text-sm bg-slate-900/20 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/60 focus:border-transparent"
                         />
-                        <select className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#0A66C2] focus:border-transparent">
+                        <select className="w-full border border-slate-700/50 rounded-lg px-3 py-2 text-sm bg-slate-900/20 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/60 focus:border-transparent">
                           <option>Select category</option>
                           <option>Career Development</option>
                           <option>Skill Learning</option>
@@ -761,17 +761,17 @@ Would you like me to create specific tasks for these recommendations?`);
                         </select>
                         <input
                           type="date"
-                          className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#0A66C2] focus:border-transparent"
+                          className="w-full border border-slate-700/50 rounded-lg px-3 py-2 text-sm bg-slate-900/20 text-white focus:outline-none focus:ring-2 focus:ring-blue-500/60 focus:border-transparent"
                         />
-                        <button className="w-full bg-[#0A66C2] text-white rounded-lg py-2 text-sm hover:bg-[#004182] transition-colors">
+                        <button className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg py-2 text-sm hover:opacity-95 transition-colors">
                           Create Goal
                         </button>
                       </div>
                     </div>
 
                     {/* AI Goal Suggestions */}
-                    <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
-                      <h3 className="font-semibold text-gray-900 mb-4">AI Goal Suggestions</h3>
+                    <div className="bg-slate-800/30 backdrop-blur-md border border-slate-700/50 rounded-xl p-6">
+                      <h3 className="font-semibold text-white mb-4">AI Goal Suggestions</h3>
                       <div className="space-y-3">
                         {[
                           'Complete advanced React course',
@@ -787,7 +787,7 @@ Would you like me to create specific tasks for these recommendations?`);
                           </div>
                         ))}
                       </div>
-                      <button className="w-full mt-4 flex items-center justify-center space-x-2 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm">
+                      <button className="w-full mt-4 flex items-center justify-center space-x-2 py-2 border border-slate-700/50 rounded-lg hover:bg-slate-700/40 transition-colors text-sm text-white">
                         <Brain className="w-4 h-4" />
                         <span>Generate More Suggestions</span>
                       </button>
