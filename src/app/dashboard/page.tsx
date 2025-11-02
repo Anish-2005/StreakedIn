@@ -3,52 +3,17 @@
 import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/navigation';
-import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../../contexts/AuthContext';
 import { db } from '../../lib/firebase';
-import { collection, addDoc, updateDoc, deleteDoc, doc, query, where, onSnapshot, orderBy } from 'firebase/firestore';
-import { BarChart3, Target, CheckSquare, Activity, Bell, Brain, Settings, TrendingUp, ChevronRight, Search } from 'lucide-react';
+import { doc, onSnapshot } from 'firebase/firestore';
 import Sidebar from '../../components/dashboard/Sidebar';
-import Header from '../../components/dashboard/Header';
-import OverviewTab from '../../components/dashboard/OverviewTab';
-import TasksTab from '../../components/dashboard/TasksTab';
-import SettingsTab from '../../components/dashboard/SettingsTab';
-import AIAssistantTab from '../../components/dashboard/AIAssistantTab';
-import RemindersTab from '../../components/dashboard/RemindersTab';
-import GoalsTab from '../../components/dashboard/GoalsTab';
-import AnalyticsTab from '../../components/dashboard/AnalyticsTab';
+import TopBar from '../../components/dashboard/TopBar';
+import TabContainer from '../../components/dashboard/TabContainer';
+import LoadingSpinner from '../../components/dashboard/LoadingSpinner';
 
-interface NotificationItem {
-  id: number;
-  message?: string;
-  time?: string;
-  read?: boolean;
-}
-
-interface Goal {
-  id: number;
-  title: string;
-  progress: number;
-  deadline: string;
-  category?: string;
-  aiSuggested?: boolean;
-}
-
-interface Task {
-  id: string;
-  title: string;
-  completed: boolean;
-  priority?: string;
-  dueDate?: string;
-}
-
-interface Reminder {
-  id: number;
-  title: string;
-  type?: string;
-  frequency?: string;
-  enabled?: boolean;
-  nextTrigger?: string;
+interface UserProfile {
+  plan?: string;
+  role?: string;
 }
 
 export default function Dashboard() {
@@ -88,11 +53,7 @@ export default function Dashboard() {
   }, [user]);
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
-        <div className="text-white text-xl">Loading...</div>
-      </div>
-    );
+    return <LoadingSpinner />;
   }
 
   if (!user) {
