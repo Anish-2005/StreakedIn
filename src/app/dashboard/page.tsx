@@ -49,6 +49,8 @@ export default function Dashboard() {
       if (mobile) {
         setIsSidebarOpen(false); // Close sidebar on mobile by default
       } else {
+        setIsSidebarOpen(true); // Open sidebar on desktop by default
+      }
     };
 
     checkMobile();
