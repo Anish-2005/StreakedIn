@@ -88,6 +88,29 @@ export default function Dashboard() {
   const { user, loading } = useAuth();
   const router = useRouter();
 
+  const [activeTab, setActiveTab] = useState<string>('overview');
+  const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(true);
+  const [aiPrompt, setAiPrompt] = useState<string>('');
+  const [aiResponse, setAiResponse] = useState<string>('');
+  const [isAiLoading, setIsAiLoading] = useState<boolean>(false);
+  const [notifications, setNotifications] = useState<NotificationItem[]>([]);
+  const [goals, setGoals] = useState<Goal[]>([]);
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [reminders, setReminders] = useState<Reminder[]>([]);
+
+  // Task manager helpers
+  const [newTaskTitle, setNewTaskTitle] = useState<string>('');
+  const [newTaskPriority, setNewTaskPriority] = useState<string>('medium');
+  const [newTaskDueDate, setNewTaskDueDate] = useState<string>('');
+
+  // Settings state
+  const [settingsState, setSettingsState] = useState<Record<string, boolean>>({
+    emailNotifications: true,
+    pushNotifications: true,
+    soundAlerts: false,
+    autoGoalSuggestions: true,
+  });
+
   useEffect(() => {
     if (!loading && !user) {
       router.push('/login');
@@ -105,15 +128,6 @@ export default function Dashboard() {
   if (!user) {
     return null;
   }
-  const [activeTab, setActiveTab] = useState<string>('overview');
-  const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(true);
-  const [aiPrompt, setAiPrompt] = useState<string>('');
-  const [aiResponse, setAiResponse] = useState<string>('');
-  const [isAiLoading, setIsAiLoading] = useState<boolean>(false);
-  const [notifications, setNotifications] = useState<NotificationItem[]>([]);
-  const [goals, setGoals] = useState<Goal[]>([]);
-  const [tasks, setTasks] = useState<Task[]>([]);
-  const [reminders, setReminders] = useState<Reminder[]>([]);
 
   // Sample data
   useEffect(() => {
@@ -133,23 +147,6 @@ export default function Dashboard() {
         deadline: '2024-03-01',
         category: 'Networking',
         aiSuggested: false
-      }
-    ]);
-
-    setTasks([
-      {
-        id: '1',
-        title: 'Complete project proposal',
-        completed: true,
-        priority: 'high',
-        dueDate: '2024-01-20'
-      },
-      {
-        id: '2',
-        title: 'Schedule team meeting',
-        completed: false,
-        priority: 'medium',
-        dueDate: '2024-01-22'
       }
     ]);
 
@@ -175,7 +172,10 @@ export default function Dashboard() {
 
   // Firestore tasks integration
   useEffect(() => {
-    if (!user) return;
+    if (!user) {
+      setTasks([]);
+      return;
+    }
 
     const tasksQuery = query(
       collection(db, 'tasks'),
@@ -218,11 +218,6 @@ Would you like me to create specific tasks for these recommendations?`);
     "Review progress and suggest improvements"
   ];
 
-  // Task manager helpers
-  const [newTaskTitle, setNewTaskTitle] = useState<string>('');
-  const [newTaskPriority, setNewTaskPriority] = useState<string>('medium');
-  const [newTaskDueDate, setNewTaskDueDate] = useState<string>('');
-
   const addTask = async () => {
     if (!newTaskTitle.trim() || !user) return;
     
@@ -264,14 +259,6 @@ Would you like me to create specific tasks for these recommendations?`);
       console.error('Error deleting task:', error);
     }
   };
-
-  // Settings state
-  const [settingsState, setSettingsState] = useState<Record<string, boolean>>({
-    emailNotifications: true,
-    pushNotifications: true,
-    soundAlerts: false,
-    autoGoalSuggestions: true,
-  });
 
   const toggleSetting = (key: string) => {
     setSettingsState(prev => ({ ...prev, [key]: !prev[key] }));
