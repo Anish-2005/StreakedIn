@@ -2,6 +2,7 @@
 "use client";
 import { useState, useEffect, useRef } from 'react';
 import Head from 'next/head';
+import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Target, 
@@ -46,6 +47,9 @@ import {
   BarChart,
   Activity
 } from 'lucide-react';
+import { useAuth } from '../../contexts/AuthContext';
+import { db } from '../../lib/firebase';
+import { collection, addDoc, updateDoc, deleteDoc, doc, query, where, onSnapshot, orderBy } from 'firebase/firestore';
 
 interface NotificationItem {
   id: number;
@@ -64,7 +68,7 @@ interface Goal {
 }
 
 interface Task {
-  id: number;
+  id: string;
   title: string;
   completed: boolean;
   priority?: string;
@@ -81,6 +85,26 @@ interface Reminder {
 }
 
 export default function Dashboard() {
+  const { user, loading } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!loading && !user) {
+      router.push('/login');
+    }
+  }, [user, loading, router]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
+        <div className="text-white text-xl">Loading...</div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return null;
+  }
   const [activeTab, setActiveTab] = useState<string>('overview');
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(true);
   const [aiPrompt, setAiPrompt] = useState<string>('');
@@ -114,14 +138,14 @@ export default function Dashboard() {
 
     setTasks([
       {
-        id: 1,
+        id: '1',
         title: 'Complete project proposal',
         completed: true,
         priority: 'high',
         dueDate: '2024-01-20'
       },
       {
-        id: 2,
+        id: '2',
         title: 'Schedule team meeting',
         completed: false,
         priority: 'medium',
@@ -148,6 +172,27 @@ export default function Dashboard() {
       }
     ]);
   }, []);
+
+  // Firestore tasks integration
+  useEffect(() => {
+    if (!user) return;
+
+    const tasksQuery = query(
+      collection(db, 'tasks'),
+      where('userId', '==', user.uid),
+      orderBy('createdAt', 'desc')
+    );
+
+    const unsubscribe = onSnapshot(tasksQuery, (snapshot) => {
+      const tasksData = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      })) as Task[];
+      setTasks(tasksData);
+    });
+
+    return () => unsubscribe();
+  }, [user]);
 
   const handleAiPrompt = async () => {
     if (!aiPrompt.trim()) return;
@@ -178,21 +223,46 @@ Would you like me to create specific tasks for these recommendations?`);
   const [newTaskPriority, setNewTaskPriority] = useState<string>('medium');
   const [newTaskDueDate, setNewTaskDueDate] = useState<string>('');
 
-  const addTask = () => {
-    if (!newTaskTitle.trim()) return;
-    const id = Date.now();
-    setTasks(prev => [{ id, title: newTaskTitle.trim(), completed: false, priority: newTaskPriority, dueDate: newTaskDueDate }, ...prev]);
-    setNewTaskTitle('');
-    setNewTaskPriority('medium');
-    setNewTaskDueDate('');
+  const addTask = async () => {
+    if (!newTaskTitle.trim() || !user) return;
+    
+    try {
+      await addDoc(collection(db, 'tasks'), {
+        title: newTaskTitle.trim(),
+        completed: false,
+        priority: newTaskPriority,
+        dueDate: newTaskDueDate,
+        userId: user.uid,
+        createdAt: new Date()
+      });
+      setNewTaskTitle('');
+      setNewTaskPriority('medium');
+      setNewTaskDueDate('');
+    } catch (error) {
+      console.error('Error adding task:', error);
+    }
   };
 
-  const toggleTask = (id: number) => {
-    setTasks(prev => prev.map(t => t.id === id ? { ...t, completed: !t.completed } : t));
+  const toggleTask = async (id: string) => {
+    try {
+      const taskRef = doc(db, 'tasks', id);
+      const task = tasks.find(t => t.id === id);
+      if (task) {
+        await updateDoc(taskRef, {
+          completed: !task.completed
+        });
+      }
+    } catch (error) {
+      console.error('Error toggling task:', error);
+    }
   };
 
-  const deleteTask = (id: number) => {
-    setTasks(prev => prev.filter(t => t.id !== id));
+  const deleteTask = async (id: string) => {
+    try {
+      await deleteDoc(doc(db, 'tasks', id));
+    } catch (error) {
+      console.error('Error deleting task:', error);
+    }
   };
 
   // Settings state

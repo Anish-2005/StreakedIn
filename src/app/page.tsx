@@ -209,12 +209,16 @@ export default function Home() {
                   </a>
                 ))}
                 <div className="pt-4 space-y-3 border-t border-slate-700/50">
-                  <button className="w-full text-center py-2 text-slate-300 hover:text-white transition-colors duration-200 font-medium">
-                    Sign In
-                  </button>
-                  <button className="w-full text-center py-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg text-white font-medium">
-                    Get Started
-                  </button>
+                  <Link href="/login">
+                    <button className="w-full text-center py-2 text-slate-300 hover:text-white transition-colors duration-200 font-medium">
+                      Sign In
+                    </button>
+                  </Link>
+                  <Link href="/login">
+                    <button className="w-full text-center py-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg text-white font-medium">
+                      Get Started
+                    </button>
+                  </Link>
                 </div>
               </div>
             </motion.div>
