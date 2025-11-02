@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../../contexts/AuthContext';
 import { db } from '../../lib/firebase';
 import { collection, addDoc, updateDoc, deleteDoc, doc, query, where, onSnapshot, orderBy } from 'firebase/firestore';
-import { BarChart3, Target, CheckSquare, Activity, Bell, Brain, Settings, TrendingUp, ChevronRight, Search, Clock, Users, Plus, Sparkles, Download, Trash2, Bot, Send, Zap, Calendar, Mail, Smartphone, MoreHorizontal, MessageCircle, Filter, CalendarIcon, Edit3, LineChart, PieChart, BarChart } from 'lucide-react';
+import { BarChart3, Target, CheckSquare, Activity, Bell, Brain, Settings, TrendingUp, ChevronRight, Search } from 'lucide-react';
 import Sidebar from '../../components/dashboard/Sidebar';
 import Header from '../../components/dashboard/Header';
 import OverviewTab from '../../components/dashboard/OverviewTab';
@@ -57,26 +57,6 @@ export default function Dashboard() {
 
   const [activeTab, setActiveTab] = useState<string>('overview');
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(true);
-  const [aiPrompt, setAiPrompt] = useState<string>('');
-  const [aiResponse, setAiResponse] = useState<string>('');
-  const [isAiLoading, setIsAiLoading] = useState<boolean>(false);
-  const [notifications, setNotifications] = useState<NotificationItem[]>([]);
-  const [goals, setGoals] = useState<Goal[]>([]);
-  const [tasks, setTasks] = useState<Task[]>([]);
-  const [reminders, setReminders] = useState<Reminder[]>([]);
-
-  // Task manager helpers
-  const [newTaskTitle, setNewTaskTitle] = useState<string>('');
-  const [newTaskPriority, setNewTaskPriority] = useState<string>('medium');
-  const [newTaskDueDate, setNewTaskDueDate] = useState<string>('');
-
-  // Settings state
-  const [settingsState, setSettingsState] = useState<Record<string, boolean>>({
-    emailNotifications: true,
-    pushNotifications: true,
-    soundAlerts: false,
-    autoGoalSuggestions: true,
-  });
 
   useEffect(() => {
     if (!loading && !user) {
@@ -84,59 +64,16 @@ export default function Dashboard() {
     }
   }, [user, loading, router]);
 
-  // Sample data
-  useEffect(() => {
-    setGoals([
-      {
-        id: 1,
-        title: 'Complete React Certification',
-        progress: 75,
-        deadline: '2024-02-15',
-        category: 'Learning',
-        aiSuggested: true
-      },
-      {
-        id: 2,
-        title: 'Increase Network by 50+',
-        progress: 40,
-        deadline: '2024-03-01',
-        category: 'Networking',
-        aiSuggested: false
-      }
-    ]);
-
-    setReminders([
-      {
-        id: 1,
-        title: 'Weekly progress review',
-        type: 'email',
-        frequency: 'weekly',
-        enabled: true,
-        nextTrigger: '2024-01-22 09:00'
-      },
-      {
-        id: 2,
-        title: 'Daily goal check-in',
-        type: 'browser',
-        frequency: 'daily',
-        enabled: true,
-        nextTrigger: '2024-01-21 08:00'
-      }
-    ]);
-  }, []);
-
   // User profile state
   const [userProfile, setUserProfile] = useState<{ plan?: string; role?: string } | null>(null);
 
-  // Firestore tasks integration
+  // Fetch user profile
   useEffect(() => {
     if (!user) {
-      setTasks([]);
       setUserProfile(null);
       return;
     }
 
-    // Fetch user profile
     const userProfileRef = doc(db, 'users', user.uid);
     const unsubscribeProfile = onSnapshot(userProfileRef, (doc) => {
       if (doc.exists()) {
@@ -147,24 +84,7 @@ export default function Dashboard() {
       }
     });
 
-    const tasksQuery = query(
-      collection(db, 'tasks'),
-      where('userId', '==', user.uid),
-      orderBy('createdAt', 'desc')
-    );
-
-    const unsubscribeTasks = onSnapshot(tasksQuery, (snapshot) => {
-      const tasksData = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      })) as Task[];
-      setTasks(tasksData);
-    });
-
-    return () => {
-      unsubscribeProfile();
-      unsubscribeTasks();
-    };
+    return () => unsubscribeProfile();
   }, [user]);
 
   if (loading) {
@@ -178,76 +98,6 @@ export default function Dashboard() {
   if (!user) {
     return null;
   }
-
-  const handleAiPrompt = async () => {
-    if (!aiPrompt.trim()) return;
-    
-    setIsAiLoading(true);
-    // Simulate AI response
-    setTimeout(() => {
-      setAiResponse(`Based on your current goals and progress, I recommend:
-
-1. **Focus on React Certification**: You're 75% complete - schedule 2 hours daily to finish by next week.
-2. **Networking Strategy**: Connect with 5 professionals in your field daily to reach your goal.
-3. **Skill Development**: Consider adding a backend technology to your learning path for full-stack development.
-
-Would you like me to create specific tasks for these recommendations?`);
-      setIsAiLoading(false);
-    }, 2000);
-  };
-
-  const quickAiPrompts = [
-    "Analyze my productivity patterns",
-    "Suggest weekly goals",
-    "Optimize my schedule",
-    "Review progress and suggest improvements"
-  ];
-
-  const addTask = async () => {
-    if (!newTaskTitle.trim() || !user) return;
-    
-    try {
-      await addDoc(collection(db, 'tasks'), {
-        title: newTaskTitle.trim(),
-        completed: false,
-        priority: newTaskPriority,
-        dueDate: newTaskDueDate,
-        userId: user.uid,
-        createdAt: new Date()
-      });
-      setNewTaskTitle('');
-      setNewTaskPriority('medium');
-      setNewTaskDueDate('');
-    } catch (error) {
-      console.error('Error adding task:', error);
-    }
-  };
-
-  const toggleTask = async (id: string) => {
-    try {
-      const taskRef = doc(db, 'tasks', id);
-      const task = tasks.find(t => t.id === id);
-      if (task) {
-        await updateDoc(taskRef, {
-          completed: !task.completed
-        });
-      }
-    } catch (error) {
-      console.error('Error toggling task:', error);
-    }
-  };
-
-  const deleteTask = async (id: string) => {
-    try {
-      await deleteDoc(doc(db, 'tasks', id));
-    } catch (error) {
-      console.error('Error deleting task:', error);
-    }
-  };
-
-  const toggleSetting = (key: string) => {
-    setSettingsState(prev => ({ ...prev, [key]: !prev[key] }));
-  };
 
   const navigation = [
     { id: 'overview', name: 'Overview', icon: <BarChart3 className="w-5 h-5" /> },
