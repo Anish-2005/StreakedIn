@@ -1,55 +1,21 @@
 // pages/dashboard.js
 "use client";
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Target, 
-  TrendingUp, 
-  BarChart3, 
-  Calendar, 
-  CheckCircle, 
-  Users, 
-  Bell,
-  MessageCircle,
-  Settings,
-  Plus,
-  Search,
-  Filter,
-  MoreHorizontal,
-  Clock,
-  Mail,
-  Smartphone,
-  Zap,
-  Brain,
-  Edit3,
-  Trash2,
-  Play,
-  Pause,
-  ChevronRight,
-  ChevronDown,
-  User,
-  LogOut,
-  Download,
-  Share2,
-  Eye,
-  EyeOff,
-  RotateCcw,
-  Sparkles,
-  Bot,
-  Send,
-  Calendar as CalendarIcon,
-  AlertCircle,
-  CheckSquare,
-  PieChart,
-  LineChart,
-  BarChart,
-  Activity
-} from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { db } from '../../lib/firebase';
 import { collection, addDoc, updateDoc, deleteDoc, doc, query, where, onSnapshot, orderBy } from 'firebase/firestore';
+import Sidebar from '../../components/dashboard/Sidebar';
+import Header from '../../components/dashboard/Header';
+import OverviewTab from '../../components/dashboard/OverviewTab';
+import TasksTab from '../../components/dashboard/TasksTab';
+import SettingsTab from '../../components/dashboard/SettingsTab';
+import AIAssistantTab from '../../components/dashboard/AIAssistantTab';
+import RemindersTab from '../../components/dashboard/RemindersTab';
+import GoalsTab from '../../components/dashboard/GoalsTab';
+import AnalyticsTab from '../../components/dashboard/AnalyticsTab';
 
 interface NotificationItem {
   id: number;
