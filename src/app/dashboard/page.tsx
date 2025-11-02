@@ -158,18 +158,6 @@ export default function Dashboard() {
     ]);
   }, []);
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
-        <div className="text-white text-xl">Loading...</div>
-      </div>
-    );
-  }
-
-  if (!user) {
-    return null;
-  }
-
   // Firestore tasks integration
   useEffect(() => {
     if (!user) {
@@ -193,6 +181,18 @@ export default function Dashboard() {
 
     return () => unsubscribe();
   }, [user]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
+        <div className="text-white text-xl">Loading...</div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return null;
+  }
 
   const handleAiPrompt = async () => {
     if (!aiPrompt.trim()) return;
