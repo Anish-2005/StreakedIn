@@ -541,8 +541,8 @@ Would you like me to create specific tasks for these recommendations?`);
                 {/* Reminders Header */}
                 <div className="flex items-center justify-between">
                   <div>
-                    <h1 className="text-2xl font-bold text-gray-900">Reminders & Notifications</h1>
-                    <p className="text-gray-600">Configure how and when you receive reminders</p>
+                    <h1 className="text-2xl font-bold text-white">Reminders & Notifications</h1>
+                    <p className="text-slate-300">Configure how and when you receive reminders</p>
                   </div>
                   <button className="flex items-center space-x-2 px-4 py-2 bg-[#0A66C2] text-white rounded-lg hover:bg-[#004182] transition-colors">
                     <Plus className="w-4 h-4" />
@@ -554,40 +554,40 @@ Would you like me to create specific tasks for these recommendations?`);
                   {/* Reminders List */}
                   <div className="lg:col-span-2 space-y-4">
                     {reminders.map((reminder) => (
-                      <div key={reminder.id} className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
+                      <div key={reminder.id} className="bg-slate-800/30 backdrop-blur-md border border-slate-700/50 rounded-xl p-6">
                         <div className="flex items-center justify-between mb-4">
                           <div className="flex items-center space-x-3">
                             <div className={`p-2 rounded-lg ${
-                              reminder.type === 'email' ? 'bg-blue-100 text-blue-600' :
-                              reminder.type === 'browser' ? 'bg-green-100 text-green-600' :
-                              'bg-purple-100 text-purple-600'
+                              reminder.type === 'email' ? 'bg-blue-900/30 text-blue-300' :
+                              reminder.type === 'browser' ? 'bg-green-900/30 text-green-300' :
+                              'bg-purple-900/30 text-purple-300'
                             }`}>
                               {reminder.type === 'email' ? <Mail className="w-4 h-4" /> :
                                reminder.type === 'browser' ? <Smartphone className="w-4 h-4" /> :
                                <Bell className="w-4 h-4" />}
                             </div>
                             <div>
-                              <h3 className="font-semibold text-gray-900">{reminder.title}</h3>
-                              <p className="text-sm text-gray-500">Next: {reminder.nextTrigger}</p>
+                              <h3 className="font-semibold text-white">{reminder.title}</h3>
+                              <p className="text-sm text-slate-400">Next: {reminder.nextTrigger}</p>
                             </div>
                           </div>
                           <div className="flex items-center space-x-2">
                             <label className="relative inline-flex items-center cursor-pointer">
                               <input type="checkbox" className="sr-only peer" defaultChecked={reminder.enabled} />
-                              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#0A66C2]"></div>
+                              <div className="w-11 h-6 bg-slate-700/40 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-600 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gradient-to-r peer-checked:from-blue-500 peer-checked:to-purple-600"></div>
                             </label>
-                            <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
-                              <MoreHorizontal className="w-4 h-4 text-gray-500" />
+                            <button className="p-2 hover:bg-slate-700/40 rounded-lg transition-colors">
+                              <MoreHorizontal className="w-4 h-4 text-slate-300" />
                             </button>
                           </div>
                         </div>
-                        <div className="flex items-center justify-between text-sm text-gray-600">
+                        <div className="flex items-center justify-between text-sm text-slate-300">
                           <span>Frequency: {reminder.frequency}</span>
                           <div className="flex space-x-2">
-                            <button className="text-[#0A66C2] hover:text-[#004182] transition-colors">
+                            <button className="text-blue-400 hover:text-blue-300 transition-colors">
                               Edit
                             </button>
-                            <button className="text-red-600 hover:text-red-700 transition-colors">
+                            <button className="text-red-500 hover:text-red-400 transition-colors">
                               Delete
                             </button>
                           </div>
@@ -656,8 +656,8 @@ Would you like me to create specific tasks for these recommendations?`);
                 {/* Goals Header */}
                 <div className="flex items-center justify-between">
                   <div>
-                    <h1 className="text-2xl font-bold text-gray-900">Goals & Targets</h1>
-                    <p className="text-gray-600">Set and track your professional development goals</p>
+                    <h1 className="text-2xl font-bold text-white">Goals & Targets</h1>
+                    <p className="text-slate-300">Set and track your professional development goals</p>
                   </div>
                   <div className="flex space-x-3">
                     <button className="flex items-center space-x-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
@@ -675,19 +675,19 @@ Would you like me to create specific tasks for these recommendations?`);
                   {/* Goals List */}
                   <div className="lg:col-span-3 space-y-4">
                     {goals.map((goal) => (
-                      <div key={goal.id} className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
+                      <div key={goal.id} className="bg-slate-800/30 backdrop-blur-md border border-slate-700/50 rounded-xl p-6">
                         <div className="flex items-start justify-between mb-4">
                           <div className="flex-1">
                             <div className="flex items-center space-x-3 mb-2">
-                              <h3 className="font-semibold text-gray-900 text-lg">{goal.title}</h3>
+                              <h3 className="font-semibold text-white text-lg">{goal.title}</h3>
                               {goal.aiSuggested && (
-                                <span className="flex items-center space-x-1 px-2 py-1 bg-purple-100 text-purple-700 rounded-full text-xs">
+                                <span className="flex items-center space-x-1 px-2 py-1 bg-purple-900/30 text-purple-300 rounded-full text-xs">
                                   <Sparkles className="w-3 h-3" />
                                   <span>AI Suggested</span>
                                 </span>
                               )}
                             </div>
-                            <div className="flex items-center space-x-4 text-sm text-gray-600">
+                            <div className="flex items-center space-x-4 text-sm text-slate-300">
                               <span className="flex items-center space-x-1">
                                 <CalendarIcon className="w-4 h-4" />
                                 <span>Due {goal.deadline}</span>
@@ -699,11 +699,11 @@ Would you like me to create specific tasks for these recommendations?`);
                             </div>
                           </div>
                           <div className="flex items-center space-x-2">
-                            <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
-                              <Edit3 className="w-4 h-4 text-gray-500" />
+                            <button className="p-2 hover:bg-slate-700/40 rounded-lg transition-colors">
+                              <Edit3 className="w-4 h-4 text-slate-300" />
                             </button>
-                            <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
-                              <MoreHorizontal className="w-4 h-4 text-gray-500" />
+                            <button className="p-2 hover:bg-slate-700/40 rounded-lg transition-colors">
+                              <MoreHorizontal className="w-4 h-4 text-slate-300" />
                             </button>
                           </div>
                         </div>
@@ -711,12 +711,12 @@ Would you like me to create specific tasks for these recommendations?`);
                         {/* Progress Bar */}
                         <div className="mb-4">
                           <div className="flex items-center justify-between mb-2">
-                            <span className="text-sm font-medium text-gray-700">Progress</span>
-                            <span className="text-sm font-semibold text-[#0A66C2]">{goal.progress}%</span>
+                            <span className="text-sm font-medium text-slate-300">Progress</span>
+                            <span className="text-sm font-semibold text-white">{goal.progress}%</span>
                           </div>
-                          <div className="w-full bg-gray-200 rounded-full h-3">
+                          <div className="w-full bg-slate-700/40 rounded-full h-3">
                             <div 
-                              className="bg-[#0A66C2] h-3 rounded-full transition-all duration-500"
+                              className="bg-gradient-to-r from-blue-500 to-purple-600 h-3 rounded-full transition-all duration-500"
                               style={{ width: `${goal.progress}%` }}
                             ></div>
                           </div>
@@ -725,14 +725,14 @@ Would you like me to create specific tasks for these recommendations?`);
                         {/* Actions */}
                         <div className="flex items-center justify-between">
                           <div className="flex space-x-2">
-                            <button className="px-3 py-1 text-sm bg-blue-100 text-[#0A66C2] rounded-lg hover:bg-blue-200 transition-colors">
+                            <button className="px-3 py-1 text-sm bg-slate-900/30 text-blue-400 rounded-lg hover:opacity-90 transition-colors">
                               Update Progress
                             </button>
-                            <button className="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
+                            <button className="px-3 py-1 text-sm bg-slate-900/20 text-slate-300 rounded-lg hover:opacity-90 transition-colors">
                               View Details
                             </button>
                           </div>
-                          <button className="flex items-center space-x-1 text-sm text-gray-500 hover:text-gray-700 transition-colors">
+                          <button className="flex items-center space-x-1 text-sm text-slate-300 hover:text-white transition-colors">
                             <Brain className="w-4 h-4" />
                             <span>Get AI Tips</span>
                           </button>
@@ -807,8 +807,8 @@ Would you like me to create specific tasks for these recommendations?`);
                 {/* Analytics Header */}
                 <div className="flex items-center justify-between">
                   <div>
-                    <h1 className="text-2xl font-bold text-gray-900">Productivity Analytics</h1>
-                    <p className="text-gray-600">Detailed insights into your performance and progress</p>
+                    <h1 className="text-2xl font-bold text-white">Productivity Analytics</h1>
+                    <p className="text-slate-300">Detailed insights into your performance and progress</p>
                   </div>
                   <div className="flex space-x-3">
                     <button className="flex items-center space-x-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
@@ -824,54 +824,54 @@ Would you like me to create specific tasks for these recommendations?`);
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                   {/* Charts */}
-                  <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
-                    <h3 className="font-semibold text-gray-900 mb-4">Productivity Trends</h3>
-                    <div className="h-64 bg-gray-50 rounded-lg flex items-center justify-center">
-                      <LineChart className="w-12 h-12 text-gray-300" />
+                  <div className="bg-slate-800/30 backdrop-blur-md border border-slate-700/50 rounded-xl p-6">
+                    <h3 className="font-semibold text-white mb-4">Productivity Trends</h3>
+                    <div className="h-64 bg-slate-900/20 rounded-lg flex items-center justify-center">
+                      <LineChart className="w-12 h-12 text-slate-500" />
                     </div>
                   </div>
 
-                  <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
-                    <h3 className="font-semibold text-gray-900 mb-4">Goal Distribution</h3>
-                    <div className="h-64 bg-gray-50 rounded-lg flex items-center justify-center">
-                      <PieChart className="w-12 h-12 text-gray-300" />
+                  <div className="bg-slate-800/30 backdrop-blur-md border border-slate-700/50 rounded-xl p-6">
+                    <h3 className="font-semibold text-white mb-4">Goal Distribution</h3>
+                    <div className="h-64 bg-slate-900/20 rounded-lg flex items-center justify-center">
+                      <PieChart className="w-12 h-12 text-slate-500" />
                     </div>
                   </div>
 
-                  <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
-                    <h3 className="font-semibold text-gray-900 mb-4">Weekly Performance</h3>
-                    <div className="h-64 bg-gray-50 rounded-lg flex items-center justify-center">
-                      <BarChart className="w-12 h-12 text-gray-300" />
+                  <div className="bg-slate-800/30 backdrop-blur-md border border-slate-700/50 rounded-xl p-6">
+                    <h3 className="font-semibold text-white mb-4">Weekly Performance</h3>
+                    <div className="h-64 bg-slate-900/20 rounded-lg flex items-center justify-center">
+                      <BarChart className="w-12 h-12 text-slate-500" />
                     </div>
                   </div>
 
-                  <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
-                    <h3 className="font-semibold text-gray-900 mb-4">AI Insights</h3>
+                  <div className="bg-slate-800/30 backdrop-blur-md border border-slate-700/50 rounded-xl p-6">
+                    <h3 className="font-semibold text-white mb-4">AI Insights</h3>
                     <div className="space-y-4">
-                      <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
+                      <div className="p-4 bg-slate-900/20 rounded-lg border border-slate-700/40">
                         <div className="flex items-center space-x-2 mb-2">
-                          <Sparkles className="w-4 h-4 text-blue-600" />
-                          <span className="font-semibold text-blue-900">Peak Productivity</span>
+                          <Sparkles className="w-4 h-4 text-blue-400" />
+                          <span className="font-semibold text-white">Peak Productivity</span>
                         </div>
-                        <p className="text-sm text-blue-700">
+                        <p className="text-sm text-slate-300">
                           Your most productive hours are between 9-11 AM. Schedule important tasks during this time.
                         </p>
                       </div>
-                      <div className="p-4 bg-green-50 rounded-lg border border-green-200">
+                      <div className="p-4 bg-slate-900/20 rounded-lg border border-slate-700/40">
                         <div className="flex items-center space-x-2 mb-2">
-                          <TrendingUp className="w-4 h-4 text-green-600" />
-                          <span className="font-semibold text-green-900">Progress Alert</span>
+                          <TrendingUp className="w-4 h-4 text-green-400" />
+                          <span className="font-semibold text-white">Progress Alert</span>
                         </div>
-                        <p className="text-sm text-green-700">
+                        <p className="text-sm text-slate-300">
                           You're on track to complete 85% of your monthly goals. Keep up the good work!
                         </p>
                       </div>
-                      <div className="p-4 bg-orange-50 rounded-lg border border-orange-200">
+                      <div className="p-4 bg-slate-900/20 rounded-lg border border-slate-700/40">
                         <div className="flex items-center space-x-2 mb-2">
-                          <AlertCircle className="w-4 h-4 text-orange-600" />
-                          <span className="font-semibold text-orange-900">Attention Needed</span>
+                          <AlertCircle className="w-4 h-4 text-orange-400" />
+                          <span className="font-semibold text-white">Attention Needed</span>
                         </div>
-                        <p className="text-sm text-orange-700">
+                        <p className="text-sm text-slate-300">
                           Networking goals are lagging behind. Consider scheduling 2-3 connection requests daily.
                         </p>
                       </div>
