@@ -238,221 +238,9 @@ Would you like me to create specific tasks for these recommendations?`);
               <span className="text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">StreakedIn</span>
             )}
 
-            {activeTab === 'tasks' && (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                className="space-y-6"
-              >
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h1 className="text-2xl font-bold text-white">Task Manager</h1>
-                    <p className="text-slate-300">Create, prioritize and track tasks</p>
-                  </div>
-                  <div className="text-sm text-slate-300">{tasks.length} tasks</div>
-                </div>
 
-                {/* New Task Form */}
-                <div className="bg-slate-800/30 backdrop-blur-md border border-slate-700/50 rounded-xl p-6">
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                    <input
-                      type="text"
-                      value={newTaskTitle}
-                      onChange={(e) => setNewTaskTitle(e.target.value)}
-                      placeholder="Task title..."
-                      className="col-span-2 w-full border border-slate-700/50 rounded-lg px-3 py-2 bg-slate-900/20 text-white placeholder-slate-400 focus:outline-none"
-                    />
-                    <select
-                      value={newTaskPriority}
-                      onChange={(e) => setNewTaskPriority(e.target.value)}
-                      className="w-full border border-slate-700/50 rounded-lg px-3 py-2 bg-slate-900/20 text-white"
-                    >
-                      <option value="low">Low</option>
-                      <option value="medium">Medium</option>
-                      <option value="high">High</option>
-                    </select>
-                    <input
-                      type="date"
-                      value={newTaskDueDate}
-                      onChange={(e) => setNewTaskDueDate(e.target.value)}
-                      className="w-full border border-slate-700/50 rounded-lg px-3 py-2 bg-slate-900/20 text-white"
-                    />
-                    <div className="col-span-3 flex justify-end">
-                      <button
-                        onClick={addTask}
-                        className="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg"
-                      >
-                        Add Task
-                      </button>
-                    </div>
-                  </div>
-                </div>
 
-                {/* Tasks List */}
-                <div className="space-y-3">
-                  {tasks.length === 0 ? (
-                    <div className="bg-slate-800/30 backdrop-blur-md border border-slate-700/50 rounded-xl p-6 text-slate-400">No tasks yet.</div>
-                  ) : (
-                    tasks.map((t) => (
-                      <div key={t.id} className="bg-slate-800/30 backdrop-blur-md border border-slate-700/50 rounded-xl p-4 flex items-center justify-between">
-                        <div className="flex items-center space-x-3">
-                          <input type="checkbox" checked={t.completed} onChange={() => toggleTask(t.id)} className="w-4 h-4" />
-                          <div>
-                            <div className={`font-medium ${t.completed ? 'line-through text-slate-400' : 'text-white'}`}>{t.title}</div>
-                            <div className="text-sm text-slate-400">{t.dueDate ? `Due ${t.dueDate}` : 'No due date'}</div>
-                          </div>
-                        </div>
-                        <div className="flex items-center space-x-3">
-                          <div className={`px-2 py-1 rounded-full text-xs ${t.priority === 'high' ? 'bg-red-600 text-white' : t.priority === 'medium' ? 'bg-yellow-600 text-white' : 'bg-green-600 text-white'}`}>{t.priority}</div>
-                          <button onClick={() => deleteTask(t.id)} className="p-2 hover:bg-slate-700/40 rounded-lg text-red-400">Delete</button>
-                        </div>
-                      </div>
-                    ))
-                  )}
-                </div>
-              </motion.div>
-            )}
 
-                {/* Settings Tab */}
-            {activeTab === 'settings' && (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                className="space-y-6"
-              >
-                <div>
-                  <h1 className="text-2xl font-bold text-white">Settings</h1>
-                  <p className="text-slate-300">Manage your account and preferences</p>
-                </div>
-
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  {/* Notification Settings */}
-                  <div className="bg-slate-800/30 backdrop-blur-md border border-slate-700/50 rounded-xl p-6">
-                    <h3 className="text-lg font-semibold text-white mb-4">Notification Settings</h3>
-                    <div className="space-y-4">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <h4 className="text-white font-medium">Email Notifications</h4>
-                          <p className="text-slate-400 text-sm">Receive updates via email</p>
-                        </div>
-                        <label className="relative inline-flex items-center cursor-pointer">
-                          <input 
-                            type="checkbox" 
-                            checked={settingsState.emailNotifications} 
-                            onChange={() => toggleSetting('emailNotifications')} 
-                            className="sr-only peer" 
-                          />
-                          <div className="w-11 h-6 bg-slate-700/40 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-600 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gradient-to-r peer-checked:from-blue-500 peer-checked:to-purple-600"></div>
-                        </label>
-                      </div>
-
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <h4 className="text-white font-medium">Push Notifications</h4>
-                          <p className="text-slate-400 text-sm">Browser and desktop alerts</p>
-                        </div>
-                        <label className="relative inline-flex items-center cursor-pointer">
-                          <input 
-                            type="checkbox" 
-                            checked={settingsState.pushNotifications} 
-                            onChange={() => toggleSetting('pushNotifications')} 
-                            className="sr-only peer" 
-                          />
-                          <div className="w-11 h-6 bg-slate-700/40 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-600 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gradient-to-r peer-checked:from-blue-500 peer-checked:to-purple-600"></div>
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* AI & Preferences */}
-                  <div className="bg-slate-800/30 backdrop-blur-md border border-slate-700/50 rounded-xl p-6">
-                    <h3 className="text-lg font-semibold text-white mb-4">AI & Preferences</h3>
-                    <div className="space-y-4">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <h4 className="text-white font-medium">Auto Goal Suggestions</h4>
-                          <p className="text-slate-400 text-sm">AI-powered goal recommendations</p>
-                        </div>
-                        <label className="relative inline-flex items-center cursor-pointer">
-                          <input 
-                            type="checkbox" 
-                            checked={settingsState.autoGoalSuggestions} 
-                            onChange={() => toggleSetting('autoGoalSuggestions')} 
-                            className="sr-only peer" 
-                          />
-                          <div className="w-11 h-6 bg-slate-700/40 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-600 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gradient-to-r peer-checked:from-blue-500 peer-checked:to-purple-600"></div>
-                        </label>
-                      </div>
-
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <h4 className="text-white font-medium">Sound Alerts</h4>
-                          <p className="text-slate-400 text-sm">Audio notifications for reminders</p>
-                        </div>
-                        <label className="relative inline-flex items-center cursor-pointer">
-                          <input 
-                            type="checkbox" 
-                            checked={settingsState.soundAlerts} 
-                            onChange={() => toggleSetting('soundAlerts')} 
-                            className="sr-only peer" 
-                          />
-                          <div className="w-11 h-6 bg-slate-700/40 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-600 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gradient-to-r peer-checked:from-blue-500 peer-checked:to-purple-600"></div>
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Account Settings */}
-                  <div className="bg-slate-800/30 backdrop-blur-md border border-slate-700/50 rounded-xl p-6 lg:col-span-2">
-                    <h3 className="text-lg font-semibold text-white mb-4">Account Settings</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
-                        <label className="text-slate-300 text-sm mb-2 block">Display Name</label>
-                        <input 
-                          type="text" 
-                          defaultValue="John Doe" 
-                          className="w-full border border-slate-700/50 rounded-lg px-3 py-2 bg-slate-900/20 text-white focus:outline-none focus:ring-2 focus:ring-blue-500/60 focus:border-transparent"
-                        />
-                      </div>
-                      <div>
-                        <label className="text-slate-300 text-sm mb-2 block">Email</label>
-                        <input 
-                          type="email" 
-                          defaultValue="john.doe@example.com" 
-                          className="w-full border border-slate-700/50 rounded-lg px-3 py-2 bg-slate-900/20 text-white focus:outline-none focus:ring-2 focus:ring-blue-500/60 focus:border-transparent"
-                        />
-                      </div>
-                      <div>
-                        <label className="text-slate-300 text-sm mb-2 block">Timezone</label>
-                        <select className="w-full border border-slate-700/50 rounded-lg px-3 py-2 bg-slate-900/20 text-white focus:outline-none focus:ring-2 focus:ring-blue-500/60 focus:border-transparent">
-                          <option>UTC-5 (Eastern Time)</option>
-                          <option>UTC-8 (Pacific Time)</option>
-                          <option>UTC+0 (GMT)</option>
-                        </select>
-                      </div>
-                      <div>
-                        <label className="text-slate-300 text-sm mb-2 block">Theme</label>
-                        <select className="w-full border border-slate-700/50 rounded-lg px-3 py-2 bg-slate-900/20 text-white focus:outline-none focus:ring-2 focus:ring-blue-500/60 focus:border-transparent">
-                          <option>Dark</option>
-                          <option>Light</option>
-                          <option>System</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div className="flex justify-end space-x-3 mt-6 pt-4 border-t border-slate-700/50">
-                      <button className="px-4 py-2 border border-slate-700/50 rounded-lg text-slate-300 hover:bg-slate-700/40 transition-colors">
-                        Cancel
-                      </button>
-                      <button className="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg text-white hover:opacity-90 transition-opacity">
-                        Save Changes
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            )}
 
           </div>
           <button
@@ -632,6 +420,248 @@ Would you like me to create specific tasks for these recommendations?`);
                           <span className="font-medium text-slate-300">{action.label}</span>
                         </button>
                       ))}
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+
+            {/* Task Manager Tab */}
+            {activeTab === 'tasks' && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                className="space-y-6"
+              >
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h1 className="text-2xl font-bold text-white">Task Manager</h1>
+                    <p className="text-slate-300">Create, prioritize and track tasks</p>
+                  </div>
+                  <div className="text-sm text-slate-300">{tasks.length} tasks</div>
+                </div>
+
+                {/* New Task Form */}
+                <div className="bg-slate-800/30 backdrop-blur-md border border-slate-700/50 rounded-xl p-6">
+                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <input
+                      type="text"
+                      value={newTaskTitle}
+                      onChange={(e) => setNewTaskTitle(e.target.value)}
+                      placeholder="Task title..."
+                      className="col-span-2 w-full border border-slate-700/50 rounded-lg px-3 py-2 bg-slate-900/20 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/60 focus:border-transparent"
+                    />
+                    <select
+                      value={newTaskPriority}
+                      onChange={(e) => setNewTaskPriority(e.target.value)}
+                      className="w-full border border-slate-700/50 rounded-lg px-3 py-2 bg-slate-900/20 text-white focus:outline-none focus:ring-2 focus:ring-blue-500/60 focus:border-transparent"
+                    >
+                      <option value="low">Low Priority</option>
+                      <option value="medium">Medium Priority</option>
+                      <option value="high">High Priority</option>
+                    </select>
+                    <input
+                      type="date"
+                      value={newTaskDueDate}
+                      onChange={(e) => setNewTaskDueDate(e.target.value)}
+                      className="w-full border border-slate-700/50 rounded-lg px-3 py-2 bg-slate-900/20 text-white focus:outline-none focus:ring-2 focus:ring-blue-500/60 focus:border-transparent"
+                    />
+                  </div>
+                  <div className="flex justify-end mt-4">
+                    <button
+                      onClick={addTask}
+                      className="px-6 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:opacity-90 transition-opacity"
+                    >
+                      Add Task
+                    </button>
+                  </div>
+                </div>
+
+                {/* Tasks List */}
+                <div className="space-y-3">
+                  {tasks.length === 0 ? (
+                    <div className="bg-slate-800/30 backdrop-blur-md border border-slate-700/50 rounded-xl p-8 text-center text-slate-400">
+                      <CheckSquare className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                      <p>No tasks yet. Create your first task above!</p>
+                    </div>
+                  ) : (
+                    tasks.map((task) => (
+                      <div key={task.id} className="bg-slate-800/30 backdrop-blur-md border border-slate-700/50 rounded-xl p-4 flex items-center justify-between hover:border-slate-600/50 transition-colors">
+                        <div className="flex items-center space-x-4">
+                          <input 
+                            type="checkbox" 
+                            checked={task.completed} 
+                            onChange={() => toggleTask(task.id)} 
+                            className="w-5 h-5 rounded border-slate-600 bg-slate-700/50 text-blue-500 focus:ring-blue-500/60" 
+                          />
+                          <div>
+                            <div className={`font-medium text-lg ${task.completed ? 'line-through text-slate-400' : 'text-white'}`}>
+                              {task.title}
+                            </div>
+                            <div className="text-sm text-slate-400">
+                              {task.dueDate ? `Due ${task.dueDate}` : 'No due date'}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex items-center space-x-4">
+                          <div className={`px-3 py-1 rounded-full text-sm font-medium ${
+                            task.priority === 'high' 
+                              ? 'bg-red-500/20 text-red-300 border border-red-500/30' 
+                              : task.priority === 'medium' 
+                              ? 'bg-yellow-500/20 text-yellow-300 border border-yellow-500/30'
+                              : 'bg-green-500/20 text-green-300 border border-green-500/30'
+                          }`}>
+                            {task.priority}
+                          </div>
+                          <button 
+                            onClick={() => deleteTask(task.id)} 
+                            className="p-2 hover:bg-red-500/20 rounded-lg text-red-400 hover:text-red-300 transition-colors"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </motion.div>
+            )}
+
+            {/* Settings Tab */}
+            {activeTab === 'settings' && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                className="space-y-6"
+              >
+                <div>
+                  <h1 className="text-2xl font-bold text-white">Settings</h1>
+                  <p className="text-slate-300">Manage your account and preferences</p>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  {/* Notification Settings */}
+                  <div className="bg-slate-800/30 backdrop-blur-md border border-slate-700/50 rounded-xl p-6">
+                    <h3 className="text-lg font-semibold text-white mb-4">Notification Settings</h3>
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <h4 className="text-white font-medium">Email Notifications</h4>
+                          <p className="text-slate-400 text-sm">Receive updates via email</p>
+                        </div>
+                        <label className="relative inline-flex items-center cursor-pointer">
+                          <input 
+                            type="checkbox" 
+                            checked={settingsState.emailNotifications} 
+                            onChange={() => toggleSetting('emailNotifications')} 
+                            className="sr-only peer" 
+                          />
+                          <div className="w-11 h-6 bg-slate-700/40 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-600 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gradient-to-r peer-checked:from-blue-500 peer-checked:to-purple-600"></div>
+                        </label>
+                      </div>
+
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <h4 className="text-white font-medium">Push Notifications</h4>
+                          <p className="text-slate-400 text-sm">Browser and desktop alerts</p>
+                        </div>
+                        <label className="relative inline-flex items-center cursor-pointer">
+                          <input 
+                            type="checkbox" 
+                            checked={settingsState.pushNotifications} 
+                            onChange={() => toggleSetting('pushNotifications')} 
+                            className="sr-only peer" 
+                          />
+                          <div className="w-11 h-6 bg-slate-700/40 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-600 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gradient-to-r peer-checked:from-blue-500 peer-checked:to-purple-600"></div>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* AI & Preferences */}
+                  <div className="bg-slate-800/30 backdrop-blur-md border border-slate-700/50 rounded-xl p-6">
+                    <h3 className="text-lg font-semibold text-white mb-4">AI & Preferences</h3>
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <h4 className="text-white font-medium">Auto Goal Suggestions</h4>
+                          <p className="text-slate-400 text-sm">AI-powered goal recommendations</p>
+                        </div>
+                        <label className="relative inline-flex items-center cursor-pointer">
+                          <input 
+                            type="checkbox" 
+                            checked={settingsState.autoGoalSuggestions} 
+                            onChange={() => toggleSetting('autoGoalSuggestions')} 
+                            className="sr-only peer" 
+                          />
+                          <div className="w-11 h-6 bg-slate-700/40 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-600 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gradient-to-r peer-checked:from-blue-500 peer-checked:to-purple-600"></div>
+                        </label>
+                      </div>
+
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <h4 className="text-white font-medium">Sound Alerts</h4>
+                          <p className="text-slate-400 text-sm">Audio notifications for reminders</p>
+                        </div>
+                        <label className="relative inline-flex items-center cursor-pointer">
+                          <input 
+                            type="checkbox" 
+                            checked={settingsState.soundAlerts} 
+                            onChange={() => toggleSetting('soundAlerts')} 
+                            className="sr-only peer" 
+                          />
+                          <div className="w-11 h-6 bg-slate-700/40 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-600 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gradient-to-r peer-checked:from-blue-500 peer-checked:to-purple-600"></div>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Account Settings */}
+                  <div className="bg-slate-800/30 backdrop-blur-md border border-slate-700/50 rounded-xl p-6 lg:col-span-2">
+                    <h3 className="text-lg font-semibold text-white mb-4">Account Settings</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-slate-300 text-sm mb-2 block">Display Name</label>
+                        <input 
+                          type="text" 
+                          defaultValue="John Doe" 
+                          className="w-full border border-slate-700/50 rounded-lg px-3 py-2 bg-slate-900/20 text-white focus:outline-none focus:ring-2 focus:ring-blue-500/60 focus:border-transparent"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-slate-300 text-sm mb-2 block">Email</label>
+                        <input 
+                          type="email" 
+                          defaultValue="john.doe@example.com" 
+                          className="w-full border border-slate-700/50 rounded-lg px-3 py-2 bg-slate-900/20 text-white focus:outline-none focus:ring-2 focus:ring-blue-500/60 focus:border-transparent"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-slate-300 text-sm mb-2 block">Timezone</label>
+                        <select className="w-full border border-slate-700/50 rounded-lg px-3 py-2 bg-slate-900/20 text-white focus:outline-none focus:ring-2 focus:ring-blue-500/60 focus:border-transparent">
+                          <option>UTC-5 (Eastern Time)</option>
+                          <option>UTC-8 (Pacific Time)</option>
+                          <option>UTC+0 (GMT)</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label className="text-slate-300 text-sm mb-2 block">Theme</label>
+                        <select className="w-full border border-slate-700/50 rounded-lg px-3 py-2 bg-slate-900/20 text-white focus:outline-none focus:ring-2 focus:ring-blue-500/60 focus:border-transparent">
+                          <option>Dark</option>
+                          <option>Light</option>
+                          <option>System</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div className="flex justify-end space-x-3 mt-6 pt-4 border-t border-slate-700/50">
+                      <button className="px-4 py-2 border border-slate-700/50 rounded-lg text-slate-300 hover:bg-slate-700/40 transition-colors">
+                        Cancel
+                      </button>
+                      <button className="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg text-white hover:opacity-90 transition-opacity">
+                        Save Changes
+                      </button>
                     </div>
                   </div>
                 </div>
