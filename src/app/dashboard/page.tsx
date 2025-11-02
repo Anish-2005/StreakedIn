@@ -173,6 +173,40 @@ Would you like me to create specific tasks for these recommendations?`);
     "Review progress and suggest improvements"
   ];
 
+  // Task manager helpers
+  const [newTaskTitle, setNewTaskTitle] = useState<string>('');
+  const [newTaskPriority, setNewTaskPriority] = useState<string>('medium');
+  const [newTaskDueDate, setNewTaskDueDate] = useState<string>('');
+
+  const addTask = () => {
+    if (!newTaskTitle.trim()) return;
+    const id = Date.now();
+    setTasks(prev => [{ id, title: newTaskTitle.trim(), completed: false, priority: newTaskPriority, dueDate: newTaskDueDate }, ...prev]);
+    setNewTaskTitle('');
+    setNewTaskPriority('medium');
+    setNewTaskDueDate('');
+  };
+
+  const toggleTask = (id: number) => {
+    setTasks(prev => prev.map(t => t.id === id ? { ...t, completed: !t.completed } : t));
+  };
+
+  const deleteTask = (id: number) => {
+    setTasks(prev => prev.filter(t => t.id !== id));
+  };
+
+  // Settings state
+  const [settingsState, setSettingsState] = useState<Record<string, boolean>>({
+    emailNotifications: true,
+    pushNotifications: true,
+    soundAlerts: false,
+    autoGoalSuggestions: true,
+  });
+
+  const toggleSetting = (key: string) => {
+    setSettingsState(prev => ({ ...prev, [key]: !prev[key] }));
+  };
+
   const navigation = [
     { id: 'overview', name: 'Overview', icon: <BarChart3 className="w-5 h-5" /> },
     { id: 'goals', name: 'Goals & Targets', icon: <Target className="w-5 h-5" /> },
@@ -202,6 +236,141 @@ Would you like me to create specific tasks for these recommendations?`);
             </div>
             {isSidebarOpen && (
               <span className="text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">StreakedIn</span>
+            )}
+
+            {activeTab === 'tasks' && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                className="space-y-6 max-w-4xl mx-auto"
+              >
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h1 className="text-2xl font-bold text-white">Task Manager</h1>
+                    <p className="text-slate-300">Create, prioritize and track tasks</p>
+                  </div>
+                  <div className="text-sm text-slate-300">{tasks.length} tasks</div>
+                </div>
+
+                {/* New Task Form */}
+                <div className="bg-slate-800/30 backdrop-blur-md border border-slate-700/50 rounded-xl p-6">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    <input
+                      type="text"
+                      value={newTaskTitle}
+                      onChange={(e) => setNewTaskTitle(e.target.value)}
+                      placeholder="Task title..."
+                      className="col-span-2 w-full border border-slate-700/50 rounded-lg px-3 py-2 bg-slate-900/20 text-white placeholder-slate-400 focus:outline-none"
+                    />
+                    <select
+                      value={newTaskPriority}
+                      onChange={(e) => setNewTaskPriority(e.target.value)}
+                      className="w-full border border-slate-700/50 rounded-lg px-3 py-2 bg-slate-900/20 text-white"
+                    >
+                      <option value="low">Low</option>
+                      <option value="medium">Medium</option>
+                      <option value="high">High</option>
+                    </select>
+                    <input
+                      type="date"
+                      value={newTaskDueDate}
+                      onChange={(e) => setNewTaskDueDate(e.target.value)}
+                      className="w-full border border-slate-700/50 rounded-lg px-3 py-2 bg-slate-900/20 text-white"
+                    />
+                    <div className="col-span-3 flex justify-end">
+                      <button
+                        onClick={addTask}
+                        className="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg"
+                      >
+                        Add Task
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Tasks List */}
+                <div className="space-y-3">
+                  {tasks.length === 0 ? (
+                    <div className="bg-slate-800/30 backdrop-blur-md border border-slate-700/50 rounded-xl p-6 text-slate-400">No tasks yet.</div>
+                  ) : (
+                    tasks.map((t) => (
+                      <div key={t.id} className="bg-slate-800/30 backdrop-blur-md border border-slate-700/50 rounded-xl p-4 flex items-center justify-between">
+                        <div className="flex items-center space-x-3">
+                          <input type="checkbox" checked={t.completed} onChange={() => toggleTask(t.id)} className="w-4 h-4" />
+                          <div>
+                            <div className={`font-medium ${t.completed ? 'line-through text-slate-400' : 'text-white'}`}>{t.title}</div>
+                            <div className="text-sm text-slate-400">{t.dueDate ? `Due ${t.dueDate}` : 'No due date'}</div>
+                          </div>
+                        </div>
+                        <div className="flex items-center space-x-3">
+                          <div className={`px-2 py-1 rounded-full text-xs ${t.priority === 'high' ? 'bg-red-600 text-white' : t.priority === 'medium' ? 'bg-yellow-600 text-white' : 'bg-green-600 text-white'}`}>{t.priority}</div>
+                          <button onClick={() => deleteTask(t.id)} className="p-2 hover:bg-slate-700/40 rounded-lg text-red-400">Delete</button>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </motion.div>
+            )}
+
+            {activeTab === 'settings' && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                className="space-y-6 max-w-3xl mx-auto"
+              >
+                <div>
+                  <h1 className="text-2xl font-bold text-white">Settings</h1>
+                  <p className="text-slate-300">Manage your account and preferences</p>
+                </div>
+
+                <div className="bg-slate-800/30 backdrop-blur-md border border-slate-700/50 rounded-xl p-6 space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h3 className="text-white font-semibold">Notifications</h3>
+                      <p className="text-slate-400 text-sm">Control how you receive notifications</p>
+                    </div>
+                    <div className="space-y-2">
+                      <label className="flex items-center space-x-3">
+                        <input type="checkbox" checked={!!settingsState.emailNotifications} onChange={() => toggleSetting('emailNotifications')} className="sr-only peer" />
+                        <div className="w-11 h-6 bg-slate-700/40 rounded-full peer-checked:bg-gradient-to-r peer-checked:from-blue-500 peer-checked:to-purple-600"></div>
+                        <span className="text-slate-300">Email</span>
+                      </label>
+                      <label className="flex items-center space-x-3">
+                        <input type="checkbox" checked={!!settingsState.pushNotifications} onChange={() => toggleSetting('pushNotifications')} className="sr-only peer" />
+                        <div className="w-11 h-6 bg-slate-700/40 rounded-full peer-checked:bg-gradient-to-r peer-checked:from-blue-500 peer-checked:to-purple-600"></div>
+                        <span className="text-slate-300">Push</span>
+                      </label>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h3 className="text-white font-semibold">Preferences</h3>
+                      <p className="text-slate-400 text-sm">UX and AI options</p>
+                    </div>
+                    <div className="space-y-2 text-right">
+                      <label className="flex items-center space-x-3 justify-end">
+                        <input type="checkbox" checked={!!settingsState.autoGoalSuggestions} onChange={() => toggleSetting('autoGoalSuggestions')} className="sr-only peer" />
+                        <div className="w-11 h-6 bg-slate-700/40 rounded-full peer-checked:bg-gradient-to-r peer-checked:from-blue-500 peer-checked:to-purple-600"></div>
+                        <span className="text-slate-300">Auto goal suggestions</span>
+                      </label>
+                      <label className="flex items-center space-x-3 justify-end">
+                        <input type="checkbox" checked={!!settingsState.soundAlerts} onChange={() => toggleSetting('soundAlerts')} className="sr-only peer" />
+                        <div className="w-11 h-6 bg-slate-700/40 rounded-full peer-checked:bg-gradient-to-r peer-checked:from-blue-500 peer-checked:to-purple-600"></div>
+                        <span className="text-slate-300">Sound alerts</span>
+                      </label>
+                    </div>
+                  </div>
+
+                  <div className="pt-4 border-t border-slate-700/50 flex justify-end">
+                    <button className="px-4 py-2 bg-transparent border border-slate-700/50 rounded-lg text-slate-300 mr-2">Cancel</button>
+                    <button className="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg text-white">Save</button>
+                  </div>
+                </div>
+              </motion.div>
             )}
           </div>
           <button
