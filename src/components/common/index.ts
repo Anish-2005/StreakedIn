@@ -6,3 +6,4 @@ export { default as ProgressBar } from './ProgressBar';
 export { default as ToggleSwitch } from './ToggleSwitch';
 export { default as StatsCard } from './StatsCard';
 export { default as FormField } from './FormField';
+export { Breadcrumb } from './Breadcrumb';

@@ -10,11 +10,22 @@ import Sidebar from '../../components/dashboard/Sidebar';
 import TopBar from '../../components/dashboard/TopBar';
 import TabContainer from '../../components/dashboard/TabContainer';
 import LoadingSpinner from '../../components/dashboard/LoadingSpinner';
+import { Breadcrumb } from '../../components/common';
 
 interface UserProfile {
   plan?: string;
   role?: string;
 }
+
+const tabNames: Record<string, string> = {
+  overview: 'Overview',
+  goals: 'Goals & Targets',
+  tasks: 'Task Manager',
+  analytics: 'Analytics',
+  reminders: 'Reminders',
+  'ai-assistant': 'AI Assistant',
+  settings: 'Settings'
+};
 
 export default function Dashboard() {
   const { user, loading } = useAuth();
@@ -95,6 +106,16 @@ export default function Dashboard() {
           onSearch={handleSearch}
           onNotificationsClick={handleNotificationsClick}
         />
+
+        {/* Breadcrumb Navigation */}
+        <div className="px-6 py-4 border-b border-slate-700/50">
+          <Breadcrumb
+            items={[
+              { label: 'Dashboard', href: '/dashboard' },
+              { label: tabNames[activeTab] || activeTab }
+            ]}
+          />
+        </div>
 
         <TabContainer
           activeTab={activeTab}
