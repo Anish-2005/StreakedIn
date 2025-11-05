@@ -3,43 +3,61 @@ import { motion } from 'framer-motion';
 import { TrendingUp, Target, Clock, Users, Plus, Brain } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { Card, StatsCard, Badge, ProgressBar, Button } from '../common';
-
-interface Goal {
-  id: number;
-  title: string;
-  progress: number;
-  deadline: string;
-  category?: string;
-  aiSuggested?: boolean;
-}
+import { GoalsService, TasksService, StatsService, AISuggestionsService, Goal, Task, UserStats } from '../../lib/services';
+import { useAuth } from '../../contexts/AuthContext';
 
 interface OverviewTabProps {
   setActiveTab: (tab: string) => void;
 }
 
 export default function OverviewTab({ setActiveTab }: OverviewTabProps) {
+  const { user } = useAuth();
   const [goals, setGoals] = useState<Goal[]>([]);
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [userStats, setUserStats] = useState<UserStats | null>(null);
+  const [aiSuggestions, setAiSuggestions] = useState<string[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setGoals([
-      {
-        id: 1,
-        title: 'Complete React Certification',
-        progress: 75,
-        deadline: '2024-02-15',
-        category: 'Learning',
-        aiSuggested: true
-      },
-      {
-        id: 2,
-        title: 'Increase Network by 50+',
-        progress: 40,
-        deadline: '2024-03-01',
-        category: 'Networking',
-        aiSuggested: false
-      }
-    ]);
-  }, []);
+    if (!user) return;
+
+    setLoading(true);
+
+    // Subscribe to goals
+    const unsubscribeGoals = GoalsService.subscribeToGoals(user.uid, (goalsData) => {
+      setGoals(goalsData);
+    });
+
+    // Subscribe to tasks
+    const unsubscribeTasks = TasksService.subscribeToTasks(user.uid, (tasksData) => {
+      setTasks(tasksData);
+    });
+
+    // Subscribe to user stats
+    const unsubscribeStats = StatsService.subscribeToUserStats(user.uid, (stats) => {
+      setUserStats(stats);
+      setLoading(false);
+    });
+
+    // Load AI suggestions
+    AISuggestionsService.generateGoalSuggestions(user.uid).then(setAiSuggestions);
+
+    return () => {
+      unsubscribeGoals();
+      unsubscribeTasks();
+      unsubscribeStats();
+    };
+  }, [user]);
+
+  const getTasksDueToday = () => {
+    const today = new Date().toISOString().split('T')[0];
+    return tasks.filter(task => task.dueDate === today && !task.completed).length;
+  };
+
+  const getOverdueTasks = () => {
+    const today = new Date().toISOString().split('T')[0];
+    return tasks.filter(task => task.dueDate && task.dueDate < today && !task.completed).length;
+  };
 
   return (
     <motion.div
@@ -52,28 +70,28 @@ export default function OverviewTab({ setActiveTab }: OverviewTabProps) {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <StatsCard
           title="Productivity Score"
-          value="87%"
-          change="+5%"
+          value={loading ? "..." : `${userStats?.productivityScore || 0}%`}
+          change={userStats && userStats.productivityScore > 0 ? "+5%" : "N/A"}
           icon={<TrendingUp className="w-6 h-6" />}
           color="text-green-400"
         />
         <StatsCard
           title="Goals Completed"
-          value="12/20"
-          change="60%"
+          value={loading ? "..." : `${userStats?.completedGoals || 0}/${userStats?.totalGoals || 0}`}
+          change={`${userStats ? Math.round((userStats.completedGoals / Math.max(userStats.totalGoals, 1)) * 100) : 0}%`}
           icon={<Target className="w-6 h-6" />}
           color="text-blue-400"
         />
         <StatsCard
           title="Tasks Due"
-          value="8"
-          change="2 overdue"
+          value={loading ? "..." : `${getTasksDueToday()}`}
+          change={`${getOverdueTasks()} overdue`}
           icon={<Clock className="w-6 h-6" />}
           color="text-orange-400"
         />
         <StatsCard
           title="Network Growth"
-          value="+24"
+          value={loading ? "..." : `+${userStats?.networkGrowth || 0}`}
           change="This week"
           icon={<Users className="w-6 h-6" />}
           color="text-purple-400"
