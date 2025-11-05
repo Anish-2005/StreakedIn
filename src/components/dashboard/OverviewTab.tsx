@@ -108,25 +108,34 @@ export default function OverviewTab({ setActiveTab }: OverviewTabProps) {
             </Button>
           </div>
           <div className="space-y-4">
-            {goals.map((goal) => (
-              <div key={goal.id} className="border border-slate-700/50 rounded-lg p-4">
-                <div className="flex items-center justify-between mb-2">
-                  <div className="flex items-center space-x-3">
-                    <h3 className="font-semibold text-white">{goal.title}</h3>
-                    {goal.aiSuggested && (
-                      <Badge variant="purple" size="sm" icon={<Brain className="w-3 h-3" />}>
-                        AI Suggested
-                      </Badge>
-                    )}
-                  </div>
-                  <span className="text-sm text-slate-400">Due {goal.deadline}</span>
-                </div>
-                <div className="flex items-center space-x-4">
-                  <ProgressBar value={goal.progress} className="flex-1" />
-                  <span className="text-sm font-semibold text-slate-300">{goal.progress}%</span>
-                </div>
+            {goals.length === 0 ? (
+              <div className="text-center py-8 text-slate-400">
+                <Target className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                <p>No goals yet. Create your first goal!</p>
               </div>
-            ))}
+            ) : (
+              goals.slice(0, 3).map((goal) => (
+                <div key={goal.id} className="border border-slate-700/50 rounded-lg p-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center space-x-3">
+                      <h3 className="font-semibold text-white">{goal.title}</h3>
+                      {goal.aiSuggested && (
+                        <Badge variant="purple" size="sm" icon={<Brain className="w-3 h-3" />}>
+                          AI Suggested
+                        </Badge>
+                      )}
+                    </div>
+                    <span className="text-sm text-slate-400">
+                      Due {new Date(goal.deadline).toLocaleDateString()}
+                    </span>
+                  </div>
+                  <div className="flex items-center space-x-4">
+                    <ProgressBar value={goal.progress} className="flex-1" />
+                    <span className="text-sm font-semibold text-slate-300">{goal.progress}%</span>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         </Card>
 
@@ -135,10 +144,10 @@ export default function OverviewTab({ setActiveTab }: OverviewTabProps) {
           <h2 className="text-lg font-semibold text-white mb-6">Quick Actions</h2>
           <div className="space-y-3">
             {[
-              { icon: <Plus className="w-5 h-5" />, label: 'Create New Goal', action: () => {} },
-              { icon: <Clock className="w-5 h-5" />, label: 'Set Reminder', action: () => {} },
+              { icon: <Plus className="w-5 h-5" />, label: 'Create New Goal', action: () => setActiveTab('goals') },
+              { icon: <Clock className="w-5 h-5" />, label: 'Set Reminder', action: () => setActiveTab('reminders') },
               { icon: <Brain className="w-5 h-5" />, label: 'AI Suggestions', action: () => setActiveTab('ai-assistant') },
-              { icon: <TrendingUp className="w-5 h-5" />, label: 'Export Report', action: () => {} }
+              { icon: <TrendingUp className="w-5 h-5" />, label: 'View Analytics', action: () => setActiveTab('analytics') }
             ].map((action, index) => (
               <Button
                 key={index}
@@ -151,6 +160,28 @@ export default function OverviewTab({ setActiveTab }: OverviewTabProps) {
               </Button>
             ))}
           </div>
+
+          {/* AI Suggestions Preview */}
+          {aiSuggestions.length > 0 && (
+            <div className="mt-6">
+              <h3 className="text-lg font-semibold text-white mb-3">AI Suggestions</h3>
+              <div className="space-y-2">
+                {aiSuggestions.slice(0, 2).map((suggestion, index) => (
+                  <div key={index} className="text-sm text-slate-300 bg-slate-800/30 rounded-lg p-3">
+                    {suggestion}
+                  </div>
+                ))}
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="w-full mt-2"
+                  onClick={() => setActiveTab('ai-assistant')}
+                >
+                  View All Suggestions
+                </Button>
+              </div>
+            </div>
+          )}
         </Card>
       </div>
     </motion.div>

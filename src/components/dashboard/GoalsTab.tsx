@@ -1,42 +1,135 @@
 "use client";
 import { motion } from 'framer-motion';
-import { Plus, Filter, Edit3, MoreHorizontal, Calendar, Target, Brain } from 'lucide-react';
+import { Plus, Filter, Edit3, MoreHorizontal, Calendar, Target, Brain, Trash2, CheckCircle } from 'lucide-react';
 import { useState, useEffect } from 'react';
-
-interface Goal {
-  id: number;
-  title: string;
-  progress: number;
-  deadline: string;
-  category?: string;
-  aiSuggested?: boolean;
-}
+import { useAuth } from '../../contexts/AuthContext';
+import { GoalsService, AISuggestionsService, Goal } from '../../lib/services';
+import { Card, Button, Input, Select, Badge, ProgressBar } from '../common';
 
 interface GoalsTabProps {}
 
 export default function GoalsTab({}: GoalsTabProps) {
+  const { user } = useAuth();
   const [goals, setGoals] = useState<Goal[]>([]);
+  const [aiSuggestions, setAiSuggestions] = useState<string[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [showCreateForm, setShowCreateForm] = useState(false);
+  const [editingGoal, setEditingGoal] = useState<Goal | null>(null);
+
+  // Form state
+  const [formData, setFormData] = useState({
+    title: '',
+    description: '',
+    deadline: '',
+    category: 'Career Development',
+    progress: 0
+  });
 
   useEffect(() => {
-    setGoals([
-      {
-        id: 1,
-        title: 'Complete React Certification',
-        progress: 75,
-        deadline: '2024-02-15',
-        category: 'Learning',
-        aiSuggested: true
-      },
-      {
-        id: 2,
-        title: 'Increase Network by 50+',
-        progress: 40,
-        deadline: '2024-03-01',
-        category: 'Networking',
-        aiSuggested: false
-      }
-    ]);
-  }, []);
+    if (!user) return;
+
+    setLoading(true);
+
+    // Subscribe to goals
+    const unsubscribe = GoalsService.subscribeToGoals(user.uid, (goalsData) => {
+      setGoals(goalsData);
+      setLoading(false);
+    });
+
+    // Load AI suggestions
+    AISuggestionsService.generateGoalSuggestions(user.uid).then(setAiSuggestions);
+
+    return unsubscribe;
+  }, [user]);
+
+  const resetForm = () => {
+    setFormData({
+      title: '',
+      description: '',
+      deadline: '',
+      category: 'Career Development',
+      progress: 0
+    });
+    setEditingGoal(null);
+    setShowCreateForm(false);
+  };
+
+  const handleCreateGoal = async () => {
+    if (!user || !formData.title.trim()) return;
+
+    try {
+      await GoalsService.createGoal(user.uid, {
+        title: formData.title.trim(),
+        description: formData.description.trim(),
+        progress: formData.progress,
+        deadline: formData.deadline,
+        category: formData.category,
+        aiSuggested: false,
+        status: 'active'
+      });
+      resetForm();
+    } catch (error) {
+      console.error('Error creating goal:', error);
+    }
+  };
+
+  const handleUpdateGoal = async () => {
+    if (!editingGoal || !formData.title.trim()) return;
+
+    try {
+      await GoalsService.updateGoal(editingGoal.id, {
+        title: formData.title.trim(),
+        description: formData.description.trim(),
+        progress: formData.progress,
+        deadline: formData.deadline,
+        category: formData.category
+      });
+      resetForm();
+    } catch (error) {
+      console.error('Error updating goal:', error);
+    }
+  };
+
+  const handleDeleteGoal = async (goalId: string) => {
+    if (!confirm('Are you sure you want to delete this goal?')) return;
+
+    try {
+      await GoalsService.deleteGoal(goalId);
+    } catch (error) {
+      console.error('Error deleting goal:', error);
+    }
+  };
+
+  const handleEditGoal = (goal: Goal) => {
+    setEditingGoal(goal);
+    setFormData({
+      title: goal.title,
+      description: goal.description || '',
+      deadline: goal.deadline,
+      category: goal.category,
+      progress: goal.progress
+    });
+    setShowCreateForm(true);
+  };
+
+  const handleAISuggestionClick = (suggestion: string) => {
+    setFormData(prev => ({
+      ...prev,
+      title: suggestion,
+      aiSuggested: true
+    }));
+    setShowCreateForm(true);
+  };
+
+  const categories = [
+    'Career Development',
+    'Skill Learning',
+    'Networking',
+    'Health & Wellness',
+    'Personal Growth',
+    'Financial Goals',
+    'Creative Projects'
+  ];
 
   return (
     <motion.div
@@ -52,16 +145,87 @@ export default function GoalsTab({}: GoalsTabProps) {
           <p className="text-slate-300">Set and track your professional development goals</p>
         </div>
         <div className="flex space-x-3">
-          <button className="flex items-center space-x-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
-            <Filter className="w-4 h-4" />
-            <span>Filter</span>
-          </button>
-          <button className="flex items-center space-x-2 px-4 py-2 bg-[#0A66C2] text-white rounded-lg hover:bg-[#004182] transition-colors">
-            <Plus className="w-4 h-4" />
-            <span>New Goal</span>
-          </button>
+          <Button variant="outline" icon={<Filter />}>
+            Filter
+          </Button>
+          <Button
+            variant="primary"
+            icon={<Plus />}
+            onClick={() => setShowCreateForm(!showCreateForm)}
+          >
+            New Goal
+          </Button>
         </div>
       </div>
+
+      {/* Create/Edit Goal Form */}
+      {showCreateForm && (
+        <Card className="mb-6">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-lg font-semibold text-white">
+              {editingGoal ? 'Edit Goal' : 'Create New Goal'}
+            </h2>
+            <Button variant="ghost" onClick={resetForm}>
+              Cancel
+            </Button>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="md:col-span-2">
+              <Input
+                placeholder="Goal title..."
+                value={formData.title}
+                onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
+              />
+            </div>
+
+            <div className="md:col-span-2">
+              <textarea
+                placeholder="Goal description (optional)..."
+                value={formData.description}
+                onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+                className="w-full border border-slate-700/50 rounded-lg px-3 py-2 text-sm bg-slate-900/20 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/60 focus:border-transparent resize-none"
+                rows={3}
+              />
+            </div>
+
+            <Select
+              value={formData.category}
+              onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
+            >
+              {categories.map(category => (
+                <option key={category} value={category}>{category}</option>
+              ))}
+            </Select>
+
+            <Input
+              type="date"
+              value={formData.deadline}
+              onChange={(e) => setFormData(prev => ({ ...prev, deadline: e.target.value }))}
+            />
+
+            <div className="md:col-span-2">
+              <label className="block text-sm font-medium text-slate-300 mb-2">
+                Initial Progress: {formData.progress}%
+              </label>
+              <input
+                type="range"
+                min="0"
+                max="100"
+                value={formData.progress}
+                onChange={(e) => setFormData(prev => ({ ...prev, progress: parseInt(e.target.value) }))}
+                className="w-full"
+              />
+            </div>
+          </div>
+
+          <div className="flex justify-end mt-4">
+            <Button onClick={editingGoal ? handleUpdateGoal : handleCreateGoal}>
+              {editingGoal ? 'Update Goal' : 'Create Goal'}
+            </Button>
+          </div>
+        </Card>
+      )}
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         {/* Goals List */}
