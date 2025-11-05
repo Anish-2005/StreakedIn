@@ -119,7 +119,7 @@ export default function Dashboard() {
         isMobile
           ? 'ml-0'
           : isSidebarOpen
-            ? 'ml-64'
+            ? 'ml-72'
             : 'ml-20'
       }`}>
         <TopBar

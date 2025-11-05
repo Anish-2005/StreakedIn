@@ -1,5 +1,5 @@
 "use client";
-import { ChevronRight, TrendingUp } from 'lucide-react';
+import { ChevronRight, TrendingUp, Sparkles } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { db } from '../../lib/firebase';
 import { doc, onSnapshot } from 'firebase/firestore';
@@ -43,42 +43,65 @@ export default function Sidebar({ activeTab, setActiveTab, isSidebarOpen, setIsS
   }, [user]);
 
   return (
-    <div className={`fixed inset-y-0 left-0 z-50 bg-slate-800/95 backdrop-blur-md border-r border-slate-700/50 transition-all duration-300 ${
+    <div className={`fixed inset-y-0 left-0 z-50 transition-all duration-500 ${
       isMobile
-        ? `w-64 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`
-        : `${isSidebarOpen ? 'w-64' : 'w-20'}`
+        ? `w-72 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`
+        : `${isSidebarOpen ? 'w-72' : 'w-20'}`
     }`}>
-      {/* Logo */}
-      <div className="flex items-center justify-between h-16 px-4 border-b border-gray-200">
-        <div className="flex items-center space-x-3">
-          <div className="w-8 h-8 bg-[#0A66C2] rounded-md flex items-center justify-center">
-            <TrendingUp className="w-5 h-5 text-white" />
+      {/* Enhanced Background with Multiple Layers */}
+      <div className="absolute inset-0 bg-gradient-to-b from-slate-900/98 via-purple-900/95 to-slate-900/98 backdrop-blur-2xl"></div>
+      <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 via-transparent to-purple-600/10"></div>
+      <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-white/5"></div>
+
+      {/* Animated Border */}
+      <div className="absolute right-0 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-blue-400/30 to-transparent"></div>
+
+      {/* Content Container */}
+      <div className="relative h-full flex flex-col">
+        {/* Enhanced Logo Section */}
+        <div className="flex items-center justify-between h-20 px-6 border-b border-slate-700/60">
+          <div className="flex items-center space-x-4">
+            <div className="relative group">
+              <div className="w-12 h-12 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-xl flex items-center justify-center border border-white/10 group-hover:border-white/20 transition-colors">
+                <TrendingUp className="w-6 h-6 text-blue-300" />
+              </div>
+              {/* Logo glow */}
+              <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl blur opacity-0 group-hover:opacity-30 transition-opacity"></div>
+            </div>
+            {isSidebarOpen && (
+              <div className="flex items-center space-x-2">
+                <span className="text-2xl font-bold bg-gradient-to-r from-white via-blue-100 to-purple-200 bg-clip-text text-transparent">
+                  StreakedIn
+                </span>
+                <Sparkles className="w-5 h-5 text-purple-300 animate-pulse" />
+              </div>
+            )}
           </div>
-          {isSidebarOpen && (
-            <span className="text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">StreakedIn</span>
-          )}
+
+          <button
+            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+            className="group p-2 hover:bg-white/10 rounded-xl transition-all duration-300 hover:scale-110"
+          >
+            <ChevronRight className={`w-5 h-5 text-slate-400 group-hover:text-white transition-all duration-300 ${
+              isSidebarOpen ? 'rotate-180' : ''
+            }`} />
+          </button>
         </div>
-        <button
-          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-          className="p-1 hover:bg-slate-700/40 rounded-lg transition-colors"
-        >
-          <ChevronRight className={`w-4 h-4 text-gray-500 transition-transform ${
-            isSidebarOpen ? 'rotate-180' : ''
-          }`} />
-        </button>
+
+        {/* Navigation */}
+        <Navigation
+          activeTab={activeTab}
+          onTabChange={setActiveTab}
+          isCollapsed={!isSidebarOpen}
+        />
+
+        {/* User Profile */}
+        <UserProfile
+          user={user}
+          userProfile={userProfile}
+          isCollapsed={!isSidebarOpen}
+        />
       </div>
-
-      <Navigation
-        activeTab={activeTab}
-        onTabChange={setActiveTab}
-        isCollapsed={!isSidebarOpen}
-      />
-
-      <UserProfile
-        user={user}
-        userProfile={userProfile}
-        isCollapsed={!isSidebarOpen}
-      />
     </div>
   );
 }
