@@ -59,11 +59,13 @@ export default function Sidebar({ activeTab, setActiveTab, isSidebarOpen, setIsS
       {/* Content Container */}
       <div className="relative h-full flex flex-col">
         {/* Enhanced Logo Section */}
-        <div className="flex items-center justify-between h-20 px-6 border-b border-slate-700/60">
-          <div className="flex items-center space-x-4">
+        <div className={`flex ${isSidebarOpen ? 'items-center justify-between' : 'justify-center'} h-20 ${isSidebarOpen ? 'px-6' : 'px-3'} border-b border-slate-700/60`}>
+          <div className={`flex ${isSidebarOpen ? 'items-center space-x-4' : 'justify-center'}`}>
             <div className="relative group">
-              <div className="w-12 h-12 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-xl flex items-center justify-center border border-white/10 group-hover:border-white/20 transition-colors">
-                <TrendingUp className="w-6 h-6 text-blue-300" />
+              <div className={`bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-xl flex items-center justify-center border border-white/10 group-hover:border-white/20 transition-colors ${
+                isSidebarOpen ? 'w-12 h-12' : 'w-10 h-10'
+              }`}>
+                <TrendingUp className={`text-blue-300 ${isSidebarOpen ? 'w-6 h-6' : 'w-5 h-5'}`} />
               </div>
               {/* Logo glow */}
               <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl blur opacity-0 group-hover:opacity-30 transition-opacity"></div>
@@ -78,14 +80,25 @@ export default function Sidebar({ activeTab, setActiveTab, isSidebarOpen, setIsS
             )}
           </div>
 
-          <button
-            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-            className="group p-2 hover:bg-white/10 rounded-xl transition-all duration-300 hover:scale-110"
-          >
-            <ChevronRight className={`w-5 h-5 text-slate-400 group-hover:text-white transition-all duration-300 ${
-              isSidebarOpen ? 'rotate-180' : ''
-            }`} />
-          </button>
+          {isSidebarOpen && (
+            <button
+              onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+              className="group p-2 hover:bg-white/10 rounded-xl transition-all duration-300 hover:scale-110"
+            >
+              <ChevronRight className="w-5 h-5 text-slate-400 group-hover:text-white transition-all duration-300 rotate-180" />
+            </button>
+          )}
+
+          {/* Collapse button for collapsed state */}
+          {!isSidebarOpen && (
+            <button
+              onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+              className="absolute top-4 right-2 group p-2 hover:bg-white/10 rounded-xl transition-all duration-300 hover:scale-110"
+              title="Expand Sidebar"
+            >
+              <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-white transition-all duration-300" />
+            </button>
+          )}
         </div>
 
         {/* Navigation */}

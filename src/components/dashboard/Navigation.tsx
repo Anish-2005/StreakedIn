@@ -26,7 +26,7 @@ const navigationItems: NavigationItem[] = [
 
 export default function Navigation({ activeTab, onTabChange, isCollapsed }: NavigationProps) {
   return (
-    <nav className="flex-1 px-6 py-8">
+    <nav className={`flex-1 ${isCollapsed ? 'px-3 py-8' : 'px-6 py-8'}`}>
       <div className="space-y-3">
         {navigationItems.map((item) => {
           const isActive = activeTab === item.id;
@@ -34,30 +34,44 @@ export default function Navigation({ activeTab, onTabChange, isCollapsed }: Navi
             <button
               key={item.id}
               onClick={() => onTabChange(item.id)}
-              className={`group relative w-full flex items-center space-x-4 px-4 py-3.5 rounded-xl transition-all duration-300 hover:scale-105 ${
+              className={`group relative w-full flex items-center justify-center ${
+                isCollapsed ? 'px-3 py-4' : 'space-x-4 px-4 py-3.5'
+              } rounded-xl transition-all duration-300 hover:scale-110 ${
                 isActive
                   ? 'bg-gradient-to-r from-white/15 to-white/5 border border-white/20 shadow-lg shadow-blue-500/20'
                   : 'hover:bg-white/5 border border-transparent hover:border-white/10'
               }`}
             >
-              {/* Active indicator */}
-              {isActive && (
+              {/* Active indicator - only show when not collapsed */}
+              {isActive && !isCollapsed && (
                 <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-gradient-to-b from-blue-400 to-purple-400 rounded-r-full"></div>
               )}
 
+              {/* Active indicator for collapsed state */}
+              {isActive && isCollapsed && (
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-xl border border-blue-400/30"></div>
+              )}
+
               {/* Icon with enhanced styling */}
-              <div className={`relative flex-shrink-0 ${
+              <div className={`relative flex-shrink-0 transition-all duration-300 ${
                 isActive
-                  ? 'text-white'
-                  : 'text-slate-400 group-hover:text-white transition-colors'
+                  ? 'text-white scale-110'
+                  : 'text-slate-400 group-hover:text-white group-hover:scale-105'
               }`}>
                 {item.icon}
+
+                {/* Icon glow effect */}
                 {isActive && (
-                  <div className="absolute -inset-1 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-lg blur opacity-50"></div>
+                  <div className="absolute -inset-1 bg-gradient-to-r from-blue-500/30 to-purple-500/30 rounded-lg blur opacity-60"></div>
+                )}
+
+                {/* Hover glow for non-active items */}
+                {!isActive && (
+                  <div className={`absolute -inset-1 bg-gradient-to-r ${item.color} rounded-lg blur opacity-0 group-hover:opacity-20 transition-opacity duration-300`}></div>
                 )}
               </div>
 
-              {/* Text and badge */}
+              {/* Text and badge - only show when not collapsed */}
               {!isCollapsed && (
                 <div className="flex-1 flex items-center justify-between min-w-0">
                   <span className={`font-medium transition-colors ${
@@ -75,17 +89,25 @@ export default function Navigation({ activeTab, onTabChange, isCollapsed }: Navi
                 </div>
               )}
 
-              {/* Hover glow effect */}
-              <div className={`absolute inset-0 bg-gradient-to-r ${item.color} opacity-0 group-hover:opacity-5 rounded-xl transition-opacity duration-300`}></div>
+              {/* Tooltip for collapsed state */}
+              {isCollapsed && (
+                <div className="absolute left-full ml-3 px-3 py-2 bg-slate-800/95 backdrop-blur-md text-white text-sm rounded-lg border border-slate-600/50 opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none whitespace-nowrap z-50 shadow-xl">
+                  {item.name}
+                  {/* Tooltip arrow */}
+                  <div className="absolute right-full top-1/2 -translate-y-1/2 w-0 h-0 border-t-4 border-b-4 border-r-4 border-transparent border-r-slate-800/95"></div>
+                </div>
+              )}
             </button>
           );
         })}
       </div>
 
-      {/* Decorative elements */}
-      <div className="mt-8 flex justify-center">
-        <div className="w-32 h-px bg-gradient-to-r from-transparent via-slate-600 to-transparent"></div>
-      </div>
+      {/* Decorative elements - hide when collapsed */}
+      {!isCollapsed && (
+        <div className="mt-8 flex justify-center">
+          <div className="w-32 h-px bg-gradient-to-r from-transparent via-slate-600 to-transparent"></div>
+        </div>
+      )}
     </nav>
   );
 }
