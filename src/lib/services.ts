@@ -388,6 +388,9 @@ export class StatsService {
 
 // AI Suggestions Service
 export class AISuggestionsService {
+  private static readonly GEMINI_API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
+  private static readonly GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent';
+
   static async generateGoalSuggestions(userId: string): Promise<string[]> {
     try {
       // Get user's current goals and tasks to generate relevant suggestions
@@ -405,55 +408,68 @@ export class AISuggestionsService {
         });
       });
 
-      // Simple AI logic based on existing data
-      const suggestions: string[] = [];
+      // Create context for AI
+      const context = {
+        goals: goals.map(g => ({ title: g.title, category: g.category, progress: g.progress, status: g.status })),
+        tasks: tasks.map(t => ({ title: t.title, completed: t.completed, priority: t.priority })),
+        totalGoals: goals.length,
+        completedGoals: goals.filter(g => g.status === 'completed').length,
+        totalTasks: tasks.length,
+        completedTasks: tasks.filter(t => t.completed).length
+      };
 
-      // If user has learning goals, suggest related tasks
-      const learningGoals = goals.filter(g => g.category.toLowerCase().includes('learn'));
-      if (learningGoals.length > 0) {
-        suggestions.push('Complete advanced course on current learning topic');
-        suggestions.push('Practice coding exercises for 1 hour daily');
-        suggestions.push('Read technical articles related to your field');
+      const prompt = `Based on this user's productivity data, generate 5 personalized goal suggestions. Focus on helping them improve their productivity, achieve their goals faster, and develop better habits.
+
+User Data:
+- Total Goals: ${context.totalGoals}
+- Completed Goals: ${context.completedGoals}
+- Total Tasks: ${context.totalTasks}
+- Completed Tasks: ${context.completedTasks}
+- Current Goals: ${context.goals.map(g => `${g.title} (${g.category}, ${g.progress}% complete, ${g.status})`).join(', ')}
+- Current Tasks: ${context.tasks.map(t => `${t.title} (${t.priority}, ${t.completed ? 'completed' : 'pending'})`).join(', ')}
+
+Provide 5 specific, actionable goal suggestions that would help this user be more productive. Make them SMART goals where possible. Return only the suggestions as a numbered list, no additional text.`;
+
+      const response = await fetch(`${this.GEMINI_API_URL}?key=${this.GEMINI_API_KEY}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          contents: [{
+            parts: [{
+              text: prompt
+            }]
+          }],
+          generationConfig: {
+            temperature: 0.7,
+            topK: 40,
+            topP: 0.95,
+            maxOutputTokens: 1024,
+          }
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error(`Gemini API error: ${response.status}`);
       }
 
-      // If user has networking goals
-      const networkingGoals = goals.filter(g => g.category.toLowerCase().includes('network'));
-      if (networkingGoals.length > 0) {
-        suggestions.push('Send 5 personalized connection requests on LinkedIn');
-        suggestions.push('Attend virtual networking event this week');
-        suggestions.push('Follow up with 3 recent connections');
-      }
+      const data = await response.json();
+      const aiResponse = data.candidates[0].content.parts[0].text;
 
-      // If user has career goals
-      const careerGoals = goals.filter(g => g.category.toLowerCase().includes('career'));
-      if (careerGoals.length > 0) {
-        suggestions.push('Update resume with recent achievements');
-        suggestions.push('Research job opportunities in target companies');
-        suggestions.push('Prepare for technical interviews');
-      }
+      // Parse the numbered list into an array
+      const suggestions = aiResponse
+        .split('\n')
+        .filter((line: string) => line.trim().match(/^\d+\./))
+        .map((line: string) => line.replace(/^\d+\.\s*/, '').trim());
 
-      // General productivity suggestions
-      if (tasks.length < 5) {
-        suggestions.push('Break down large goals into smaller daily tasks');
-      }
-
-      if (goals.length === 0) {
-        suggestions.push('Set your first SMART goal for this month');
-        suggestions.push('Define career objectives for the next quarter');
-      }
-
-      // Return at least some default suggestions
-      if (suggestions.length === 0) {
-        suggestions.push(
-          'Learn a new professional skill this month',
-          'Expand your professional network by 20 connections',
-          'Complete a certification in your field',
-          'Start a personal project to build your portfolio',
-          'Read one industry-related book per week'
-        );
-      }
-
-      return suggestions.slice(0, 5); // Return top 5 suggestions
+      return suggestions.length > 0 ? suggestions : [
+        'Learn a new professional skill this month',
+        'Expand your professional network by 20 connections',
+        'Complete a certification in your field',
+        'Start a personal project to build your portfolio',
+        'Read one industry-related book per week'
+      ];
     } catch (error) {
       console.error('Error generating AI suggestions:', error);
       return [
@@ -463,6 +479,81 @@ export class AISuggestionsService {
         'Start a personal project',
         'Read industry-related books'
       ];
+    }
+  }
+
+  static async generateAIResponse(userId: string, prompt: string): Promise<string> {
+    try {
+      // Get user's current data for context
+      const goals = await new Promise<Goal[]>((resolve) => {
+        const unsubscribe = GoalsService.subscribeToGoals(userId, (goals) => {
+          unsubscribe();
+          resolve(goals);
+        });
+      });
+
+      const tasks = await new Promise<Task[]>((resolve) => {
+        const unsubscribe = TasksService.subscribeToTasks(userId, (tasks) => {
+          unsubscribe();
+          resolve(tasks);
+        });
+      });
+
+      const stats = await StatsService.calculateUserStats(userId);
+
+      const context = `You are a productivity assistant helping a user optimize their goals and tasks. Here's their current data:
+
+Goals (${goals.length} total, ${goals.filter(g => g.status === 'completed').length} completed):
+${goals.map(g => `- ${g.title} (${g.category}): ${g.progress}% complete, status: ${g.status}`).join('\n')}
+
+Tasks (${tasks.length} total, ${tasks.filter(t => t.completed).length} completed):
+${tasks.map(t => `- ${t.title} (${t.priority} priority): ${t.completed ? 'completed' : 'pending'}`).join('\n')}
+
+Stats:
+- Productivity Score: ${stats.productivityScore}/100
+- Current Streak: ${stats.streakDays} days
+- Network Growth: ${stats.networkGrowth}%
+
+User's question: ${prompt}
+
+Provide a helpful, actionable response focused on productivity, goal achievement, and task management. Keep it concise but comprehensive. If appropriate, suggest specific actions they can take.`;
+
+      const response = await fetch(`${this.GEMINI_API_URL}?key=${this.GEMINI_API_KEY}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          contents: [{
+            parts: [{
+              text: context
+            }]
+          }],
+          generationConfig: {
+            temperature: 0.7,
+            topK: 40,
+            topP: 0.95,
+            maxOutputTokens: 2048,
+          }
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error(`Gemini API error: ${response.status}`);
+      }
+
+      const data = await response.json();
+      return data.candidates[0].content.parts[0].text;
+    } catch (error) {
+      console.error('Error generating AI response:', error);
+      return `I apologize, but I'm having trouble connecting to my AI services right now. Based on your current goals and progress, here are some general recommendations:
+
+1. **Review your active goals**: Make sure they're still aligned with your current priorities
+2. **Break down large tasks**: Divide complex goals into smaller, manageable steps
+3. **Set daily priorities**: Focus on 3-5 key tasks each day to maintain momentum
+4. **Track your progress**: Regular check-ins help maintain motivation and identify areas for improvement
+
+Would you like me to help you create specific tasks or adjust your current goals?`;
     }
   }
 }

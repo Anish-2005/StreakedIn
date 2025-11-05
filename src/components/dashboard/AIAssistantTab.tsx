@@ -2,29 +2,30 @@
 import { motion } from 'framer-motion';
 import { Brain, Bot, Send, Zap, Bell, TrendingUp, Calendar } from 'lucide-react';
 import { useState } from 'react';
+import { AISuggestionsService } from '../../lib/services';
+import { useAuth } from '../../contexts/AuthContext';
 
 interface AIAssistantTabProps {}
 
 export default function AIAssistantTab({}: AIAssistantTabProps) {
+  const { user } = useAuth();
   const [aiPrompt, setAiPrompt] = useState<string>('');
   const [aiResponse, setAiResponse] = useState<string>('');
   const [isAiLoading, setIsAiLoading] = useState<boolean>(false);
 
   const handleAiPrompt = async () => {
-    if (!aiPrompt.trim()) return;
+    if (!aiPrompt.trim() || !user) return;
 
     setIsAiLoading(true);
-    // Simulate AI response
-    setTimeout(() => {
-      setAiResponse(`Based on your current goals and progress, I recommend:
-
-1. **Focus on React Certification**: You're 75% complete - schedule 2 hours daily to finish by next week.
-2. **Networking Strategy**: Connect with 5 professionals in your field daily to reach your goal.
-3. **Skill Development**: Consider adding a backend technology to your learning path for full-stack development.
-
-Would you like me to create specific tasks for these recommendations?`);
+    try {
+      const response = await AISuggestionsService.generateAIResponse(user.uid, aiPrompt);
+      setAiResponse(response);
+    } catch (error) {
+      console.error('Error getting AI response:', error);
+      setAiResponse('I apologize, but I\'m having trouble processing your request right now. Please try again in a moment.');
+    } finally {
       setIsAiLoading(false);
-    }, 2000);
+    }
   };
 
   const quickAiPrompts = [
