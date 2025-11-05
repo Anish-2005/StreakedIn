@@ -230,71 +230,94 @@ export default function GoalsTab({}: GoalsTabProps) {
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         {/* Goals List */}
         <div className="lg:col-span-3 space-y-4">
-          {goals.map((goal) => (
-            <div key={goal.id} className="bg-slate-800/30 backdrop-blur-md border border-slate-700/50 rounded-xl p-6">
-              <div className="flex items-start justify-between mb-4">
-                <div className="flex-1">
-                  <div className="flex items-center space-x-3 mb-2">
-                    <h3 className="font-semibold text-white text-lg">{goal.title}</h3>
-                    {goal.aiSuggested && (
-                      <span className="flex items-center space-x-1 px-2 py-1 bg-purple-900/30 text-purple-300 rounded-full text-xs">
-                        <Brain className="w-3 h-3" />
-                        <span>AI Suggested</span>
-                      </span>
-                    )}
-                  </div>
-                  <div className="flex items-center space-x-4 text-sm text-slate-300">
-                    <span className="flex items-center space-x-1">
-                      <Calendar className="w-4 h-4" />
-                      <span>Due {goal.deadline}</span>
-                    </span>
-                    <span className="flex items-center space-x-1">
-                      <Target className="w-4 h-4" />
-                      <span>{goal.category}</span>
-                    </span>
-                  </div>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <button className="p-2 hover:bg-slate-700/40 rounded-lg transition-colors">
-                    <Edit3 className="w-4 h-4 text-slate-300" />
-                  </button>
-                  <button className="p-2 hover:bg-slate-700/40 rounded-lg transition-colors">
-                    <MoreHorizontal className="w-4 h-4 text-slate-300" />
-                  </button>
-                </div>
-              </div>
-
-              {/* Progress Bar */}
-              <div className="mb-4">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium text-slate-300">Progress</span>
-                  <span className="text-sm font-semibold text-white">{goal.progress}%</span>
-                </div>
-                <div className="w-full bg-slate-700/40 rounded-full h-3">
-                  <div
-                    className="bg-gradient-to-r from-blue-500 to-purple-600 h-3 rounded-full transition-all duration-500"
-                    style={{ width: `${goal.progress}%` }}
-                  ></div>
-                </div>
-              </div>
-
-              {/* Actions */}
-              <div className="flex items-center justify-between">
-                <div className="flex space-x-2">
-                  <button className="px-3 py-1 text-sm bg-slate-900/30 text-blue-400 rounded-lg hover:opacity-90 transition-colors">
-                    Update Progress
-                  </button>
-                  <button className="px-3 py-1 text-sm bg-slate-900/20 text-slate-300 rounded-lg hover:opacity-90 transition-colors">
-                    View Details
-                  </button>
-                </div>
-                <button className="flex items-center space-x-1 text-sm text-slate-300 hover:text-white transition-colors">
-                  <Brain className="w-4 h-4" />
-                  <span>Get AI Tips</span>
-                </button>
-              </div>
+          {loading ? (
+            <div className="text-center py-8">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto"></div>
+              <p className="text-slate-400 mt-2">Loading goals...</p>
             </div>
-          ))}
+          ) : goals.length === 0 ? (
+            <Card className="text-center py-8">
+              <Target className="w-12 h-12 mx-auto mb-4 opacity-50 text-slate-400" />
+              <p className="text-slate-400">No goals yet. Create your first goal!</p>
+            </Card>
+          ) : (
+            goals.map((goal) => (
+              <Card key={goal.id} hover>
+                <div className="flex items-start justify-between mb-4">
+                  <div className="flex-1">
+                    <div className="flex items-center space-x-3 mb-2">
+                      <h3 className="font-semibold text-white text-lg">{goal.title}</h3>
+                      {goal.aiSuggested && (
+                        <Badge variant="purple" size="sm" icon={<Brain className="w-3 h-3" />}>
+                          AI Suggested
+                        </Badge>
+                      )}
+                      {goal.status === 'completed' && (
+                        <Badge variant="success" size="sm" icon={<CheckCircle className="w-3 h-3" />}>
+                          Completed
+                        </Badge>
+                      )}
+                    </div>
+                    {goal.description && (
+                      <p className="text-slate-300 text-sm mb-2">{goal.description}</p>
+                    )}
+                    <div className="flex items-center space-x-4 text-sm text-slate-300">
+                      <span className="flex items-center space-x-1">
+                        <Calendar className="w-4 h-4" />
+                        <span>Due {new Date(goal.deadline).toLocaleDateString()}</span>
+                      </span>
+                      <span className="flex items-center space-x-1">
+                        <Target className="w-4 h-4" />
+                        <span>{goal.category}</span>
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => handleEditGoal(goal)}
+                      className="p-2"
+                    >
+                      <Edit3 className="w-4 h-4" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => handleDeleteGoal(goal.id)}
+                      className="p-2 text-red-400 hover:text-red-300 hover:bg-red-500/20"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+                  </div>
+                </div>
+
+                {/* Progress Bar */}
+                <div className="mb-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm font-medium text-slate-300">Progress</span>
+                    <span className="text-sm font-semibold text-white">{goal.progress}%</span>
+                  </div>
+                  <ProgressBar value={goal.progress} className="w-full" />
+                </div>
+
+                {/* Actions */}
+                <div className="flex items-center justify-between">
+                  <div className="flex space-x-2">
+                    <Button variant="outline" size="sm">
+                      Update Progress
+                    </Button>
+                    <Button variant="ghost" size="sm">
+                      View Details
+                    </Button>
+                  </div>
+                  <Button variant="ghost" size="sm" icon={<Brain className="w-4 h-4" />}>
+                    Get AI Tips
+                  </Button>
+                </div>
+              </Card>
+            ))
+          )}
         </div>
 
         {/* Goal Creation & AI */}
@@ -326,28 +349,32 @@ export default function GoalsTab({}: GoalsTabProps) {
           </div>
 
           {/* AI Goal Suggestions */}
-          <div className="bg-slate-800/30 backdrop-blur-md border border-slate-700/50 rounded-xl p-6">
+          <Card>
             <h3 className="font-semibold text-white mb-4">AI Goal Suggestions</h3>
             <div className="space-y-3">
-              {[
-                'Complete advanced React course',
-                'Attend 3 networking events this month',
-                'Publish 2 technical articles',
-                'Learn TypeScript fundamentals'
-              ].map((suggestion, index) => (
-                <div key={index} className="flex items-center justify-between p-3 rounded-lg border border-gray-200">
-                  <span className="text-sm text-gray-700 flex-1">{suggestion}</span>
-                  <button className="text-[#0A66C2] hover:text-[#004182] transition-colors text-sm">
+              {aiSuggestions.map((suggestion, index) => (
+                <div key={index} className="flex items-center justify-between p-3 rounded-lg bg-slate-800/30 border border-slate-700/40">
+                  <span className="text-sm text-slate-300 flex-1">{suggestion}</span>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => handleAISuggestionClick(suggestion)}
+                    className="text-blue-400 hover:text-blue-300"
+                  >
                     Add
-                  </button>
+                  </Button>
                 </div>
               ))}
             </div>
-            <button className="w-full mt-4 flex items-center justify-center space-x-2 py-2 border border-slate-700/50 rounded-lg hover:bg-slate-700/40 transition-colors text-sm text-white">
-              <Brain className="w-4 h-4" />
-              <span>Generate More Suggestions</span>
-            </button>
-          </div>
+            <Button
+              variant="outline"
+              className="w-full mt-4"
+              icon={<Brain className="w-4 h-4" />}
+              onClick={() => AISuggestionsService.generateGoalSuggestions(user?.uid || '').then(setAiSuggestions)}
+            >
+              Generate More Suggestions
+            </Button>
+          </Card>
         </div>
       </div>
     </motion.div>
