@@ -148,59 +148,126 @@ export default function AnalyticsTab({}: AnalyticsTabProps) {
         </div>
       </div>
 
+      {/* Key Metrics */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <StatsCard
+          title="Productivity Score"
+          value={`${getProductivityScore()}%`}
+          icon={<TrendingUp className="w-5 h-5 text-green-400" />}
+          change={getProductivityScore() > 50 ? '+15%' : '-5%'}
+        />
+        <StatsCard
+          title="Goals Completed"
+          value={`${getCompletedGoals()}/${getTotalGoals()}`}
+          icon={<Target className="w-5 h-5 text-blue-400" />}
+          change={getCompletedGoals() > 0 ? `+${getCompletedGoals()}` : '0'}
+        />
+        <StatsCard
+          title="Tasks Done"
+          value={`${getCompletedTasks()}/${getTotalTasks()}`}
+          icon={<CheckSquare className="w-5 h-5 text-purple-400" />}
+          change={getCompletedTasks() > 0 ? `+${getCompletedTasks()}` : '0'}
+        />
+        <StatsCard
+          title="Due Today"
+          value={getTasksDueToday().toString()}
+          icon={<Calendar className="w-5 h-5 text-orange-400" />}
+          change={getTasksDueToday() > 0 ? `${getTasksDueToday()}` : '0'}
+        />
+      </div>
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Charts */}
+        {/* Productivity Trends */}
         <div className="bg-slate-800/30 backdrop-blur-md border border-slate-700/50 rounded-xl p-6">
-          <h3 className="font-semibold text-white mb-4">Productivity Trends</h3>
-          <div className="h-64 bg-slate-900/20 rounded-lg flex items-center justify-center">
-            <LineChart className="w-12 h-12 text-slate-500" />
+          <h3 className="font-semibold text-white mb-4">Weekly Progress</h3>
+          <div className="space-y-3">
+            {getWeeklyProgress().map((day, index) => (
+              <div key={day.day} className="flex items-center justify-between">
+                <span className="text-slate-300 text-sm">{day.day}</span>
+                <div className="flex space-x-2">
+                  <div className="flex items-center space-x-1">
+                    <div className="w-3 h-3 bg-blue-400 rounded-full"></div>
+                    <span className="text-xs text-slate-400">{day.tasks} tasks</span>
+                  </div>
+                  <div className="flex items-center space-x-1">
+                    <div className="w-3 h-3 bg-green-400 rounded-full"></div>
+                    <span className="text-xs text-slate-400">{day.goals} goals</span>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 
+        {/* Goal Distribution */}
         <div className="bg-slate-800/30 backdrop-blur-md border border-slate-700/50 rounded-xl p-6">
-          <h3 className="font-semibold text-white mb-4">Goal Distribution</h3>
-          <div className="h-64 bg-slate-900/20 rounded-lg flex items-center justify-center">
-            <PieChart className="w-12 h-12 text-slate-500" />
+          <h3 className="font-semibold text-white mb-4">Goals by Category</h3>
+          <div className="space-y-3">
+            {getGoalsByCategory().map((item, index) => (
+              <div key={item.category} className="flex items-center justify-between">
+                <span className="text-slate-300 capitalize">{item.category}</span>
+                <div className="flex items-center space-x-2">
+                  <div className="w-20 bg-slate-700 rounded-full h-2">
+                    <div
+                      className="bg-blue-400 h-2 rounded-full"
+                      style={{ width: `${(item.count / Math.max(...getGoalsByCategory().map(g => g.count))) * 100}%` }}
+                    ></div>
+                  </div>
+                  <span className="text-xs text-slate-400">{item.count}</span>
+                </div>
+              </div>
+            ))}
+            {getGoalsByCategory().length === 0 && (
+              <div className="text-center py-8">
+                <Target className="w-12 h-12 text-slate-500 mx-auto mb-2" />
+                <p className="text-slate-400">No goals yet</p>
+              </div>
+            )}
           </div>
         </div>
 
+        {/* Task Overview */}
         <div className="bg-slate-800/30 backdrop-blur-md border border-slate-700/50 rounded-xl p-6">
-          <h3 className="font-semibold text-white mb-4">Weekly Performance</h3>
-          <div className="h-64 bg-slate-900/20 rounded-lg flex items-center justify-center">
-            <BarChart className="w-12 h-12 text-slate-500" />
+          <h3 className="font-semibold text-white mb-4">Task Overview</h3>
+          <div className="space-y-4">
+            <div className="flex justify-between items-center">
+              <span className="text-slate-300">Completed</span>
+              <span className="text-green-400 font-semibold">{getCompletedTasks()}</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-slate-300">Pending</span>
+              <span className="text-yellow-400 font-semibold">{getTotalTasks() - getCompletedTasks()}</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-slate-300">Due Today</span>
+              <span className="text-blue-400 font-semibold">{getTasksDueToday()}</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-slate-300">Overdue</span>
+              <span className="text-red-400 font-semibold">{getOverdueTasks()}</span>
+            </div>
           </div>
         </div>
 
+        {/* AI Insights */}
         <div className="bg-slate-800/30 backdrop-blur-md border border-slate-700/50 rounded-xl p-6">
           <h3 className="font-semibold text-white mb-4">AI Insights</h3>
           <div className="space-y-4">
-            <div className="p-4 bg-slate-900/20 rounded-lg border border-slate-700/40">
-              <div className="flex items-center space-x-2 mb-2">
-                <Sparkles className="w-4 h-4 text-blue-400" />
-                <span className="font-semibold text-white">Peak Productivity</span>
+            {getInsights().map((insight, index) => (
+              <div key={index} className="p-4 bg-slate-900/20 rounded-lg border border-slate-700/40">
+                <div className="flex items-center space-x-2 mb-2">
+                  {insight.icon}
+                  <span className="font-semibold text-white">{insight.title}</span>
+                </div>
+                <p className="text-sm text-slate-300">{insight.message}</p>
               </div>
-              <p className="text-sm text-slate-300">
-                Your most productive hours are between 9-11 AM. Schedule important tasks during this time.
-              </p>
-            </div>
-            <div className="p-4 bg-slate-900/20 rounded-lg border border-slate-700/40">
-              <div className="flex items-center space-x-2 mb-2">
-                <TrendingUp className="w-4 h-4 text-green-400" />
-                <span className="font-semibold text-white">Progress Alert</span>
+            ))}
+            {getInsights().length === 0 && (
+              <div className="text-center py-8">
+                <Brain className="w-12 h-12 text-slate-500 mx-auto mb-2" />
+                <p className="text-slate-400">No insights available yet</p>
               </div>
-              <p className="text-sm text-slate-300">
-                You're on track to complete 85% of your monthly goals. Keep up the good work!
-              </p>
-            </div>
-            <div className="p-4 bg-slate-900/20 rounded-lg border border-slate-700/40">
-              <div className="flex items-center space-x-2 mb-2">
-                <AlertCircle className="w-4 h-4 text-orange-400" />
-                <span className="font-semibold text-white">Attention Needed</span>
-              </div>
-              <p className="text-sm text-slate-300">
-                Networking goals are lagging behind. Consider scheduling 2-3 connection requests daily.
-              </p>
-            </div>
+            )}
           </div>
         </div>
       </div>
