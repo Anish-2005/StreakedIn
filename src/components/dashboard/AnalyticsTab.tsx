@@ -1,10 +1,128 @@
 "use client";
 import { motion } from 'framer-motion';
-import { Download, Brain, LineChart, PieChart, BarChart, Sparkles, TrendingUp, AlertCircle } from 'lucide-react';
+import { Download, Brain, LineChart, PieChart, BarChart, Sparkles, TrendingUp, AlertCircle, Calendar, Target, CheckSquare } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { useAuth } from '../../contexts/AuthContext';
+import { AnalyticsService, GoalsService, TasksService, Goal, Task } from '../../lib/services';
+import { Card, Button, StatsCard } from '../common';
 
 interface AnalyticsTabProps {}
 
 export default function AnalyticsTab({}: AnalyticsTabProps) {
+  const { user } = useAuth();
+  const [goals, setGoals] = useState<Goal[]>([]);
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!user) return;
+
+    setLoading(true);
+
+    // Subscribe to goals and tasks
+    const unsubscribeGoals = GoalsService.subscribeToGoals(user.uid, (goalsData) => {
+      setGoals(goalsData);
+    });
+
+    const unsubscribeTasks = TasksService.subscribeToTasks(user.uid, (tasksData) => {
+      setTasks(tasksData);
+      setLoading(false);
+    });
+
+    return () => {
+      unsubscribeGoals();
+      unsubscribeTasks();
+    };
+  }, [user]);
+
+  // Calculate analytics data
+  const getProductivityScore = () => {
+    if (goals.length === 0) return 0;
+    const avgProgress = goals.reduce((sum, goal) => sum + goal.progress, 0) / goals.length;
+    return Math.round(avgProgress);
+  };
+
+  const getCompletedGoals = () => {
+    return goals.filter(goal => goal.status === 'completed').length;
+  };
+
+  const getTotalGoals = () => goals.length;
+
+  const getCompletedTasks = () => {
+    return tasks.filter(task => task.completed).length;
+  };
+
+  const getTotalTasks = () => tasks.length;
+
+  const getTasksDueToday = () => {
+    const today = new Date().toISOString().split('T')[0];
+    return tasks.filter(task => task.dueDate === today).length;
+  };
+
+  const getOverdueTasks = () => {
+    const today = new Date().toISOString().split('T')[0];
+    return tasks.filter(task => task.dueDate && task.dueDate < today && !task.completed).length;
+  };
+
+  const getGoalsByCategory = () => {
+    const categories: Record<string, number> = {};
+    goals.forEach(goal => {
+      categories[goal.category] = (categories[goal.category] || 0) + 1;
+    });
+    return Object.entries(categories).map(([category, count]) => ({ category, count }));
+  };
+
+  const getWeeklyProgress = () => {
+    // Mock weekly data - in a real app, this would come from analytics collection
+    const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    return days.map(day => ({
+      day,
+      tasks: Math.floor(Math.random() * 5) + 1,
+      goals: Math.floor(Math.random() * 2)
+    }));
+  };
+
+  const getInsights = () => {
+    const insights = [];
+
+    if (getProductivityScore() > 80) {
+      insights.push({
+        type: 'success',
+        icon: <TrendingUp className="w-4 h-4 text-green-400" />,
+        title: 'Excellent Progress!',
+        message: 'You\'re performing exceptionally well. Keep up the momentum!'
+      });
+    }
+
+    if (getOverdueTasks() > 0) {
+      insights.push({
+        type: 'warning',
+        icon: <AlertCircle className="w-4 h-4 text-orange-400" />,
+        title: 'Tasks Need Attention',
+        message: `You have ${getOverdueTasks()} overdue tasks that need immediate attention.`
+      });
+    }
+
+    if (goals.length === 0) {
+      insights.push({
+        type: 'info',
+        icon: <Target className="w-4 h-4 text-blue-400" />,
+        title: 'Set Your First Goal',
+        message: 'Start your productivity journey by creating your first goal.'
+      });
+    }
+
+    if (getCompletedTasks() / Math.max(getTotalTasks(), 1) > 0.8) {
+      insights.push({
+        type: 'success',
+        icon: <CheckSquare className="w-4 h-4 text-green-400" />,
+        title: 'Task Master!',
+        message: 'You\'re completing tasks at an impressive rate.'
+      });
+    }
+
+    return insights.slice(0, 3); // Return top 3 insights
+  };
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
