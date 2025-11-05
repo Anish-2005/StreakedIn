@@ -390,9 +390,24 @@ export class StatsService {
 export class AISuggestionsService {
   private static readonly GEMINI_API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
   private static readonly GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent';
+  private static apiWorking = true; // Flag to track if API is working
 
   static async generateGoalSuggestions(userId: string): Promise<string[]> {
     try {
+      // Check if API key is available and API is working
+      if (!this.GEMINI_API_KEY || !this.apiWorking) {
+        console.warn('Gemini API key not found or API not working, using fallback suggestions');
+        return [
+          'Learn a new professional skill this month',
+          'Expand your professional network by 20 connections',
+          'Complete a certification in your field',
+          'Start a personal project to build your portfolio',
+          'Read one industry-related book per week'
+        ];
+      }
+
+      console.log('Gemini API key found, length:', this.GEMINI_API_KEY.length);
+
       // Get user's current goals and tasks to generate relevant suggestions
       const goals = await new Promise<Goal[]>((resolve) => {
         const unsubscribe = GoalsService.subscribeToGoals(userId, (goals) => {
@@ -430,6 +445,8 @@ User Data:
 
 Provide 5 specific, actionable goal suggestions that would help this user be more productive. Make them SMART goals where possible. Return only the suggestions as a numbered list, no additional text.`;
 
+      console.log('Making Gemini API request for goal suggestions...');
+
       const response = await fetch(`${this.GEMINI_API_URL}?key=${this.GEMINI_API_KEY}`, {
         method: 'POST',
         headers: {
@@ -450,12 +467,36 @@ Provide 5 specific, actionable goal suggestions that would help this user be mor
         })
       });
 
+      console.log('Gemini API response status:', response.status);
+
       if (!response.ok) {
-        throw new Error(`Gemini API error: ${response.status}`);
+        const errorText = await response.text();
+        console.error('Gemini API error details:', response.status, errorText);
+
+        // If it's a 404 or authentication error, the API key might be invalid
+        if (response.status === 404 || response.status === 403 || response.status === 401) {
+          console.warn('Gemini API key appears to be invalid or not properly configured');
+        }
+
+        this.apiWorking = false; // Disable API calls if it fails
+        throw new Error(`Gemini API error: ${response.status} - ${errorText}`);
       }
 
       const data = await response.json();
-      const aiResponse = data.candidates[0].content.parts[0].text;
+      console.log('Gemini API response data:', data);
+
+      const aiResponse = data.candidates?.[0]?.content?.parts?.[0]?.text;
+
+      if (!aiResponse) {
+        console.warn('No valid response from Gemini API, using fallback');
+        return [
+          'Learn a new professional skill this month',
+          'Expand your professional network by 20 connections',
+          'Complete a certification in your field',
+          'Start a personal project to build your portfolio',
+          'Read one industry-related book per week'
+        ];
+      }
 
       // Parse the numbered list into an array
       const suggestions = aiResponse
@@ -472,6 +513,7 @@ Provide 5 specific, actionable goal suggestions that would help this user be mor
       ];
     } catch (error) {
       console.error('Error generating AI suggestions:', error);
+      this.apiWorking = false; // Disable API calls on any error
       return [
         'Learn a new professional skill this month',
         'Expand your professional network',
@@ -484,6 +526,19 @@ Provide 5 specific, actionable goal suggestions that would help this user be mor
 
   static async generateAIResponse(userId: string, prompt: string): Promise<string> {
     try {
+      // Check if API key is available and API is working
+      if (!this.GEMINI_API_KEY || !this.apiWorking) {
+        console.warn('Gemini API key not found or API not working, using fallback response');
+        return `I apologize, but I'm having trouble connecting to my AI services right now. Based on your current goals and progress, here are some general recommendations:
+
+1. **Review your active goals**: Make sure they're still aligned with your current priorities
+2. **Break down large tasks**: Divide complex goals into smaller, manageable steps
+3. **Set daily priorities**: Focus on 3-5 key tasks each day to maintain momentum
+4. **Track your progress**: Regular check-ins help maintain motivation and identify areas for improvement
+
+Would you like me to help you create specific tasks or adjust your current goals?`;
+      }
+
       // Get user's current data for context
       const goals = await new Promise<Goal[]>((resolve) => {
         const unsubscribe = GoalsService.subscribeToGoals(userId, (goals) => {
@@ -518,6 +573,8 @@ User's question: ${prompt}
 
 Provide a helpful, actionable response focused on productivity, goal achievement, and task management. Keep it concise but comprehensive. If appropriate, suggest specific actions they can take.`;
 
+      console.log('Making Gemini API request for AI response...');
+
       const response = await fetch(`${this.GEMINI_API_URL}?key=${this.GEMINI_API_KEY}`, {
         method: 'POST',
         headers: {
@@ -538,14 +595,42 @@ Provide a helpful, actionable response focused on productivity, goal achievement
         })
       });
 
+      console.log('Gemini API response status:', response.status);
+
       if (!response.ok) {
-        throw new Error(`Gemini API error: ${response.status}`);
+        const errorText = await response.text();
+        console.error('Gemini API error details:', response.status, errorText);
+
+        // If it's a 404 or authentication error, the API key might be invalid
+        if (response.status === 404 || response.status === 403 || response.status === 401) {
+          console.warn('Gemini API key appears to be invalid or not properly configured');
+        }
+
+        this.apiWorking = false; // Disable API calls if it fails
+        throw new Error(`Gemini API error: ${response.status} - ${errorText}`);
       }
 
       const data = await response.json();
-      return data.candidates[0].content.parts[0].text;
+      console.log('Gemini API response data:', data);
+
+      const aiResponse = data.candidates?.[0]?.content?.parts?.[0]?.text;
+
+      if (!aiResponse) {
+        console.warn('No valid response from Gemini API, using fallback');
+        return `I apologize, but I'm having trouble connecting to my AI services right now. Based on your current goals and progress, here are some general recommendations:
+
+1. **Review your active goals**: Make sure they're still aligned with your current priorities
+2. **Break down large tasks**: Divide complex goals into smaller, manageable steps
+3. **Set daily priorities**: Focus on 3-5 key tasks each day to maintain momentum
+4. **Track your progress**: Regular check-ins help maintain motivation and identify areas for improvement
+
+Would you like me to help you create specific tasks or adjust your current goals?`;
+      }
+
+      return aiResponse;
     } catch (error) {
       console.error('Error generating AI response:', error);
+      this.apiWorking = false; // Disable API calls on any error
       return `I apologize, but I'm having trouble connecting to my AI services right now. Based on your current goals and progress, here are some general recommendations:
 
 1. **Review your active goals**: Make sure they're still aligned with your current priorities
