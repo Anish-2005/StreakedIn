@@ -1,7 +1,7 @@
 "use client";
 import { motion } from 'framer-motion';
-import { Brain, Bot, Send, Zap, Bell, TrendingUp, Calendar } from 'lucide-react';
-import { useState } from 'react';
+import { Brain, Bot, Send, Zap, Bell, TrendingUp, Calendar, Volume2, VolumeX } from 'lucide-react';
+import { useState, useEffect } from 'react';
 import { AISuggestionsService } from '../../lib/services';
 import { useAuth } from '../../contexts/AuthContext';
 
@@ -12,6 +12,68 @@ export default function AIAssistantTab({}: AIAssistantTabProps) {
   const [aiPrompt, setAiPrompt] = useState<string>('');
   const [aiResponse, setAiResponse] = useState<string>('');
   const [isAiLoading, setIsAiLoading] = useState<boolean>(false);
+  const [isSpeaking, setIsSpeaking] = useState<boolean>(false);
+
+  useEffect(() => {
+    return () => {
+      // Cleanup: stop any ongoing speech when component unmounts
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+    };
+  }, []);
+
+  const formatAIResponse = (text: string) => {
+    // Split by lines and process each line
+    const lines = text.split('\n');
+    const formattedLines = lines.map((line, index) => {
+      // Handle bold text (**text**)
+      line = line.replace(/\*\*(.*?)\*\*/g, '<strong class="text-white font-semibold">$1</strong>');
+
+      // Handle numbered lists (1. Text)
+      if (/^\d+\.\s/.test(line)) {
+        return `<div class="flex items-start space-x-2 mb-2">
+          <span class="text-blue-400 font-medium text-sm flex-shrink-0 mt-1">${line.match(/^\d+/)?.[0]}.</span>
+          <span class="text-slate-300 leading-relaxed">${line.replace(/^\d+\.\s*/, '')}</span>
+        </div>`;
+      }
+
+      // Handle regular paragraphs
+      if (line.trim()) {
+        return `<p class="text-slate-300 leading-relaxed mb-3">${line}</p>`;
+      }
+
+      // Empty lines become spacing
+      return '<div class="h-2"></div>';
+    });
+
+    return formattedLines.join('');
+  };
+
+  const speakText = (text: string) => {
+    if ('speechSynthesis' in window) {
+      // Stop any ongoing speech
+      window.speechSynthesis.cancel();
+
+      if (isSpeaking) {
+        setIsSpeaking(false);
+        return;
+      }
+
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.rate = 0.9; // Slightly slower for clarity
+      utterance.pitch = 1;
+      utterance.volume = 0.8;
+
+      utterance.onstart = () => setIsSpeaking(true);
+      utterance.onend = () => setIsSpeaking(false);
+      utterance.onerror = () => setIsSpeaking(false);
+
+      window.speechSynthesis.speak(utterance);
+    } else {
+      alert('Text-to-speech is not supported in your browser.');
+    }
+  };
 
   const handleAiPrompt = async () => {
     if (!aiPrompt.trim() || !user) return;
@@ -79,18 +141,36 @@ export default function AIAssistantTab({}: AIAssistantTabProps) {
                     <Bot className="w-4 h-4 text-white" />
                   </div>
                   <div className="bg-slate-900/20 rounded-2xl rounded-bl-none px-4 py-3 flex-1">
-                    <div className="whitespace-pre-line text-slate-300">
-                      {aiResponse}
-                    </div>
-                    <div className="flex space-x-2 mt-3">
-                      <button className="text-xs text-[#0A66C2] hover:text-[#004182]">
-                        Create Tasks
-                      </button>
-                      <button className="text-xs text-[#0A66C2] hover:text-[#004182]">
-                        Set Reminders
-                      </button>
-                      <button className="text-xs text-[#0A66C2] hover:text-[#004182]">
-                        Analyze Further
+                    <div
+                      className="text-slate-300 leading-relaxed"
+                      dangerouslySetInnerHTML={{ __html: formatAIResponse(aiResponse) }}
+                    />
+                    <div className="flex items-center justify-between mt-4 pt-3 border-t border-slate-700/30">
+                      <div className="flex space-x-3">
+                        <button className="text-xs px-3 py-1 bg-blue-500/20 text-blue-400 hover:bg-blue-500/30 rounded-full transition-colors font-medium">
+                          Create Tasks
+                        </button>
+                        <button className="text-xs px-3 py-1 bg-purple-500/20 text-purple-400 hover:bg-purple-500/30 rounded-full transition-colors font-medium">
+                          Set Reminders
+                        </button>
+                        <button className="text-xs px-3 py-1 bg-green-500/20 text-green-400 hover:bg-green-500/30 rounded-full transition-colors font-medium">
+                          Analyze Further
+                        </button>
+                      </div>
+                      <button
+                        onClick={() => speakText(aiResponse)}
+                        className={`p-2 rounded-lg transition-all duration-200 ${
+                          isSpeaking
+                            ? 'bg-red-500/20 text-red-400 hover:bg-red-500/30'
+                            : 'bg-blue-500/20 text-blue-400 hover:bg-blue-500/30'
+                        }`}
+                        title={isSpeaking ? 'Stop speaking' : 'Listen to response'}
+                      >
+                        {isSpeaking ? (
+                          <VolumeX className="w-4 h-4" />
+                        ) : (
+                          <Volume2 className="w-4 h-4" />
+                        )}
                       </button>
                     </div>
                   </div>
