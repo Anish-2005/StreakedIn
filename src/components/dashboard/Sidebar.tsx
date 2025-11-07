@@ -59,9 +59,9 @@ export default function Sidebar({ activeTab, setActiveTab, isSidebarOpen, setIsS
       {/* Content Container */}
       <div className="relative h-full flex flex-col">
         {/* Enhanced Logo Section */}
-        <div className={`flex flex-col ${isSidebarOpen ? 'items-center justify-between' : 'items-center'} ${isSidebarOpen ? 'h-20 px-6' : 'h-24 px-2'} border-b border-slate-700/60 relative`}>
+        <div className={`flex flex-col items-center ${isSidebarOpen ? 'h-20 px-6 py-3' : 'h-20 px-2 py-3'} border-b border-slate-700/60 relative`}>
           {/* Logo and title row */}
-          <div className={`flex ${isSidebarOpen ? 'items-center space-x-4' : 'justify-center mt-2'} ${isSidebarOpen ? 'w-full' : 'mb-2'}`}>
+          <div className={`flex ${isSidebarOpen ? 'items-center space-x-4 w-full justify-between' : 'justify-center'}`}>
             <div className="relative group">
               <div className={`bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-xl flex items-center justify-center border border-white/10 group-hover:border-white/20 transition-colors ${
                 isSidebarOpen ? 'w-12 h-12' : 'w-12 h-12'
@@ -80,28 +80,6 @@ export default function Sidebar({ activeTab, setActiveTab, isSidebarOpen, setIsS
               </div>
             )}
           </div>
-
-          {/* Expand button row for collapsed state */}
-          {!isSidebarOpen && (
-            <div className="flex justify-center mb-2">
-              <button
-                onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-                className="group p-2 hover:bg-white/10 rounded-xl transition-all duration-300 hover:scale-110"
-                title="Expand Sidebar"
-              >
-                <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-white transition-all duration-300" />
-              </button>
-            </div>
-          )}
-
-          {isSidebarOpen && (
-            <button
-              onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-              className="group p-2 hover:bg-white/10 rounded-xl transition-all duration-300 hover:scale-110"
-            >
-              <ChevronRight className="w-5 h-5 text-slate-400 group-hover:text-white transition-all duration-300 rotate-180" />
-            </button>
-          )}
         </div>
 
         {/* Navigation */}
@@ -110,6 +88,19 @@ export default function Sidebar({ activeTab, setActiveTab, isSidebarOpen, setIsS
           onTabChange={setActiveTab}
           isCollapsed={!isSidebarOpen}
         />
+
+        {/* Sidebar Toggle Button */}
+        <div className={`flex ${isSidebarOpen ? 'justify-end px-6 py-4' : 'justify-center px-2 py-3'}`}>
+          <button
+            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+            className="group p-2 hover:bg-white/10 rounded-xl transition-all duration-300 hover:scale-110"
+            title={isSidebarOpen ? "Collapse Sidebar" : "Expand Sidebar"}
+          >
+            <ChevronRight className={`w-5 h-5 text-slate-400 group-hover:text-white transition-all duration-300 ${
+              isSidebarOpen ? 'rotate-180' : ''
+            }`} />
+          </button>
+        </div>
 
         {/* User Profile */}
         <UserProfile
