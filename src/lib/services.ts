@@ -425,15 +425,18 @@ export class ChatService {
   }
 
   static async getChatSessions(userId: string): Promise<ChatSession[]> {
+    console.log('ChatService.getChatSessions called with userId:', userId);
     try {
       // First try with the indexed query
       try {
+        console.log('ChatService: Trying indexed query for chatSessions');
         const q = query(
           collection(db, 'chatSessions'),
           where('userId', '==', userId),
           orderBy('updatedAt', 'desc')
         );
         const querySnapshot = await getDocs(q);
+        console.log('ChatService: Indexed query successful, found', querySnapshot.size, 'sessions');
         return querySnapshot.docs.map(doc => ({
           id: doc.id,
           ...doc.data(),

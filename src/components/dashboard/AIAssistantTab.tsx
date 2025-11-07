@@ -60,7 +60,8 @@ export default function AIAssistantTab({}: AIAssistantTabProps) {
   // Load chat sessions on component mount
   useEffect(() => {
     const loadChatSessions = async () => {
-      if (user) {
+      console.log('AIAssistantTab: Loading chat sessions', { user: !!user, authLoading, userId: user?.uid });
+      if (user && !authLoading) {
         try {
           const sessions = await ChatService.getChatSessions(user.uid);
           setChatSessions(sessions);
@@ -81,7 +82,7 @@ export default function AIAssistantTab({}: AIAssistantTabProps) {
       }
     };
     loadChatSessions();
-  }, [user]);
+  }, [user, authLoading]);
 
   // Load conversation history when current chat session changes
   useEffect(() => {
