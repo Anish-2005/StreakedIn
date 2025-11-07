@@ -1,6 +1,7 @@
 import React from 'react';
 import { User } from 'firebase/auth';
-import { Crown, Zap } from 'lucide-react';
+import { Crown, Zap, LogOut } from 'lucide-react';
+import { useAuth } from '../../contexts/AuthContext';
 
 interface UserProfileProps {
   user: User | null;
@@ -9,6 +10,7 @@ interface UserProfileProps {
 }
 
 export default function UserProfile({ user, userProfile, isCollapsed }: UserProfileProps) {
+  const { logout } = useAuth();
   const getInitials = (user: User | null) => {
     if (user?.displayName) {
       return user.displayName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
@@ -60,18 +62,36 @@ export default function UserProfile({ user, userProfile, isCollapsed }: UserProf
                 <span className="text-green-300 text-xs font-medium">Active</span>
               </div>
             </div>
+            {/* Logout Button */}
+            <button
+              onClick={logout}
+              className="flex items-center space-x-2 mt-3 px-3 py-1.5 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 hover:border-red-500/30 rounded-lg transition-all duration-200 group"
+            >
+              <LogOut className="w-4 h-4 text-red-400 group-hover:text-red-300" />
+              <span className="text-red-400 group-hover:text-red-300 text-xs font-medium">Logout</span>
+            </button>
           </div>
         )}
 
         {/* Tooltip for collapsed state */}
         {isCollapsed && (
-          <div className="absolute left-full ml-2 px-4 py-3 bg-slate-800/95 backdrop-blur-md text-white rounded-lg border border-slate-600/50 opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none z-50 shadow-xl">
+          <div className="absolute left-full ml-2 px-4 py-3 bg-slate-800/95 backdrop-blur-md text-white rounded-lg border border-slate-600/50 opacity-0 group-hover:opacity-100 transition-all duration-300 z-50 shadow-xl">
             <div className="font-semibold text-sm mb-1">{getDisplayName(user)}</div>
-            <div className="text-slate-400 text-xs">{userProfile?.plan || 'Professional Plan'}</div>
-            <div className="flex items-center space-x-1 mt-2">
+            <div className="text-slate-400 text-xs mb-2">{userProfile?.plan || 'Professional Plan'}</div>
+            <div className="flex items-center space-x-1 mb-3">
               <div className="w-2 h-2 bg-green-400 rounded-full"></div>
               <span className="text-green-300 text-xs">Active</span>
             </div>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                logout();
+              }}
+              className="flex items-center space-x-2 w-full px-3 py-1.5 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 hover:border-red-500/30 rounded-lg transition-all duration-200"
+            >
+              <LogOut className="w-3 h-3 text-red-400" />
+              <span className="text-red-400 text-xs font-medium">Logout</span>
+            </button>
             {/* Tooltip arrow */}
             <div className="absolute right-full top-1/2 -translate-y-1/2 w-0 h-0 border-t-4 border-b-4 border-r-4 border-transparent border-r-slate-800/95"></div>
           </div>

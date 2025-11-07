@@ -64,6 +64,14 @@ export interface UserStats {
   networkGrowth: number;
 }
 
+export interface ChatMessage {
+  id: string;
+  userId: string;
+  role: 'user' | 'assistant';
+  content: string;
+  createdAt: Date;
+}
+
 // Goals Service
 export class GoalsService {
   static async createGoal(userId: string, goalData: Omit<Goal, 'id' | 'userId' | 'createdAt' | 'updatedAt'>): Promise<string> {
@@ -386,6 +394,98 @@ export class StatsService {
   }
 }
 
+// Chat Service
+export class ChatService {
+  static async saveMessage(userId: string, message: Omit<ChatMessage, 'id' | 'userId' | 'createdAt'>): Promise<string>;
+  static async saveMessage(userId: string, role: 'user' | 'assistant', content: string): Promise<string>;
+  static async saveMessage(userId: string, roleOrMessage: Omit<ChatMessage, 'id' | 'userId' | 'createdAt'> | 'user' | 'assistant', content?: string): Promise<string> {
+    try {
+      let messageData: Omit<ChatMessage, 'id' | 'userId' | 'createdAt'>;
+      
+      if (typeof roleOrMessage === 'string') {
+        // Called with (userId, role, content)
+        messageData = {
+          role: roleOrMessage as 'user' | 'assistant',
+          content: content!,
+        };
+      } else {
+        // Called with (userId, message)
+        messageData = roleOrMessage;
+      }
+
+      const docRef = await addDoc(collection(db, 'chat_messages'), {
+        ...messageData,
+        userId,
+        createdAt: Timestamp.now(),
+      });
+      return docRef.id;
+    } catch (error) {
+      console.error('Error saving chat message:', error);
+      throw error;
+    }
+  }
+
+  static subscribeToChatHistory(userId: string, callback: (messages: ChatMessage[]) => void): () => void {
+    const q = query(
+      collection(db, 'chat_messages'),
+      where('userId', '==', userId),
+      orderBy('createdAt', 'asc')
+    );
+
+    return onSnapshot(q, (querySnapshot) => {
+      const messages: ChatMessage[] = [];
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        messages.push({
+          id: doc.id,
+          ...data,
+          createdAt: data.createdAt?.toDate() || new Date(),
+        } as ChatMessage);
+      });
+      callback(messages);
+    });
+  }
+
+  static async clearChatHistory(userId: string): Promise<void> {
+    try {
+      const q = query(
+        collection(db, 'chat_messages'),
+        where('userId', '==', userId)
+      );
+      const querySnapshot = await getDocs(q);
+      
+      const batch = writeBatch(db);
+      querySnapshot.forEach((doc) => {
+        batch.delete(doc.ref);
+      });
+      
+      await batch.commit();
+      console.log('Chat history cleared for user:', userId);
+    } catch (error) {
+      console.error('Error clearing chat history:', error);
+      throw error;
+    }
+  }
+
+  static async loadChatHistory(userId: string): Promise<Array<{role: 'user' | 'assistant', content: string}>> {
+    try {
+      const q = query(
+        collection(db, 'chat_messages'),
+        where('userId', '==', userId),
+        orderBy('createdAt', 'asc')
+      );
+      const querySnapshot = await getDocs(q);
+      return querySnapshot.docs.map(doc => ({
+        role: doc.data().role,
+        content: doc.data().content,
+      }));
+    } catch (error) {
+      console.error('Error loading chat history:', error);
+      return [];
+    }
+  }
+}
+
 // AI Suggestions Service
 export class AISuggestionsService {
   private static get GEMINI_API_KEY(): string | undefined {
@@ -531,7 +631,7 @@ Provide 5 specific, actionable goal suggestions that would help this user be mor
     }
   }
 
-  static async generateAIResponse(userId: string, prompt: string): Promise<string> {
+  static async generateAIResponse(userId: string, prompt: string, conversationHistory?: Array<{role: 'user' | 'assistant', content: string}>): Promise<string> {
     try {
       // Check if API key is available and API is working
       if (!this.GEMINI_API_KEY || !this.apiWorking) {
@@ -563,6 +663,14 @@ Would you like me to help you create specific tasks or adjust your current goals
 
       const stats = await StatsService.calculateUserStats(userId);
 
+      // Build conversation context
+      let conversationContext = '';
+      if (conversationHistory && conversationHistory.length > 0) {
+        conversationContext = '\n\nConversation History:\n' +
+          conversationHistory.map(msg => `${msg.role === 'user' ? 'User' : 'Assistant'}: ${msg.content}`).join('\n') +
+          '\n\n';
+      }
+
       const context = `You are a productivity assistant helping a user optimize their goals and tasks. Here's their current data:
 
 Goals (${goals.length} total, ${goals.filter(g => g.status === 'completed').length} completed):
@@ -576,9 +684,9 @@ Stats:
 - Current Streak: ${stats.streakDays} days
 - Network Growth: ${stats.networkGrowth}%
 
-User's question: ${prompt}
+${conversationContext}User's question: ${prompt}
 
-Provide a helpful, actionable response focused on productivity, goal achievement, and task management. Keep it concise but comprehensive. If appropriate, suggest specific actions they can take.`;
+Provide a helpful, actionable response focused on productivity, goal achievement, and task management. Keep it concise but comprehensive. If appropriate, suggest specific actions they can take. Maintain context from the conversation history if relevant.`;
 
       console.log('Making Gemini API request for AI response...');
 

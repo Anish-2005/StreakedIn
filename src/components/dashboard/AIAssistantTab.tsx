@@ -1,8 +1,8 @@
 "use client";
 import { motion } from 'framer-motion';
-import { Brain, Bot, Send, Zap, Bell, TrendingUp, Calendar, Volume2, VolumeX } from 'lucide-react';
+import { Brain, Bot, Send, Zap, Bell, TrendingUp, Calendar, Volume2, VolumeX, RotateCcw } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import { AISuggestionsService } from '../../lib/services';
+import { AISuggestionsService, ChatService } from '../../lib/services';
 import { useAuth } from '../../contexts/AuthContext';
 
 interface AIAssistantTabProps {}
@@ -14,6 +14,7 @@ export default function AIAssistantTab({}: AIAssistantTabProps) {
   const [isAiLoading, setIsAiLoading] = useState<boolean>(false);
   const [isSpeaking, setIsSpeaking] = useState<boolean>(false);
   const [lastUserMessage, setLastUserMessage] = useState<string>('');
+  const [conversationHistory, setConversationHistory] = useState<Array<{role: 'user' | 'assistant', content: string}>>([]);
 
   useEffect(() => {
     return () => {
@@ -23,6 +24,21 @@ export default function AIAssistantTab({}: AIAssistantTabProps) {
       }
     };
   }, []);
+
+  // Load conversation history on component mount
+  useEffect(() => {
+    const loadChatHistory = async () => {
+      if (user) {
+        try {
+          const history = await ChatService.loadChatHistory(user.uid);
+          setConversationHistory(history);
+        } catch (error) {
+          console.error('Error loading chat history:', error);
+        }
+      }
+    };
+    loadChatHistory();
+  }, [user]);
 
   const formatAIResponse = (text: string) => {
     // Split by lines and process each line
@@ -83,15 +99,59 @@ export default function AIAssistantTab({}: AIAssistantTabProps) {
     setLastUserMessage(messageToSend); // Store the message for display in chat
     setAiPrompt(''); // Clear the input immediately
 
+    // Add user message to conversation history
+    const newHistory = [...conversationHistory, { role: 'user' as const, content: messageToSend }];
+    setConversationHistory(newHistory);
+
+    // Save user message to Firebase
+    try {
+      await ChatService.saveMessage(user.uid, 'user', messageToSend);
+    } catch (error) {
+      console.error('Error saving user message:', error);
+    }
+
     setIsAiLoading(true);
     try {
-      const response = await AISuggestionsService.generateAIResponse(user.uid, messageToSend);
+      const response = await AISuggestionsService.generateAIResponse(user.uid, messageToSend, newHistory);
       setAiResponse(response);
+
+      // Add AI response to conversation history
+      const finalHistory = [...newHistory, { role: 'assistant' as const, content: response }];
+      setConversationHistory(finalHistory);
+
+      // Save AI response to Firebase
+      try {
+        await ChatService.saveMessage(user.uid, 'assistant', response);
+      } catch (error) {
+        console.error('Error saving AI response:', error);
+      }
     } catch (error) {
       console.error('Error getting AI response:', error);
-      setAiResponse('I apologize, but I\'m having trouble processing your request right now. Please try again in a moment.');
+      const errorMessage = 'I apologize, but I\'m having trouble processing your request right now. Please try again in a moment.';
+      setAiResponse(errorMessage);
+      const finalHistory = [...newHistory, { role: 'assistant' as const, content: errorMessage }];
+      setConversationHistory(finalHistory);
+
+      // Save error message to Firebase
+      try {
+        await ChatService.saveMessage(user.uid, 'assistant', errorMessage);
+      } catch (saveError) {
+        console.error('Error saving error message:', saveError);
+      }
     } finally {
       setIsAiLoading(false);
+    }
+  };
+
+  const clearChatHistory = async () => {
+    if (!user) return;
+    try {
+      await ChatService.clearChatHistory(user.uid);
+      setConversationHistory([]);
+      setAiResponse('');
+      setLastUserMessage('');
+    } catch (error) {
+      console.error('Error clearing chat history:', error);
     }
   };
 
@@ -125,66 +185,94 @@ export default function AIAssistantTab({}: AIAssistantTabProps) {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* AI Chat */}
         <div className="lg:col-span-2 bg-slate-800/30 backdrop-blur-md border border-slate-700/50 rounded-xl shadow-sm">
-          <div className="p-4 border-b border-slate-700/50">
+          <div className="p-4 border-b border-slate-700/50 flex items-center justify-between">
             <h3 className="font-semibold text-white">Chat with AI Assistant</h3>
+            <button
+              onClick={clearChatHistory}
+              className="flex items-center space-x-2 px-3 py-1.5 bg-red-500/20 text-red-400 hover:bg-red-500/30 rounded-lg transition-colors text-sm"
+              title="Clear chat history"
+            >
+              <RotateCcw className="w-4 h-4" />
+              <span>Clear</span>
+            </button>
           </div>
 
           {/* Chat Messages */}
           <div className="p-4 h-96 overflow-y-auto space-y-4">
-            {aiResponse ? (
-              <>
-                {/* User Message */}
-                <div className="flex justify-end">
-                  <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-2xl rounded-br-none px-4 py-2 max-w-xs">
-                    {lastUserMessage}
-                  </div>
-                </div>
-
-                {/* AI Response */}
-                <div className="flex space-x-3">
-                  <div className="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center flex-shrink-0">
-                    <Bot className="w-4 h-4 text-white" />
-                  </div>
-                  <div className="bg-slate-900/20 rounded-2xl rounded-bl-none px-4 py-3 flex-1">
-                    <div
-                      className="text-slate-300 leading-relaxed"
-                      dangerouslySetInnerHTML={{ __html: formatAIResponse(aiResponse) }}
-                    />
-                    <div className="flex items-center justify-between mt-4 pt-3 border-t border-slate-700/30">
-                      <div className="flex space-x-3">
-                        <button className="text-xs px-3 py-1 bg-blue-500/20 text-blue-400 hover:bg-blue-500/30 rounded-full transition-colors font-medium">
-                          Create Tasks
-                        </button>
-                        <button className="text-xs px-3 py-1 bg-purple-500/20 text-purple-400 hover:bg-purple-500/30 rounded-full transition-colors font-medium">
-                          Set Reminders
-                        </button>
-                        <button className="text-xs px-3 py-1 bg-green-500/20 text-green-400 hover:bg-green-500/30 rounded-full transition-colors font-medium">
-                          Analyze Further
-                        </button>
-                      </div>
-                      <button
-                        onClick={() => speakText(aiResponse)}
-                        className={`p-2 rounded-lg transition-all duration-200 ${
-                          isSpeaking
-                            ? 'bg-red-500/20 text-red-400 hover:bg-red-500/30'
-                            : 'bg-blue-500/20 text-blue-400 hover:bg-blue-500/30'
-                        }`}
-                        title={isSpeaking ? 'Stop speaking' : 'Listen to response'}
-                      >
-                        {isSpeaking ? (
-                          <VolumeX className="w-4 h-4" />
-                        ) : (
-                          <Volume2 className="w-4 h-4" />
-                        )}
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </>
-            ) : (
+            {conversationHistory.length === 0 ? (
               <div className="text-center text-slate-400 py-12">
                 <Brain className="w-12 h-12 text-slate-500 mx-auto mb-4" />
                 <p>Ask me anything about your productivity, goals, or schedule!</p>
+              </div>
+            ) : (
+              conversationHistory.map((message, index) => (
+                <div key={index}>
+                  {message.role === 'user' ? (
+                    // User Message
+                    <div className="flex justify-end">
+                      <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-2xl rounded-br-none px-4 py-2 max-w-xs">
+                        {message.content}
+                      </div>
+                    </div>
+                  ) : (
+                    // AI Response
+                    <div className="flex space-x-3">
+                      <div className="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center flex-shrink-0">
+                        <Bot className="w-4 h-4 text-white" />
+                      </div>
+                      <div className="bg-slate-900/20 rounded-2xl rounded-bl-none px-4 py-3 flex-1">
+                        <div
+                          className="text-slate-300 leading-relaxed"
+                          dangerouslySetInnerHTML={{ __html: formatAIResponse(message.content) }}
+                        />
+                        <div className="flex items-center justify-between mt-4 pt-3 border-t border-slate-700/30">
+                          <div className="flex space-x-3">
+                            <button className="text-xs px-3 py-1 bg-blue-500/20 text-blue-400 hover:bg-blue-500/30 rounded-full transition-colors font-medium">
+                              Create Tasks
+                            </button>
+                            <button className="text-xs px-3 py-1 bg-purple-500/20 text-purple-400 hover:bg-purple-500/30 rounded-full transition-colors font-medium">
+                              Set Reminders
+                            </button>
+                            <button className="text-xs px-3 py-1 bg-green-500/20 text-green-400 hover:bg-green-500/30 rounded-full transition-colors font-medium">
+                              Analyze Further
+                            </button>
+                          </div>
+                          <button
+                            onClick={() => speakText(message.content)}
+                            className={`p-2 rounded-lg transition-all duration-200 ${
+                              isSpeaking
+                                ? 'bg-red-500/20 text-red-400 hover:bg-red-500/30'
+                                : 'bg-blue-500/20 text-blue-400 hover:bg-blue-500/30'
+                            }`}
+                            title={isSpeaking ? 'Stop speaking' : 'Listen to response'}
+                          >
+                            {isSpeaking ? (
+                              <VolumeX className="w-4 h-4" />
+                            ) : (
+                              <Volume2 className="w-4 h-4" />
+                            )}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ))
+            )}
+
+            {/* Loading indicator */}
+            {isAiLoading && (
+              <div className="flex space-x-3">
+                <div className="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center flex-shrink-0">
+                  <Bot className="w-4 h-4 text-white" />
+                </div>
+                <div className="bg-slate-900/20 rounded-2xl rounded-bl-none px-4 py-3 flex-1">
+                  <div className="flex items-center space-x-2">
+                    <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce"></div>
+                    <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                    <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                  </div>
+                </div>
               </div>
             )}
           </div>
