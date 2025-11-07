@@ -25,26 +25,32 @@ export default function SearchBar({
   const query = externalQuery !== undefined ? externalQuery : internalQuery;
   const setQuery = externalQuery !== undefined ? () => {} : setInternalQuery;
 
-  // Debounce the search query
+  // Debounce the search query only when not using external query
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setDebouncedQuery(query);
-    }, debounceMs);
+    if (externalQuery === undefined) {
+      const timer = setTimeout(() => {
+        setDebouncedQuery(internalQuery);
+      }, debounceMs);
 
-    return () => clearTimeout(timer);
-  }, [query, debounceMs]);
+      return () => clearTimeout(timer);
+    }
+  }, [internalQuery, debounceMs, externalQuery]);
 
-  // Call onSearch when debounced query changes
+  // Call onSearch when debounced query changes (only for uncontrolled component)
   useEffect(() => {
-    onSearch?.(debouncedQuery);
-  }, [debouncedQuery, onSearch]);
+    if (externalQuery === undefined) {
+      onSearch?.(debouncedQuery);
+    }
+  }, [debouncedQuery, onSearch, externalQuery]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     if (externalQuery !== undefined) {
-      // If using external query, call onSearch immediately for controlled component
+      // For controlled component, just call onSearch with the new value
+      // The parent will handle debouncing and state updates
       onSearch?.(value);
     } else {
+      // For uncontrolled component, update internal state
       setInternalQuery(value);
     }
   };

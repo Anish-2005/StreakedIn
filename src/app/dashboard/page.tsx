@@ -1,6 +1,6 @@
 // pages/dashboard.js
 "use client";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '../../contexts/AuthContext';
@@ -12,6 +12,18 @@ import TopBar from '../../components/dashboard/TopBar';
 import TabContainer from '../../components/dashboard/TabContainer';
 import LoadingSpinner from '../../components/dashboard/LoadingSpinner';
 import { Breadcrumb } from '../../components/common';
+
+// Debounce utility function
+function debounce<T extends (...args: any[]) => any>(
+  func: T,
+  wait: number
+): (...args: Parameters<T>) => void {
+  let timeout: NodeJS.Timeout;
+  return (...args: Parameters<T>) => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func(...args), wait);
+  };
+}
 
 interface UserProfile {
   plan?: string;
@@ -106,7 +118,7 @@ export default function Dashboard() {
     return null;
   }
 
-  const handleSearch = async (query: string) => {
+  const handleSearch = useCallback(async (query: string) => {
     setSearchQuery(query);
 
     if (!query.trim() || !user) {
@@ -160,6 +172,24 @@ export default function Dashboard() {
     } finally {
       setIsSearching(false);
     }
+  }, [user]);
+
+  // Debounced search function
+  const debouncedSearch = useCallback(
+    debounce((query: string) => {
+      handleSearch(query);
+    }, 300),
+    [handleSearch]
+  );
+
+  const handleSearchInput = (query: string) => {
+    setSearchQuery(query);
+    if (!query.trim()) {
+      setSearchResults({ goals: [], tasks: [] });
+      setIsSearching(false);
+    } else {
+      debouncedSearch(query);
+    }
   };
 
   const handleNotificationsClick = () => {
@@ -194,7 +224,7 @@ export default function Dashboard() {
           activeTab={activeTab}
           user={user}
           userProfile={userProfile}
-          onSearch={handleSearch}
+          onSearch={handleSearchInput}
           onNotificationsClick={handleNotificationsClick}
           onMenuClick={() => setIsSidebarOpen(!isSidebarOpen)}
           isMobile={isMobile}
