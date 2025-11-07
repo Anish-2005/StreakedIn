@@ -193,7 +193,7 @@ export default function GoalsTab({}: GoalsTabProps) {
 
             <Select
               value={formData.category}
-              onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
+              onChange={(value) => setFormData(prev => ({ ...prev, category: value }))}
             >
               {categories.map(category => (
                 <option key={category} value={category}>{category}</option>

@@ -13,9 +13,11 @@ interface InputFieldProps extends BaseFormFieldProps, React.InputHTMLAttributes<
   type?: 'input';
 }
 
-interface SelectFieldProps extends BaseFormFieldProps, React.SelectHTMLAttributes<HTMLSelectElement> {
+interface SelectFieldProps extends BaseFormFieldProps, Omit<React.SelectHTMLAttributes<HTMLSelectElement>, 'onChange'> {
   type: 'select';
   children: React.ReactNode;
+  onChange?: (value: string) => void;
+  placeholder?: string;
 }
 
 interface TextareaFieldProps extends BaseFormFieldProps, React.TextareaHTMLAttributes<HTMLTextAreaElement> {
@@ -48,7 +50,10 @@ export default function FormField({
         <Select
           id={fieldId}
           error={error}
-          {...(props as SelectFieldProps)}
+          value={props.value}
+          onChange={props.onChange}
+          placeholder={props.placeholder}
+          disabled={props.disabled}
         >
           {props.children}
         </Select>

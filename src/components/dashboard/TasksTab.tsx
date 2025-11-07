@@ -11,6 +11,7 @@ import { TasksService } from '../../lib/services';
 interface Task {
   id: string;
   title: string;
+  description?: string;
   completed: boolean;
   priority?: string;
   dueDate?: string;
@@ -32,6 +33,7 @@ export default function TasksTab({}: TasksTabProps) {
   const { user } = useAuth();
   const [tasks, setTasks] = useState<Task[]>([]);
   const [newTaskTitle, setNewTaskTitle] = useState<string>('');
+  const [newTaskDescription, setNewTaskDescription] = useState<string>('');
   const [newTaskPriority, setNewTaskPriority] = useState<string>('medium');
   const [newTaskDueDate, setNewTaskDueDate] = useState<string>('');
   const [filter, setFilter] = useState<'all' | 'pending' | 'completed'>('all');
@@ -48,6 +50,7 @@ export default function TasksTab({}: TasksTabProps) {
   // Edit-related state
   const [editingTask, setEditingTask] = useState<Task | null>(null);
   const [editTitle, setEditTitle] = useState('');
+  const [editDescription, setEditDescription] = useState('');
   const [editPriority, setEditPriority] = useState<'low' | 'medium' | 'high'>('medium');
   const [editDueDate, setEditDueDate] = useState('');
   const [showEditModal, setShowEditModal] = useState(false);
@@ -137,6 +140,11 @@ export default function TasksTab({}: TasksTabProps) {
         createdAt: new Date()
       };
 
+      // Only include description if it has a value
+      if (newTaskDescription.trim()) {
+        taskData.description = newTaskDescription.trim();
+      }
+
       // Only include dueDate if it has a value
       if (newTaskDueDate.trim()) {
         taskData.dueDate = newTaskDueDate;
@@ -144,6 +152,7 @@ export default function TasksTab({}: TasksTabProps) {
 
       await addDoc(collection(db, 'tasks'), taskData);
       setNewTaskTitle('');
+      setNewTaskDescription('');
       setNewTaskPriority('medium');
       setNewTaskDueDate('');
     } catch (error) {
@@ -178,6 +187,7 @@ export default function TasksTab({}: TasksTabProps) {
   const startEditingTask = (task: Task) => {
     setEditingTask(task);
     setEditTitle(task.title);
+    setEditDescription(task.description || '');
     setEditPriority((task.priority as 'low' | 'medium' | 'high') || 'medium');
     setEditDueDate(task.dueDate || '');
     setShowEditModal(true);
@@ -186,6 +196,7 @@ export default function TasksTab({}: TasksTabProps) {
   const cancelEditingTask = () => {
     setEditingTask(null);
     setEditTitle('');
+    setEditDescription('');
     setEditPriority('medium');
     setEditDueDate('');
     setShowEditModal(false);
@@ -200,6 +211,14 @@ export default function TasksTab({}: TasksTabProps) {
         priority: editPriority,
         updatedAt: new Date()
       };
+
+      // Only include description if it has a value
+      if (editDescription.trim()) {
+        updateData.description = editDescription.trim();
+      } else {
+        // If description is being cleared, we need to explicitly set it to null or delete the field
+        updateData.description = null;
+      }
 
       // Only include dueDate if it has a value
       if (editDueDate.trim()) {
@@ -378,7 +397,7 @@ export default function TasksTab({}: TasksTabProps) {
           <span className="text-sm text-slate-400">Sort by:</span>
           <Select
             value={sortBy}
-            onChange={(e) => setSortBy(e.target.value as any)}
+            onChange={(value) => setSortBy(value as any)}
             className="w-32"
           >
             <option value="created">Created</option>
@@ -412,12 +431,23 @@ export default function TasksTab({}: TasksTabProps) {
             />
           </div>
 
+          <div>
+            <label className="block text-sm font-medium text-slate-300 mb-2">Description (Optional)</label>
+            <textarea
+              placeholder="Add more details about this task..."
+              value={newTaskDescription}
+              onChange={(e) => setNewTaskDescription(e.target.value)}
+              className="w-full px-4 py-3 border border-slate-600/60 bg-slate-800/60 text-white placeholder-slate-400 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500/60 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed resize-none text-base"
+              rows={3}
+            />
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-slate-300 mb-2">Priority</label>
               <Select
                 value={newTaskPriority}
-                onChange={(e) => setNewTaskPriority(e.target.value)}
+                onChange={(value) => setNewTaskPriority(value)}
                 className="bg-slate-700/50 border-slate-600"
               >
                 <option value="low">🟢 Low Priority</option>
@@ -572,6 +602,16 @@ export default function TasksTab({}: TasksTabProps) {
                       >
                         {task.title}
                       </motion.h3>
+
+                      {task.description && task.description.trim() && (
+                        <p className={`text-sm mb-2 transition-all ${
+                          task.completed
+                            ? 'text-slate-500 line-through'
+                            : 'text-slate-300'
+                        }`}>
+                          {task.description}
+                        </p>
+                      )}
 
                       <div className="flex items-center gap-4 text-sm">
                         {/* Due Date */}
@@ -826,12 +866,23 @@ export default function TasksTab({}: TasksTabProps) {
                   />
                 </div>
 
+                <div>
+                  <label className="block text-sm font-medium text-slate-300 mb-2">Description (Optional)</label>
+                  <textarea
+                    placeholder="Add more details about this task..."
+                    value={editDescription}
+                    onChange={(e) => setEditDescription(e.target.value)}
+                    className="w-full px-4 py-3 border border-slate-600/60 bg-slate-800/60 text-white placeholder-slate-400 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500/60 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed resize-none text-base"
+                    rows={3}
+                  />
+                </div>
+
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-slate-300 mb-2">Priority</label>
                     <Select
                       value={editPriority}
-                      onChange={(e) => setEditPriority(e.target.value as 'low' | 'medium' | 'high')}
+                      onChange={(value) => setEditPriority(value as 'low' | 'medium' | 'high')}
                       className="bg-slate-700/50 border-slate-600"
                     >
                       <option value="low">🟢 Low Priority</option>
