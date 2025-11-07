@@ -113,7 +113,7 @@
       ]
     },
     {
-      "collectionGroup": "chatSessions",
+      "collectionGroup": "chatMessages",
       "queryScope": "COLLECTION",
       "fields": [
         {
@@ -121,8 +121,12 @@
           "order": "ASCENDING"
         },
         {
-          "fieldPath": "updatedAt",
-          "order": "DESCENDING"
+          "fieldPath": "chatSessionId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "createdAt",
+          "order": "ASCENDING"
         },
         {
           "fieldPath": "__name__",
