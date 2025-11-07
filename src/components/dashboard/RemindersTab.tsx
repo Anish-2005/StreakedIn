@@ -37,7 +37,7 @@ export default function RemindersTab({}: RemindersTabProps) {
   useEffect(() => {
     if (!user) return;
 
-    const unsubscribe = RemindersService.subscribeToReminders(user.uid, (remindersData) => {
+    const unsubscribe = RemindersService.subscribeToReminders(user.uid, (remindersData: Reminder[]) => {
       setReminders(remindersData);
       setLoading(false);
     });

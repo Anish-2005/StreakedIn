@@ -734,6 +734,33 @@ export class RemindersService {
     }
   }
 
+  static subscribeToReminders(userId: string, callback: (reminders: Reminder[]) => void): () => void {
+    // Use unindexed query to avoid requiring composite index
+    // Sorting will be done client-side
+    const q = query(
+      collection(db, 'reminders'),
+      where('userId', '==', userId)
+    );
+
+    return onSnapshot(q, (querySnapshot) => {
+      const reminders: Reminder[] = [];
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        reminders.push({
+          id: doc.id,
+          ...data,
+          createdAt: data.createdAt?.toDate() || new Date(),
+          updatedAt: data.updatedAt?.toDate() || new Date(),
+        } as Reminder);
+      });
+
+      // Sort by createdAt descending on the client side
+      reminders.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+
+      callback(reminders);
+    });
+  }
+
   static async generateReminderFromPrompt(userId: string, prompt: string): Promise<Partial<Reminder> | null> {
     try {
       // Check if API key is available
@@ -782,7 +809,8 @@ PROFESSIONAL GUIDELINES:
 
 OUTPUT FORMAT:
 Return exclusively a valid JSON object containing only these fields: title, description, type, frequency.
-Do not include explanatory text, markdown formatting, or additional commentary outside the JSON structure.
+Do not include explanatory text, markdown formatting, code blocks, or additional commentary outside the JSON structure.
+Return only the raw JSON object, nothing else.
 
 EXAMPLES:
 Input: "Remind me to review quarterly reports every Friday at 2 PM"
@@ -851,7 +879,22 @@ Output: {"title":"Daily Hydration Reminder","description":"Stay hydrated through
 
       // Try to parse the JSON response
       try {
-        const parsed = JSON.parse(aiResponse);
+        // Clean the AI response by removing markdown code blocks and extra whitespace
+        let cleanResponse = aiResponse.trim();
+
+        // Remove markdown code blocks if present
+        if (cleanResponse.startsWith('```json')) {
+          cleanResponse = cleanResponse.replace(/^```json\s*/, '').replace(/\s*```$/, '');
+        } else if (cleanResponse.startsWith('```')) {
+          cleanResponse = cleanResponse.replace(/^```\s*/, '').replace(/\s*```$/, '');
+        }
+
+        // Remove any leading/trailing whitespace again
+        cleanResponse = cleanResponse.trim();
+
+        console.log('Cleaned AI response:', cleanResponse);
+
+        const parsed = JSON.parse(cleanResponse);
         return {
           title: parsed.title || 'New Reminder',
           description: parsed.description || 'AI-generated reminder for your request.',
@@ -861,10 +904,32 @@ Output: {"title":"Daily Hydration Reminder","description":"Stay hydrated through
         };
       } catch (parseError) {
         console.warn('Failed to parse AI reminder response, using fallback parsing');
+        console.error('Parse error:', parseError);
+
         // Try to extract basic information from the AI response
-        const fallbackTitle = aiResponse.split('\n')[0]?.replace(/^["\s]+|["\s]+$/g, '') || 'New Reminder';
+        // Look for JSON-like content within the response
+        const jsonMatch = aiResponse.match(/\{[\s\S]*\}/);
+        if (jsonMatch) {
+          try {
+            const parsed = JSON.parse(jsonMatch[0]);
+            return {
+              title: parsed.title || 'New Reminder',
+              description: parsed.description || 'AI-generated reminder for your request.',
+              type: parsed.type || 'browser',
+              frequency: parsed.frequency || 'once',
+              enabled: true,
+            };
+          } catch (innerParseError) {
+            console.warn('Failed to parse extracted JSON, using basic fallback');
+          }
+        }
+
+        // Final fallback: extract from first line or use generic title
+        const firstLine = aiResponse.split('\n')[0]?.replace(/^["`\s]+|["`\s]+$/g, '') || 'New Reminder';
+        const title = firstLine.length > 50 ? 'New Reminder' : firstLine;
+
         return {
-          title: fallbackTitle.length > 50 ? 'New Reminder' : fallbackTitle,
+          title: title,
           description: `AI-generated reminder: ${prompt}`,
           type: 'browser',
           frequency: 'once',
