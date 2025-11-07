@@ -157,25 +157,239 @@ export class GoalsService {
     });
   }
 
-  static async getGoalById(goalId: string): Promise<Goal | null> {
+  static async generateGoalFromPrompt(userId: string, prompt: string): Promise<Partial<Goal> | null> {
     try {
-      const docRef = doc(db, 'goals', goalId);
-      const docSnap = await getDoc(docRef);
-
-      if (docSnap.exists()) {
-        const data = docSnap.data();
-        return {
-          id: docSnap.id,
-          ...data,
-          createdAt: data.createdAt?.toDate() || new Date(),
-          updatedAt: data.updatedAt?.toDate() || new Date(),
-        } as Goal;
+      // Check if API key is available
+      if (!AISuggestionsService['GEMINI_API_KEY'] || AISuggestionsService['GEMINI_API_KEY'] === 'YOUR_GEMINI_API_KEY_HERE') {
+        console.warn('Gemini API key not configured, using intelligent fallback');
+        return GoalsService.generateGoalFromPromptFallback(prompt);
       }
-      return null;
+
+      if (!AISuggestionsService['apiWorking']) {
+        console.warn('Gemini API not working, using intelligent fallback');
+        return GoalsService.generateGoalFromPromptFallback(prompt);
+      }
+
+      const context = `You are a professional productivity assistant specializing in creating structured goals from natural language requests. Your expertise lies in parsing user intentions and generating appropriate goal configurations.
+
+USER REQUEST: "${prompt}"
+
+ANALYSIS OBJECTIVE:
+Extract and structure the following goal components from the user's natural language request:
+
+REQUIRED OUTPUT FIELDS:
+• title: A professional, concise title (4-10 words) that clearly identifies the goal's purpose. Use action-oriented language and be specific about the deliverable or outcome.
+
+• description: A professional description providing essential context, specific requirements, or implementation details. Include relevant details like scope, deliverables, or additional context that would help the user understand the goal's importance. Keep it informative and actionable (1-2 sentences).
+
+• category: Select the most appropriate professional category:
+  - 'Career Development': Career advancement, job skills, professional growth
+  - 'Skill Learning': Learning new technical or soft skills
+  - 'Networking': Building professional relationships and connections
+  - 'Health & Wellness': Physical and mental health goals
+  - 'Personal Growth': Personal development and self-improvement
+  - 'Financial Goals': Financial planning and wealth building
+  - 'Creative Projects': Artistic or innovative endeavors
+
+PROFESSIONAL GUIDELINES:
+• Parse the goal's domain (career, learning, health, etc.) to determine the appropriate category
+• Craft titles that are professional, actionable, and immediately understandable
+• Always include a description with relevant context, requirements, or specific details that enhance the goal's value
+• Include scope information, deliverables, or specific instructions in the description when mentioned
+• Default to 'Career Development' category unless a more specific category is clearly indicated
+• Focus on the core professional objective or deliverable required
+• Set realistic initial progress (0-10%) for new goals
+
+OUTPUT FORMAT:
+Return exclusively a valid JSON object containing only these fields: title, description, category.
+Do not include explanatory text, markdown formatting, code blocks, or additional commentary outside the JSON structure.
+Return only the raw JSON object, nothing else.
+
+EXAMPLES:
+Input: "Complete a professional certification in data science within 6 months"
+Output: {"title":"Complete Data Science Certification","description":"Obtain a recognized professional certification in data science within 6 months. Focus on key concepts, practice regularly, and complete all required coursework and assessments.","category":"Skill Learning"}
+
+Input: "Build a professional network of 50 industry connections"
+Output: {"title":"Build Professional Network","description":"Establish meaningful connections with 50 professionals in your industry. Attend networking events, join professional groups, and engage actively on LinkedIn to build valuable relationships.","category":"Networking"}
+
+Input: "Improve work-life balance and reduce stress"
+Output: {"title":"Achieve Work-Life Balance","description":"Develop healthy work-life balance by setting boundaries, incorporating regular exercise, and practicing stress management techniques. Aim for consistent sleep and mindful breaks throughout the workday.","category":"Health & Wellness"}`;
+
+      console.log('Making Gemini API request for goal generation...');
+
+      const response = await fetch(`${AISuggestionsService['GEMINI_API_URL']}?key=${AISuggestionsService['GEMINI_API_KEY']}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          contents: [{
+            parts: [{
+              text: context
+            }]
+          }],
+          generationConfig: {
+            temperature: 0.3,
+            topK: 40,
+            topP: 0.95,
+            maxOutputTokens: 512,
+          }
+        })
+      });
+
+      console.log('Gemini API response status:', response.status);
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Gemini API error details:', response.status, errorText);
+
+        // If it's a 404 or authentication error, the API key might be invalid
+        if (response.status === 404 || response.status === 403 || response.status === 401) {
+          console.warn('Gemini API key appears to be invalid or not properly configured');
+        }
+
+        AISuggestionsService['apiWorking'] = false; // Disable API calls if it fails
+        throw new Error(`Gemini API error: ${response.status} - ${errorText}`);
+      }
+
+      const data = await response.json();
+      console.log('Gemini API response data:', data);
+
+      const aiResponse = data.candidates?.[0]?.content?.parts?.[0]?.text;
+
+      if (!aiResponse) {
+        console.warn('No valid response from Gemini API for goal generation');
+        return null;
+      }
+
+      console.log('Raw AI response:', aiResponse);
+
+      // Try to parse the JSON response
+      try {
+        // Clean the AI response by removing markdown code blocks and extra whitespace
+        let cleanResponse = aiResponse.trim();
+
+        // Remove markdown code blocks if present
+        if (cleanResponse.startsWith('```json')) {
+          cleanResponse = cleanResponse.replace(/^```json\s*/, '').replace(/\s*```$/, '');
+        } else if (cleanResponse.startsWith('```')) {
+          cleanResponse = cleanResponse.replace(/^```\s*/, '').replace(/\s*```$/, '');
+        }
+
+        // Remove any leading/trailing whitespace again
+        cleanResponse = cleanResponse.trim();
+
+        console.log('Cleaned AI response:', cleanResponse);
+
+        const parsed = JSON.parse(cleanResponse);
+        return {
+          title: parsed.title || 'New Goal',
+          description: parsed.description || 'AI-generated goal for your request.',
+          category: parsed.category || 'Career Development',
+          progress: 0,
+          status: 'active',
+          aiSuggested: true,
+        };
+      } catch (parseError) {
+        console.warn('Failed to parse AI goal response, using fallback parsing');
+        console.error('Parse error:', parseError);
+
+        // Try to extract basic information from the AI response
+        // Look for JSON-like content within the response
+        const jsonMatch = aiResponse.match(/\{[\s\S]*\}/);
+        if (jsonMatch) {
+          try {
+            const parsed = JSON.parse(jsonMatch[0]);
+            return {
+              title: parsed.title || 'New Goal',
+              description: parsed.description || 'AI-generated goal for your request.',
+              category: parsed.category || 'Career Development',
+              progress: 0,
+              status: 'active',
+              aiSuggested: true,
+            };
+          } catch (innerParseError) {
+            console.warn('Failed to parse extracted JSON, using basic fallback');
+          }
+        }
+
+        // Final fallback: extract from first line or use generic title
+        const firstLine = aiResponse.split('\n')[0]?.replace(/^["`\s]+|["`\s]+$/g, '') || 'New Goal';
+        const title = firstLine.length > 50 ? 'New Goal' : firstLine;
+
+        return {
+          title: title,
+          description: `AI-generated goal: ${prompt}`,
+          category: 'Career Development',
+          progress: 0,
+          status: 'active',
+          aiSuggested: true,
+        };
+      }
     } catch (error) {
-      console.error('Error getting goal:', error);
-      throw error;
+      console.error('Error generating goal from prompt:', error);
+      return null;
     }
+  }
+
+  static generateGoalFromPromptFallback(prompt: string): Partial<Goal> {
+    console.log('Using intelligent fallback for goal prompt:', prompt);
+
+    // Intelligent parsing of common goal patterns
+    const lowerPrompt = prompt.toLowerCase();
+
+    // Extract title
+    let title = 'New Goal';
+    if (prompt.length <= 50) {
+      title = prompt.charAt(0).toUpperCase() + prompt.slice(1);
+    } else {
+      // Try to find a good title
+      const sentences = prompt.split(/[.!?]+/).filter(s => s.trim().length > 0);
+      if (sentences.length > 0) {
+        const firstSentence = sentences[0].trim();
+        title = firstSentence.length <= 40 ? firstSentence : firstSentence.substring(0, 37) + '...';
+        title = title.charAt(0).toUpperCase() + title.slice(1);
+      }
+    }
+
+    // Determine category
+    let category: string = 'Career Development';
+    if (lowerPrompt.includes('learn') || lowerPrompt.includes('skill') || lowerPrompt.includes('certification') || lowerPrompt.includes('course')) {
+      category = 'Skill Learning';
+    } else if (lowerPrompt.includes('network') || lowerPrompt.includes('connection') || lowerPrompt.includes('contact') || lowerPrompt.includes('relationship')) {
+      category = 'Networking';
+    } else if (lowerPrompt.includes('health') || lowerPrompt.includes('fitness') || lowerPrompt.includes('wellness') || lowerPrompt.includes('exercise')) {
+      category = 'Health & Wellness';
+    } else if (lowerPrompt.includes('personal') || lowerPrompt.includes('growth') || lowerPrompt.includes('develop') || lowerPrompt.includes('improve')) {
+      category = 'Personal Growth';
+    } else if (lowerPrompt.includes('financial') || lowerPrompt.includes('money') || lowerPrompt.includes('saving') || lowerPrompt.includes('investment')) {
+      category = 'Financial Goals';
+    } else if (lowerPrompt.includes('creative') || lowerPrompt.includes('art') || lowerPrompt.includes('project') || lowerPrompt.includes('build')) {
+      category = 'Creative Projects';
+    }
+
+    // Generate description based on the prompt
+    let description = `Goal: ${prompt}`;
+    if (lowerPrompt.includes('learn') || lowerPrompt.includes('skill')) {
+      description = `Learning goal: ${prompt}. Focus on consistent practice and application of new knowledge.`;
+    } else if (lowerPrompt.includes('network') || lowerPrompt.includes('connection')) {
+      description = `Networking goal: ${prompt}. Build meaningful professional relationships through consistent outreach and engagement.`;
+    } else if (lowerPrompt.includes('health') || lowerPrompt.includes('fitness')) {
+      description = `Health goal: ${prompt}. Maintain consistency and track progress to achieve sustainable results.`;
+    } else if (lowerPrompt.includes('career') || lowerPrompt.includes('job')) {
+      description = `Career goal: ${prompt}. Focus on professional development and skill enhancement to advance your career.`;
+    } else if (lowerPrompt.includes('financial') || lowerPrompt.includes('money')) {
+      description = `Financial goal: ${prompt}. Develop good financial habits and track progress toward your financial objectives.`;
+    }
+
+    return {
+      title,
+      description,
+      category,
+      progress: 0,
+      status: 'active',
+      aiSuggested: true,
+    };
   }
 }
 
