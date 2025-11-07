@@ -262,6 +262,219 @@ export class TasksService {
       callback(tasks);
     });
   }
+
+  static async generateTaskFromPrompt(userId: string, prompt: string): Promise<Partial<Task> | null> {
+    try {
+      // Check if API key is available
+      if (!AISuggestionsService['GEMINI_API_KEY'] || AISuggestionsService['GEMINI_API_KEY'] === 'YOUR_GEMINI_API_KEY_HERE') {
+        console.warn('Gemini API key not configured, using intelligent fallback');
+        return TasksService.generateTaskFromPromptFallback(prompt);
+      }
+
+      if (!AISuggestionsService['apiWorking']) {
+        console.warn('Gemini API not working, using intelligent fallback');
+        return TasksService.generateTaskFromPromptFallback(prompt);
+      }
+
+      const context = `You are a professional productivity assistant specializing in creating structured tasks from natural language requests. Your expertise lies in parsing user intentions and generating appropriate task configurations.
+
+USER REQUEST: "${prompt}"
+
+ANALYSIS OBJECTIVE:
+Extract and structure the following task components from the user's natural language request:
+
+REQUIRED OUTPUT FIELDS:
+• title: A professional, concise title (4-10 words) that clearly identifies the task's purpose. Use action-oriented language and be specific about the deliverable or outcome.
+
+• description: A professional description providing essential context, specific requirements, or implementation details. Include relevant details like scope, deliverables, or additional context that would help the user understand the task's importance. Keep it informative and actionable (1-2 sentences).
+
+• priority: Determine the task's urgency and importance level:
+  - 'low': Routine tasks, minor improvements, or tasks with flexible deadlines
+  - 'medium': Standard tasks that need attention but aren't critical
+  - 'high': Important tasks that significantly impact goals or have approaching deadlines
+
+PROFESSIONAL GUIDELINES:
+• Parse urgency indicators (e.g., "urgent", "ASAP", "deadline", "important") to determine priority
+• Identify task scope and deliverables from the request
+• Craft titles that are professional, actionable, and immediately understandable
+• Always include a description with relevant context, requirements, or specific details that enhance the task's value
+• Include scope information, deliverables, or specific instructions in the description when mentioned
+• Default to 'medium' priority unless urgency indicators are clearly present
+• Focus on the core professional objective or deliverable required
+
+OUTPUT FORMAT:
+Return exclusively a valid JSON object containing only these fields: title, description, priority.
+Do not include explanatory text, markdown formatting, code blocks, or additional commentary outside the JSON structure.
+Return only the raw JSON object, nothing else.
+
+EXAMPLES:
+Input: "Complete the quarterly financial report by Friday"
+Output: {"title":"Complete Quarterly Financial Report","description":"Prepare and finalize the quarterly financial report with all required data and analysis. Ensure accuracy and completeness before Friday deadline.","priority":"high"}
+
+Input: "Review and update the team documentation"
+Output: {"title":"Review Team Documentation","description":"Conduct a comprehensive review of all team documentation and update as needed. Ensure information is current and accessible to team members.","priority":"medium"}
+
+Input: "Schedule a meeting with the design team next week"
+Output: {"title":"Schedule Design Team Meeting","description":"Coordinate and schedule a meeting with the design team for next week. Prepare agenda and ensure all necessary participants are available.","priority":"medium"}`;
+
+      console.log('Making Gemini API request for task generation...');
+
+      const response = await fetch(`${AISuggestionsService['GEMINI_API_URL']}?key=${AISuggestionsService['GEMINI_API_KEY']}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          contents: [{
+            parts: [{
+              text: context
+            }]
+          }],
+          generationConfig: {
+            temperature: 0.3,
+            topK: 40,
+            topP: 0.95,
+            maxOutputTokens: 512,
+          }
+        })
+      });
+
+      console.log('Gemini API response status:', response.status);
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Gemini API error details:', response.status, errorText);
+
+        // If it's a 404 or authentication error, the API key might be invalid
+        if (response.status === 404 || response.status === 403 || response.status === 401) {
+          console.warn('Gemini API key appears to be invalid or not properly configured');
+        }
+
+        AISuggestionsService['apiWorking'] = false; // Disable API calls if it fails
+        throw new Error(`Gemini API error: ${response.status} - ${errorText}`);
+      }
+
+      const data = await response.json();
+      console.log('Gemini API response data:', data);
+
+      const aiResponse = data.candidates?.[0]?.content?.parts?.[0]?.text;
+
+      if (!aiResponse) {
+        console.warn('No valid response from Gemini API for task generation');
+        return null;
+      }
+
+      console.log('Raw AI response:', aiResponse);
+
+      // Try to parse the JSON response
+      try {
+        // Clean the AI response by removing markdown code blocks and extra whitespace
+        let cleanResponse = aiResponse.trim();
+
+        // Remove markdown code blocks if present
+        if (cleanResponse.startsWith('```json')) {
+          cleanResponse = cleanResponse.replace(/^```json\s*/, '').replace(/\s*```$/, '');
+        } else if (cleanResponse.startsWith('```')) {
+          cleanResponse = cleanResponse.replace(/^```\s*/, '').replace(/\s*```$/, '');
+        }
+
+        // Remove any leading/trailing whitespace again
+        cleanResponse = cleanResponse.trim();
+
+        console.log('Cleaned AI response:', cleanResponse);
+
+        const parsed = JSON.parse(cleanResponse);
+        return {
+          title: parsed.title || 'New Task',
+          description: parsed.description || 'AI-generated task for your request.',
+          priority: parsed.priority || 'medium',
+          completed: false,
+        };
+      } catch (parseError) {
+        console.warn('Failed to parse AI task response, using fallback parsing');
+        console.error('Parse error:', parseError);
+
+        // Try to extract basic information from the AI response
+        // Look for JSON-like content within the response
+        const jsonMatch = aiResponse.match(/\{[\s\S]*\}/);
+        if (jsonMatch) {
+          try {
+            const parsed = JSON.parse(jsonMatch[0]);
+            return {
+              title: parsed.title || 'New Task',
+              description: parsed.description || 'AI-generated task for your request.',
+              priority: parsed.priority || 'medium',
+              completed: false,
+            };
+          } catch (innerParseError) {
+            console.warn('Failed to parse extracted JSON, using basic fallback');
+          }
+        }
+
+        // Final fallback: extract from first line or use generic title
+        const firstLine = aiResponse.split('\n')[0]?.replace(/^["`\s]+|["`\s]+$/g, '') || 'New Task';
+        const title = firstLine.length > 50 ? 'New Task' : firstLine;
+
+        return {
+          title: title,
+          description: `AI-generated task: ${prompt}`,
+          priority: 'medium',
+          completed: false,
+        };
+      }
+    } catch (error) {
+      console.error('Error generating task from prompt:', error);
+      return null;
+    }
+  }
+
+  static generateTaskFromPromptFallback(prompt: string): Partial<Task> {
+    console.log('Using intelligent fallback for task prompt:', prompt);
+
+    // Intelligent parsing of common task patterns
+    const lowerPrompt = prompt.toLowerCase();
+
+    // Extract title
+    let title = 'New Task';
+    if (prompt.length <= 50) {
+      title = prompt.charAt(0).toUpperCase() + prompt.slice(1);
+    } else {
+      // Try to find a good title
+      const sentences = prompt.split(/[.!?]+/).filter(s => s.trim().length > 0);
+      if (sentences.length > 0) {
+        const firstSentence = sentences[0].trim();
+        title = firstSentence.length <= 40 ? firstSentence : firstSentence.substring(0, 37) + '...';
+        title = title.charAt(0).toUpperCase() + title.slice(1);
+      }
+    }
+
+    // Determine priority
+    let priority: 'low' | 'medium' | 'high' = 'medium';
+    if (lowerPrompt.includes('urgent') || lowerPrompt.includes('asap') || lowerPrompt.includes('deadline') || lowerPrompt.includes('critical') || lowerPrompt.includes('important')) {
+      priority = 'high';
+    } else if (lowerPrompt.includes('low') || lowerPrompt.includes('minor') || lowerPrompt.includes('optional') || lowerPrompt.includes('when possible')) {
+      priority = 'low';
+    }
+
+    // Generate description based on the prompt
+    let description = `Task: ${prompt}`;
+    if (lowerPrompt.includes('report') || lowerPrompt.includes('document')) {
+      description = `Documentation task: ${prompt}. Ensure all information is accurate and properly formatted.`;
+    } else if (lowerPrompt.includes('meeting') || lowerPrompt.includes('schedule') || lowerPrompt.includes('coordinate')) {
+      description = `Coordination task: ${prompt}. Ensure all necessary participants are informed and prepared.`;
+    } else if (lowerPrompt.includes('review') || lowerPrompt.includes('check') || lowerPrompt.includes('verify')) {
+      description = `Review task: ${prompt}. Conduct thorough evaluation and provide constructive feedback.`;
+    } else if (lowerPrompt.includes('create') || lowerPrompt.includes('build') || lowerPrompt.includes('develop')) {
+      description = `Development task: ${prompt}. Focus on quality implementation and meeting all requirements.`;
+    }
+
+    return {
+      title,
+      description,
+      priority,
+      completed: false,
+    };
+  }
 }
 
 // Analytics Service

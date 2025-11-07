@@ -1,11 +1,12 @@
 "use client";
 import { motion, AnimatePresence } from 'framer-motion';
-import { CheckSquare, Trash2, Plus, Calendar, Flag, Clock, CheckCircle2, Circle, Filter } from 'lucide-react';
+import { CheckSquare, Trash2, Plus, Calendar, Flag, Clock, CheckCircle2, Circle, Filter, Sparkles, X } from 'lucide-react';
 import { useState, useEffect, useMemo } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { db } from '../../lib/firebase';
 import { collection, addDoc, updateDoc, deleteDoc, doc, query, where, onSnapshot, orderBy } from 'firebase/firestore';
 import { Card, Button, Input, Select, Badge, Checkbox } from '../common';
+import { TasksService } from '../../lib/services';
 
 interface Task {
   id: string;
@@ -28,6 +29,13 @@ export default function TasksTab({}: TasksTabProps) {
   const [filter, setFilter] = useState<'all' | 'pending' | 'completed'>('all');
   const [sortBy, setSortBy] = useState<'created' | 'priority' | 'dueDate'>('created');
   const [isAddingTask, setIsAddingTask] = useState(false);
+
+  // AI-related state
+  const [showAIPrompt, setShowAIPrompt] = useState(false);
+  const [aiPrompt, setAiPrompt] = useState('');
+  const [isGeneratingAI, setIsGeneratingAI] = useState(false);
+  const [aiGeneratedTask, setAiGeneratedTask] = useState<Partial<Task> | null>(null);
+  const [showAIConfirmation, setShowAIConfirmation] = useState(false);
 
   // Filtered and sorted tasks
   const filteredAndSortedTasks = useMemo(() => {
@@ -143,6 +151,59 @@ export default function TasksTab({}: TasksTabProps) {
       await deleteDoc(doc(db, 'tasks', id));
     } catch (error) {
       console.error('Error deleting task:', error);
+    }
+  };
+
+  const handleAIPrompt = async () => {
+    if (!aiPrompt.trim() || !user || isGeneratingAI) return;
+
+    setIsGeneratingAI(true);
+    try {
+      const generatedTask = await TasksService.generateTaskFromPrompt(user.uid, aiPrompt.trim());
+
+      if (generatedTask) {
+        setAiGeneratedTask(generatedTask);
+        setShowAIPrompt(false);
+        setShowAIConfirmation(true);
+        setAiPrompt('');
+      } else {
+        // Fallback: create a basic task from the prompt
+        const fallbackTask = TasksService.generateTaskFromPromptFallback(aiPrompt.trim());
+        setAiGeneratedTask(fallbackTask);
+        setShowAIPrompt(false);
+        setShowAIConfirmation(true);
+        setAiPrompt('');
+      }
+    } catch (error) {
+      console.error('Error generating AI task:', error);
+      // Fallback: create a basic task from the prompt
+      const fallbackTask = TasksService.generateTaskFromPromptFallback(aiPrompt.trim());
+      setAiGeneratedTask(fallbackTask);
+      setShowAIPrompt(false);
+      setShowAIConfirmation(true);
+      setAiPrompt('');
+    } finally {
+      setIsGeneratingAI(false);
+    }
+  };
+
+  const confirmAICreatedTask = async () => {
+    if (!aiGeneratedTask || !user) return;
+
+    try {
+      await addDoc(collection(db, 'tasks'), {
+        title: aiGeneratedTask.title || 'New Task',
+        description: aiGeneratedTask.description,
+        completed: false,
+        priority: aiGeneratedTask.priority || 'medium',
+        dueDate: aiGeneratedTask.dueDate,
+        userId: user.uid,
+        createdAt: new Date()
+      });
+      setShowAIConfirmation(false);
+      setAiGeneratedTask(null);
+    } catch (error) {
+      console.error('Error adding AI-generated task:', error);
     }
   };
 
@@ -298,7 +359,16 @@ export default function TasksTab({}: TasksTabProps) {
           />
         </div>
 
-        <div className="flex justify-end mt-4">
+        <div className="flex justify-end gap-3 mt-4">
+          <Button
+            onClick={() => setShowAIPrompt(true)}
+            className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-6 py-2"
+          >
+            <div className="flex items-center gap-2">
+              <Sparkles className="w-4 h-4" />
+              AI Create
+            </div>
+          </Button>
           <Button
             onClick={addTask}
             disabled={!newTaskTitle.trim() || isAddingTask}
@@ -473,6 +543,157 @@ export default function TasksTab({}: TasksTabProps) {
           )}
         </AnimatePresence>
       </div>
+
+      {/* AI Prompt Modal */}
+      <AnimatePresence>
+        {showAIPrompt && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            onClick={() => setShowAIPrompt(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="bg-slate-800/90 backdrop-blur-md border border-slate-600/50 rounded-xl p-6 w-full max-w-md"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-purple-500/20 rounded-lg">
+                    <Sparkles className="w-5 h-5 text-purple-400" />
+                  </div>
+                  <h3 className="text-lg font-semibold text-white">AI Task Creation</h3>
+                </div>
+                <button
+                  onClick={() => setShowAIPrompt(false)}
+                  className="p-1 text-slate-400 hover:text-white transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              <p className="text-slate-300 mb-4">
+                Describe the task you want to create. Our AI will generate a well-structured task with appropriate priority and details.
+              </p>
+
+              <textarea
+                placeholder="e.g., Complete the quarterly financial report by Friday"
+                value={aiPrompt}
+                onChange={(e) => setAiPrompt(e.target.value)}
+                onKeyPress={(e) => e.key === 'Enter' && !e.shiftKey && handleAIPrompt()}
+                className="w-full bg-slate-700/50 border border-slate-600 rounded-lg px-4 py-3 text-white placeholder-slate-400 resize-none focus:outline-none focus:ring-2 focus:ring-purple-500/50 mb-4"
+                rows={3}
+              />
+
+              <div className="flex justify-end gap-3">
+                <Button
+                  onClick={() => setShowAIPrompt(false)}
+                  variant="secondary"
+                  className="px-4 py-2"
+                >
+                  Cancel
+                </Button>
+                <Button
+                  onClick={handleAIPrompt}
+                  disabled={!aiPrompt.trim() || isGeneratingAI}
+                  className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-6 py-2"
+                >
+                  {isGeneratingAI ? (
+                    <div className="flex items-center gap-2">
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      Generating...
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-2">
+                      <Sparkles className="w-4 h-4" />
+                      Generate Task
+                    </div>
+                  )}
+                </Button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* AI Confirmation Modal */}
+      <AnimatePresence>
+        {showAIConfirmation && aiGeneratedTask && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            onClick={() => setShowAIConfirmation(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="bg-slate-800/90 backdrop-blur-md border border-slate-600/50 rounded-xl p-6 w-full max-w-lg"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-green-500/20 rounded-lg">
+                    <CheckCircle2 className="w-5 h-5 text-green-400" />
+                  </div>
+                  <h3 className="text-lg font-semibold text-white">AI Generated Task</h3>
+                </div>
+                <button
+                  onClick={() => setShowAIConfirmation(false)}
+                  className="p-1 text-slate-400 hover:text-white transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              <div className="bg-slate-700/30 rounded-lg p-4 mb-6">
+                <h4 className="text-white font-medium mb-2">{aiGeneratedTask.title}</h4>
+                {aiGeneratedTask.description && (
+                  <p className="text-slate-300 text-sm mb-3">{aiGeneratedTask.description}</p>
+                )}
+                <div className="flex items-center gap-4 text-sm">
+                  <div className={`px-2 py-1 rounded-full text-xs font-medium border ${getPriorityColor(aiGeneratedTask.priority || 'medium')}`}>
+                    <Flag className="w-3 h-3 inline mr-1" />
+                    {aiGeneratedTask.priority || 'medium'} priority
+                  </div>
+                </div>
+              </div>
+
+              <p className="text-slate-400 text-sm mb-6">
+                This task was generated by AI based on your description. You can add it to your task list or make changes later.
+              </p>
+
+              <div className="flex justify-end gap-3">
+                <Button
+                  onClick={() => {
+                    setShowAIConfirmation(false);
+                    setAiGeneratedTask(null);
+                  }}
+                  variant="secondary"
+                  className="px-4 py-2"
+                >
+                  Cancel
+                </Button>
+                <Button
+                  onClick={confirmAICreatedTask}
+                  className="bg-green-500 hover:bg-green-600 text-white px-6 py-2"
+                >
+                  <div className="flex items-center gap-2">
+                    <Plus className="w-4 h-4" />
+                    Add Task
+                  </div>
+                </Button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 }
