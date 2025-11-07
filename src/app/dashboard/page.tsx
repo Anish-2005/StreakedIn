@@ -110,14 +110,6 @@ export default function Dashboard() {
     return () => unsubscribeProfile();
   }, [user]);
 
-  if (loading) {
-    return <LoadingSpinner />;
-  }
-
-  if (!user) {
-    return null;
-  }
-
   const handleSearch = useCallback(async (query: string) => {
     setSearchQuery(query);
 
@@ -196,6 +188,14 @@ export default function Dashboard() {
     // Implement notifications functionality
     console.log('Notifications clicked');
   };
+
+  if (loading) {
+    return <LoadingSpinner />;
+  }
+
+  if (!user) {
+    return null;
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white">

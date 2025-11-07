@@ -1,6 +1,6 @@
 "use client";
 import { motion } from 'framer-motion';
-import { TrendingUp, Target, Clock, Users, Plus, Brain } from 'lucide-react';
+import { TrendingUp, Target, Clock, Users, Plus, Brain, CheckCircle } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { Card, StatsCard, Badge, ProgressBar, Button } from '../common';
 import { GoalsService, TasksService, StatsService, AISuggestionsService, Goal, Task, UserStats } from '../../lib/services';
@@ -100,7 +100,7 @@ export default function OverviewTab({ setActiveTab }: OverviewTabProps) {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Goals Progress */}
-        <Card className="lg:col-span-2">
+        <Card>
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-lg font-semibold text-white">Goals Progress</h2>
             <Button variant="ghost" size="sm" icon={<Plus className="w-4 h-4" />}>
@@ -135,6 +135,50 @@ export default function OverviewTab({ setActiveTab }: OverviewTabProps) {
                   </div>
                 </div>
               ))
+            )}
+          </div>
+        </Card>
+
+        {/* Goals Achieved */}
+        <Card>
+          <h2 className="text-lg font-semibold text-white mb-6">Goals Achieved</h2>
+          <div className="space-y-4">
+            {goals.filter(goal => goal.progress === 100).length === 0 ? (
+              <div className="text-center py-8 text-slate-400">
+                <CheckCircle className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                <p>No goals achieved yet. Keep pushing!</p>
+              </div>
+            ) : (
+              goals
+                .filter(goal => goal.progress === 100)
+                .sort((a, b) => new Date(b.updatedAt || b.createdAt).getTime() - new Date(a.updatedAt || a.createdAt).getTime())
+                .slice(0, 3)
+                .map((goal) => (
+                  <div key={goal.id} className="border border-green-500/30 bg-green-500/5 rounded-lg p-4">
+                    <div className="flex items-center space-x-3 mb-2">
+                      <div className="w-8 h-8 bg-green-500/20 rounded-full flex items-center justify-center">
+                        <CheckCircle className="w-4 h-4 text-green-400" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-semibold text-white truncate">{goal.title}</h3>
+                        <p className="text-sm text-green-400">Completed!</p>
+                      </div>
+                    </div>
+                    <div className="text-xs text-slate-400">
+                      Achieved on {new Date(goal.updatedAt || goal.createdAt).toLocaleDateString()}
+                    </div>
+                  </div>
+                ))
+            )}
+            {goals.filter(goal => goal.progress === 100).length > 3 && (
+              <Button
+                variant="ghost"
+                size="sm"
+                className="w-full mt-2"
+                onClick={() => setActiveTab('goals')}
+              >
+                View All Achieved Goals
+              </Button>
             )}
           </div>
         </Card>
