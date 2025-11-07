@@ -13,6 +13,8 @@ interface TopBarProps {
   onNotificationsClick?: () => void;
   onMenuClick?: () => void;
   isMobile?: boolean;
+  searchQuery?: string;
+  onClearSearch?: () => void;
 }
 
 export default function TopBar({
@@ -22,7 +24,9 @@ export default function TopBar({
   onSearch,
   onNotificationsClick,
   onMenuClick,
-  isMobile = false
+  isMobile = false,
+  searchQuery,
+  onClearSearch
 }: TopBarProps) {
   const [showMobileSearch, setShowMobileSearch] = useState(false);
 
