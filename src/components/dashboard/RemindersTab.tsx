@@ -185,7 +185,7 @@ export default function RemindersTab({}: RemindersTabProps) {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-white">Reminders & Notifications</h1>
-          <p className="text-slate-300">Configure how and when you receive reminders</p>
+          <p className="text-slate-300">Set up automated reminders to stay on track with your goals and tasks</p>
         </div>
         <div className="flex space-x-2">
           <button
@@ -200,7 +200,7 @@ export default function RemindersTab({}: RemindersTabProps) {
             className="flex items-center space-x-2 px-4 py-2 bg-[#0A66C2] text-white rounded-lg hover:bg-[#004182] transition-colors"
           >
             <Plus className="w-4 h-4" />
-            <span>Add Reminder</span>
+            <span>Add Manual Reminder</span>
           </button>
         </div>
       </div>
@@ -400,7 +400,7 @@ export default function RemindersTab({}: RemindersTabProps) {
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-slate-800 border border-slate-700 rounded-xl p-6 w-full max-w-md mx-4">
             <h3 className="text-lg font-semibold text-white mb-4">
-              {editingReminder ? 'Edit Reminder' : 'Add New Reminder'}
+              {editingReminder ? 'Edit Reminder' : 'Create New Reminder'}
             </h3>
             <div className="space-y-4">
               <div>
@@ -410,7 +410,7 @@ export default function RemindersTab({}: RemindersTabProps) {
                   value={formData.title}
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                   className="w-full p-3 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Reminder title"
+                  placeholder="e.g., Review weekly goals"
                 />
               </div>
               <div>
@@ -419,7 +419,7 @@ export default function RemindersTab({}: RemindersTabProps) {
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                   className="w-full p-3 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Additional details"
+                  placeholder="Add any additional details or context for this reminder"
                   rows={3}
                 />
               </div>
@@ -458,7 +458,7 @@ export default function RemindersTab({}: RemindersTabProps) {
                   onChange={(e) => setFormData({ ...formData, enabled: e.target.checked })}
                   className="rounded border-slate-600 text-blue-500 focus:ring-blue-500"
                 />
-                <label htmlFor="enabled" className="text-sm text-slate-300">Enable reminder</label>
+                <label htmlFor="enabled" className="text-sm text-slate-300">Enable this reminder</label>
               </div>
             </div>
             <div className="flex space-x-3 mt-6">
@@ -473,7 +473,7 @@ export default function RemindersTab({}: RemindersTabProps) {
                 disabled={!formData.title.trim()}
                 className="flex-1 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors disabled:opacity-50"
               >
-                {editingReminder ? 'Update' : 'Create'}
+                {editingReminder ? 'Save Changes' : 'Create Reminder'}
               </button>
             </div>
           </div>
