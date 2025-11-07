@@ -389,17 +389,10 @@ export class StatsService {
 // AI Suggestions Service
 export class AISuggestionsService {
   private static get GEMINI_API_KEY(): string | undefined {
-    const key = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
-    console.log('Gemini API Key check:', {
-      exists: !!key,
-      length: key?.length,
-      startsWith: key?.substring(0, 10) + '...',
-      isBrowser: typeof window !== 'undefined'
-    });
-    return key;
+    return process.env.NEXT_PUBLIC_GEMINI_API_KEY;
   }
-  private static readonly GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent';
-  private static apiWorking = true; // Flag to track if API is working
+  private static readonly GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
+  private static apiWorking = true; // Flag to track if API is working - reset to true with working key
 
   static resetApiStatus(): void {
     this.apiWorking = true;
@@ -411,7 +404,6 @@ export class AISuggestionsService {
       // Check if API key is available and API is working
       if (!this.GEMINI_API_KEY || !this.apiWorking) {
         console.warn('Gemini API key not found or API not working, using fallback suggestions');
-        console.log('API Key exists:', !!this.GEMINI_API_KEY, 'API Working:', this.apiWorking);
         return [
           'Learn a new professional skill this month',
           'Expand your professional network by 20 connections',
@@ -544,7 +536,6 @@ Provide 5 specific, actionable goal suggestions that would help this user be mor
       // Check if API key is available and API is working
       if (!this.GEMINI_API_KEY || !this.apiWorking) {
         console.warn('Gemini API key not found or API not working, using fallback response');
-        console.log('API Key exists:', !!this.GEMINI_API_KEY, 'API Working:', this.apiWorking);
         return `I apologize, but I'm having trouble connecting to my AI services right now. Based on your current goals and progress, here are some general recommendations:
 
 1. **Review your active goals**: Make sure they're still aligned with your current priorities
