@@ -113,11 +113,45 @@ export default function RemindersTab({}: RemindersTabProps) {
         setShowConfirmation(true);
         setShowAIPrompt(false);
       } else {
-        // Fallback: create basic reminder
+        // Enhanced fallback: create a better formatted reminder from the prompt
+        const prompt = aiPrompt.trim();
+        let title = 'New Reminder';
+        let description = `Reminder: ${prompt}`;
+        let frequency = 'once';
+        let type = 'browser';
+
+        // Try to extract a reasonable title from the prompt
+        if (prompt.length <= 50) {
+          // Capitalize first letter and clean up
+          title = prompt.charAt(0).toUpperCase() + prompt.slice(1);
+        } else {
+          // Take first sentence or first 30 characters
+          const firstSentence = prompt.split('.')[0] || prompt.split('!')[0] || prompt.split('?')[0];
+          title = firstSentence.length <= 40 ? firstSentence : prompt.substring(0, 37) + '...';
+          title = title.charAt(0).toUpperCase() + title.slice(1);
+        }
+
+        // Try to determine frequency from keywords
+        if (prompt.toLowerCase().includes('daily') || prompt.toLowerCase().includes('every day')) {
+          frequency = 'daily';
+        } else if (prompt.toLowerCase().includes('weekly') || prompt.toLowerCase().includes('every week')) {
+          frequency = 'weekly';
+        } else if (prompt.toLowerCase().includes('monthly') || prompt.toLowerCase().includes('every month')) {
+          frequency = 'monthly';
+        }
+
+        // Try to determine type from keywords
+        if (prompt.toLowerCase().includes('email') || prompt.toLowerCase().includes('send')) {
+          type = 'email';
+        } else if (prompt.toLowerCase().includes('text') || prompt.toLowerCase().includes('sms')) {
+          type = 'sms';
+        }
+
         setPendingReminder({
-          title: aiPrompt,
-          type: 'browser',
-          frequency: 'once',
+          title,
+          description,
+          type: type as 'email' | 'browser' | 'sms',
+          frequency: frequency as 'daily' | 'weekly' | 'monthly' | 'once',
           enabled: true,
         });
         setShowConfirmation(true);
@@ -125,9 +159,22 @@ export default function RemindersTab({}: RemindersTabProps) {
       }
     } catch (error) {
       console.error('Error generating reminder from AI:', error);
-      // Fallback
+      // Enhanced fallback for errors
+      const prompt = aiPrompt.trim();
+      let title = 'New Reminder';
+      let description = `Reminder: ${prompt}`;
+
+      if (prompt.length <= 50) {
+        title = prompt.charAt(0).toUpperCase() + prompt.slice(1);
+      } else {
+        const firstSentence = prompt.split('.')[0] || prompt.split('!')[0] || prompt.split('?')[0];
+        title = firstSentence.length <= 40 ? firstSentence : prompt.substring(0, 37) + '...';
+        title = title.charAt(0).toUpperCase() + title.slice(1);
+      }
+
       setPendingReminder({
-        title: aiPrompt,
+        title,
+        description,
         type: 'browser',
         frequency: 'once',
         enabled: true,

@@ -734,43 +734,17 @@ export class RemindersService {
     }
   }
 
-  static subscribeToReminders(userId: string, callback: (reminders: Reminder[]) => void): () => void {
-    // Use unindexed query to avoid index requirements, sort client-side
-    const q = query(
-      collection(db, 'reminders'),
-      where('userId', '==', userId)
-    );
-
-    return onSnapshot(q, (querySnapshot) => {
-      const reminders: Reminder[] = [];
-      querySnapshot.forEach((doc) => {
-        const data = doc.data();
-        reminders.push({
-          id: doc.id,
-          ...data,
-          nextTrigger: data.nextTrigger?.toDate(),
-          createdAt: data.createdAt?.toDate() || new Date(),
-          updatedAt: data.updatedAt?.toDate() || new Date(),
-        } as Reminder);
-      });
-
-      // Sort manually on the client side by createdAt descending
-      reminders.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
-
-      callback(reminders);
-    }, (error) => {
-      console.error('Error in reminders snapshot listener:', error);
-      // If there's an error, try to provide empty array to prevent crashes
-      callback([]);
-    });
-  }
-
   static async generateReminderFromPrompt(userId: string, prompt: string): Promise<Partial<Reminder> | null> {
     try {
       // Check if API key is available
-      if (!AISuggestionsService['GEMINI_API_KEY'] || !AISuggestionsService['apiWorking']) {
-        console.warn('Gemini API not available for reminder generation');
-        return null;
+      if (!AISuggestionsService['GEMINI_API_KEY'] || AISuggestionsService['GEMINI_API_KEY'] === 'YOUR_GEMINI_API_KEY_HERE') {
+        console.warn('Gemini API key not configured, using intelligent fallback');
+        return RemindersService.generateReminderFromPromptFallback(prompt);
+      }
+
+      if (!AISuggestionsService['apiWorking']) {
+        console.warn('Gemini API not working, using intelligent fallback');
+        return RemindersService.generateReminderFromPromptFallback(prompt);
       }
 
       const context = `You are a professional productivity assistant specializing in creating structured reminders from natural language requests. Your expertise lies in parsing user intentions and generating appropriate reminder configurations.
@@ -820,6 +794,11 @@ Output: {"title":"Team Meeting Reminder","description":"Important team meeting s
 Input: "Remind me daily to drink water"
 Output: {"title":"Daily Hydration Reminder","description":"Stay hydrated throughout the day with regular water intake. Aim for 8 glasses of water daily for optimal health and productivity.","type":"browser","frequency":"daily"}`;
 
+      console.log('Making Gemini API request for reminder generation...');
+      console.log('API URL:', AISuggestionsService['GEMINI_API_URL']);
+      console.log('API Key available:', !!AISuggestionsService['GEMINI_API_KEY']);
+      console.log('API Key length:', AISuggestionsService['GEMINI_API_KEY']?.length);
+
       const response = await fetch(`${AISuggestionsService['GEMINI_API_URL']}?key=${AISuggestionsService['GEMINI_API_KEY']}`, {
         method: 'POST',
         headers: {
@@ -840,36 +819,121 @@ Output: {"title":"Daily Hydration Reminder","description":"Stay hydrated through
         })
       });
 
+      console.log('Gemini API response status:', response.status);
+      console.log('Gemini API response headers:', Object.fromEntries(response.headers.entries()));
+
       if (!response.ok) {
-        console.warn('Failed to generate reminder from AI');
-        return null;
+        const errorText = await response.text();
+        console.error('Gemini API error details:', response.status, errorText);
+        console.error('Full error response:', errorText);
+
+        // If it's a 404 or authentication error, the API key might be invalid
+        if (response.status === 404 || response.status === 403 || response.status === 401) {
+          console.warn('Gemini API key appears to be invalid or not properly configured');
+        }
+
+        AISuggestionsService['apiWorking'] = false; // Disable API calls if it fails
+        throw new Error(`Gemini API error: ${response.status} - ${errorText}`);
       }
 
       const data = await response.json();
+      console.log('Gemini API response data:', JSON.stringify(data, null, 2));
+      console.log('AI Response text:', data.candidates?.[0]?.content?.parts?.[0]?.text);
+
       const aiResponse = data.candidates?.[0]?.content?.parts?.[0]?.text;
 
       if (!aiResponse) {
+        console.warn('No valid response from Gemini API for reminder generation');
         return null;
       }
+
+      console.log('Raw AI response:', aiResponse);
 
       // Try to parse the JSON response
       try {
         const parsed = JSON.parse(aiResponse);
         return {
           title: parsed.title || 'New Reminder',
-          description: parsed.description,
+          description: parsed.description || 'AI-generated reminder for your request.',
           type: parsed.type || 'browser',
           frequency: parsed.frequency || 'once',
           enabled: true,
         };
       } catch (parseError) {
-        console.warn('Failed to parse AI reminder response');
-        return null;
+        console.warn('Failed to parse AI reminder response, using fallback parsing');
+        // Try to extract basic information from the AI response
+        const fallbackTitle = aiResponse.split('\n')[0]?.replace(/^["\s]+|["\s]+$/g, '') || 'New Reminder';
+        return {
+          title: fallbackTitle.length > 50 ? 'New Reminder' : fallbackTitle,
+          description: `AI-generated reminder: ${prompt}`,
+          type: 'browser',
+          frequency: 'once',
+          enabled: true,
+        };
       }
     } catch (error) {
       console.error('Error generating reminder from prompt:', error);
       return null;
     }
+  }
+
+  static generateReminderFromPromptFallback(prompt: string): Partial<Reminder> {
+    console.log('Using intelligent fallback for prompt:', prompt);
+
+    // Intelligent parsing of common reminder patterns
+    const lowerPrompt = prompt.toLowerCase();
+
+    // Extract title
+    let title = 'New Reminder';
+    if (prompt.length <= 50) {
+      title = prompt.charAt(0).toUpperCase() + prompt.slice(1);
+    } else {
+      // Try to find a good title
+      const sentences = prompt.split(/[.!?]+/).filter(s => s.trim().length > 0);
+      if (sentences.length > 0) {
+        const firstSentence = sentences[0].trim();
+        title = firstSentence.length <= 40 ? firstSentence : firstSentence.substring(0, 37) + '...';
+        title = title.charAt(0).toUpperCase() + title.slice(1);
+      }
+    }
+
+    // Determine frequency
+    let frequency: 'once' | 'daily' | 'weekly' | 'monthly' = 'once';
+    if (lowerPrompt.includes('daily') || lowerPrompt.includes('every day') || lowerPrompt.includes('each day')) {
+      frequency = 'daily';
+    } else if (lowerPrompt.includes('weekly') || lowerPrompt.includes('every week') || lowerPrompt.includes('each week')) {
+      frequency = 'weekly';
+    } else if (lowerPrompt.includes('monthly') || lowerPrompt.includes('every month') || lowerPrompt.includes('each month')) {
+      frequency = 'monthly';
+    }
+
+    // Determine type
+    let type: 'browser' | 'email' | 'sms' = 'browser';
+    if (lowerPrompt.includes('email') || lowerPrompt.includes('send') || lowerPrompt.includes('mail')) {
+      type = 'email';
+    } else if (lowerPrompt.includes('text') || lowerPrompt.includes('sms') || lowerPrompt.includes('message')) {
+      type = 'sms';
+    }
+
+    // Generate description based on the prompt
+    let description = `Reminder: ${prompt}`;
+    if (lowerPrompt.includes('study') || lowerPrompt.includes('exam') || lowerPrompt.includes('test')) {
+      description = `Academic reminder: ${prompt}. Focus on key topics and review materials thoroughly.`;
+    } else if (lowerPrompt.includes('meeting') || lowerPrompt.includes('call')) {
+      description = `Meeting reminder: ${prompt}. Prepare agenda items and review relevant materials beforehand.`;
+    } else if (lowerPrompt.includes('deadline') || lowerPrompt.includes('due')) {
+      description = `Deadline reminder: ${prompt}. Ensure all requirements are met and submit on time.`;
+    } else if (lowerPrompt.includes('water') || lowerPrompt.includes('drink') || lowerPrompt.includes('hydrate')) {
+      description = `Health reminder: ${prompt}. Staying hydrated is essential for optimal health and productivity.`;
+    }
+
+    return {
+      title,
+      description,
+      type,
+      frequency,
+      enabled: true,
+    };
   }
 }
 
