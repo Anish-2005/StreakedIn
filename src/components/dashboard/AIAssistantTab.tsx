@@ -1,6 +1,6 @@
 "use client";
 import { motion } from 'framer-motion';
-import { Brain, Bot, Send, Zap, Bell, TrendingUp, Calendar, Volume2, VolumeX, RotateCcw, Plus, MessageSquare, Trash2 } from 'lucide-react';
+import { Brain, Bot, Send, Zap, Bell, TrendingUp, Calendar, Volume2, VolumeX, RotateCcw, Plus, MessageSquare, Trash2, Edit2 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { AISuggestionsService, ChatService } from '../../lib/services';
 import { useAuth } from '../../contexts/AuthContext';
@@ -23,15 +23,24 @@ export default function AIAssistantTab({}: AIAssistantTabProps) {
   const [chatSessions, setChatSessions] = useState<ChatSession[]>([]);
   const [currentChatSessionId, setCurrentChatSessionId] = useState<string | null>(null);
   const [showChatList, setShowChatList] = useState<boolean>(false);
+  
+  // Rename functionality
+  const [renamingChatId, setRenamingChatId] = useState<string | null>(null);
+  const [newChatName, setNewChatName] = useState<string>('');
 
+  // Handle clicking outside to cancel renaming
   useEffect(() => {
-    return () => {
-      // Cleanup: stop any ongoing speech when component unmounts
-      if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
+    const handleClickOutside = (event: MouseEvent) => {
+      if (renamingChatId && !(event.target as Element).closest('.rename-input')) {
+        cancelRenamingChat();
       }
     };
-  }, []);
+
+    if (renamingChatId) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+    }
+  }, [renamingChatId]);
 
   // Load chat sessions on component mount
   useEffect(() => {
@@ -258,6 +267,39 @@ export default function AIAssistantTab({}: AIAssistantTabProps) {
     }
   };
 
+  const startRenamingChat = (chatSessionId: string, currentTitle: string, event: React.MouseEvent) => {
+    event.stopPropagation(); // Prevent switching to the chat
+    setRenamingChatId(chatSessionId);
+    setNewChatName(currentTitle);
+  };
+
+  const cancelRenamingChat = () => {
+    setRenamingChatId(null);
+    setNewChatName('');
+  };
+
+  const saveRenamedChat = async (chatSessionId: string) => {
+    if (!newChatName.trim()) return;
+
+    try {
+      await ChatService.updateChatSession(chatSessionId, { title: newChatName.trim() });
+      const updatedSessions = await ChatService.getChatSessions(user!.uid);
+      setChatSessions(updatedSessions);
+      setRenamingChatId(null);
+      setNewChatName('');
+    } catch (error) {
+      console.error('Error renaming chat:', error);
+    }
+  };
+
+  const handleRenameKeyPress = (chatSessionId: string, event: React.KeyboardEvent) => {
+    if (event.key === 'Enter') {
+      saveRenamedChat(chatSessionId);
+    } else if (event.key === 'Escape') {
+      cancelRenamingChat();
+    }
+  };
+
   const quickAiPrompts = [
     "Analyze my productivity patterns",
     "Suggest weekly goals",
@@ -305,35 +347,82 @@ export default function AIAssistantTab({}: AIAssistantTabProps) {
               {chatSessions.map((session) => (
                 <div
                   key={session.id}
-                  onClick={() => switchToChat(session.id)}
+                  onClick={() => !renamingChatId && switchToChat(session.id)}
                   className={`p-3 rounded-lg cursor-pointer transition-all duration-200 ${
                     session.id === currentChatSessionId
                       ? 'bg-blue-500/20 border border-blue-500/50'
                       : 'bg-slate-700/30 hover:bg-slate-700/50'
-                  }`}
+                  } ${renamingChatId === session.id ? 'cursor-default' : ''}`}
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-white truncate">
-                        {session.title}
-                      </p>
-                      {session.lastMessage && (
-                        <p className="text-xs text-slate-400 truncate mt-1">
-                          {session.lastMessage}
-                        </p>
+                      {renamingChatId === session.id ? (
+                        <div className="flex items-center space-x-2">
+                          <input
+                            type="text"
+                            value={newChatName}
+                            onChange={(e) => setNewChatName(e.target.value)}
+                            onKeyDown={(e) => handleRenameKeyPress(session.id, e)}
+                            className="rename-input flex-1 bg-slate-800 border border-slate-600 rounded px-2 py-1 text-sm text-white focus:outline-none focus:ring-1 focus:ring-blue-500"
+                            autoFocus
+                            onClick={(e) => e.stopPropagation()}
+                          />
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              saveRenamedChat(session.id);
+                            }}
+                            className="p-1 text-green-400 hover:text-green-300 transition-colors"
+                            title="Save"
+                          >
+                            ✓
+                          </button>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              cancelRenamingChat();
+                            }}
+                            className="p-1 text-red-400 hover:text-red-300 transition-colors"
+                            title="Cancel"
+                          >
+                            ✕
+                          </button>
+                        </div>
+                      ) : (
+                        <>
+                          <p className="text-sm font-medium text-white truncate">
+                            {session.title}
+                          </p>
+                          {session.lastMessage && (
+                            <p className="text-xs text-slate-400 truncate mt-1">
+                              {session.lastMessage}
+                            </p>
+                          )}
+                          <p className="text-xs text-slate-500 mt-1">
+                            {session.messageCount} messages
+                          </p>
+                        </>
                       )}
-                      <p className="text-xs text-slate-500 mt-1">
-                        {session.messageCount} messages
-                      </p>
                     </div>
-                    {chatSessions.length > 1 && (
-                      <button
-                        onClick={(e) => deleteChat(session.id, e)}
-                        className="p-1 text-slate-400 hover:text-red-400 transition-colors ml-2"
-                        title="Delete Chat"
-                      >
-                        <Trash2 className="w-3 h-3" />
-                      </button>
+                    {renamingChatId !== session.id && (
+                      <div className="flex items-center space-x-1 ml-2">
+                        <button
+                          onClick={(e) => startRenamingChat(session.id, session.title, e)}
+                          className="p-1 text-slate-400 hover:text-blue-400 transition-colors"
+                          title="Rename Chat"
+                        >
+                          <Edit2 className="w-3 h-3" />
+                        </button>
+                        {chatSessions.length > 1 && (
+                          <button
+                            onClick={(e) => deleteChat(session.id, e)}
+                            className="p-1 text-slate-400 hover:text-red-400 transition-colors"
+                            title="Delete Chat"
+                          >
+                            <Trash2 className="w-3 h-3" />
+                          </button>
+                        )}
+                      </div>
                     )}
                   </div>
                 </div>
