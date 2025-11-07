@@ -30,6 +30,8 @@ export default function AIAssistantTab({}: AIAssistantTabProps) {
     const loadChatHistory = async () => {
       if (user) {
         try {
+          console.log('ChatService methods:', Object.getOwnPropertyNames(ChatService));
+          console.log('loadChatHistory method:', ChatService.loadChatHistory);
           const history = await ChatService.loadChatHistory(user.uid);
           setConversationHistory(history);
         } catch (error) {
