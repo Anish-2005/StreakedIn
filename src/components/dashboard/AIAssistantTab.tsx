@@ -237,17 +237,18 @@ export default function AIAssistantTab({}: AIAssistantTabProps) {
 
   const deleteChat = async (chatSessionId: string, event: React.MouseEvent) => {
     event.stopPropagation(); // Prevent switching to the chat
-    
+
     if (chatSessions.length <= 1) {
       // Don't allow deleting the last chat
       return;
     }
 
+    console.log('deleteChat called with sessionId:', chatSessionId, 'user:', user?.uid);
     try {
       await ChatService.deleteChatSession(chatSessionId);
       const updatedSessions = await ChatService.getChatSessions(user!.uid);
       setChatSessions(updatedSessions);
-      
+
       // If we deleted the current chat, switch to the first available
       if (chatSessionId === currentChatSessionId) {
         setCurrentChatSessionId(updatedSessions[0]?.id || null);

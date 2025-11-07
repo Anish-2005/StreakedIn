@@ -485,30 +485,47 @@ export class ChatService {
   }
 
   static async deleteChatSession(chatSessionId: string): Promise<void> {
+    console.log('deleteChatSession called with sessionId:', chatSessionId);
     try {
-      // Delete all messages in the chat session
+      // First, get the chat session to verify ownership
+      console.log('Getting chat session document');
+      const sessionDoc = await getDoc(doc(db, 'chatSessions', chatSessionId));
+
+      if (!sessionDoc.exists()) {
+        throw new Error('Chat session not found');
+      }
+
+      const sessionData = sessionDoc.data();
+      console.log('Session data:', sessionData);
+
+      // Delete all messages in the chat session (filter by both chatSessionId and userId for security)
+      console.log('Querying messages for session:', chatSessionId, 'and user:', sessionData?.userId);
       const messagesQuery = query(
         collection(db, 'chatMessages'),
-        where('chatSessionId', '==', chatSessionId)
+        where('chatSessionId', '==', chatSessionId),
+        where('userId', '==', sessionData?.userId)
       );
       const messagesSnapshot = await getDocs(messagesQuery);
-      
+      console.log('Found', messagesSnapshot.size, 'messages to delete');
+
       const batch = writeBatch(db);
       messagesSnapshot.docs.forEach((doc) => {
+        console.log('Adding message to batch delete:', doc.id);
         batch.delete(doc.ref);
       });
-      
+
       // Delete the chat session
+      console.log('Adding chat session to batch delete:', chatSessionId);
       batch.delete(doc(db, 'chatSessions', chatSessionId));
-      
+
+      console.log('Committing batch delete');
       await batch.commit();
+      console.log('Batch delete completed successfully');
     } catch (error) {
       console.error('Error deleting chat session:', error);
       throw error;
     }
-  }
-
-  // Chat Messages
+  }  // Chat Messages
   static async saveMessage(chatSessionId: string, userId: string, role: 'user' | 'assistant', content: string): Promise<string> {
     try {
       const docRef = await addDoc(collection(db, 'chatMessages'), {
@@ -534,11 +551,21 @@ export class ChatService {
 
   static async loadChatHistory(chatSessionId: string): Promise<Array<{role: 'user' | 'assistant', content: string}>> {
     try {
+      // First, get the chat session to verify ownership
+      const sessionDoc = await getDoc(doc(db, 'chatSessions', chatSessionId));
+
+      if (!sessionDoc.exists()) {
+        return [];
+      }
+
+      const sessionData = sessionDoc.data();
+
       // First try with the indexed query
       try {
         const q = query(
           collection(db, 'chatMessages'),
           where('chatSessionId', '==', chatSessionId),
+          where('userId', '==', sessionData?.userId),
           orderBy('createdAt', 'asc')
         );
         const querySnapshot = await getDocs(q);
@@ -551,20 +578,21 @@ export class ChatService {
         // Fallback: get all messages for chat session without ordering
         const q = query(
           collection(db, 'chatMessages'),
-          where('chatSessionId', '==', chatSessionId)
+          where('chatSessionId', '==', chatSessionId),
+          where('userId', '==', sessionData?.userId)
         );
         const querySnapshot = await getDocs(q);
-        
+
         // Sort manually on the client side
         const messages = querySnapshot.docs.map(doc => ({
           role: doc.data().role,
           content: doc.data().content,
           createdAt: doc.data().createdAt?.toDate() || new Date(),
         }));
-        
+
         // Sort by createdAt
         messages.sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
-        
+
         // Return only role and content
         return messages.map(({ role, content }) => ({ role, content }));
       }
@@ -575,20 +603,31 @@ export class ChatService {
   }
 
   static async clearChatHistory(chatSessionId: string): Promise<void> {
+    console.log('clearChatHistory called with sessionId:', chatSessionId);
     try {
+      // First, get the chat session to verify ownership
+      const sessionDoc = await getDoc(doc(db, 'chatSessions', chatSessionId));
+
+      if (!sessionDoc.exists()) {
+        throw new Error('Chat session not found');
+      }
+
+      const sessionData = sessionDoc.data();
+
       const q = query(
         collection(db, 'chatMessages'),
-        where('chatSessionId', '==', chatSessionId)
+        where('chatSessionId', '==', chatSessionId),
+        where('userId', '==', sessionData?.userId)
       );
       const querySnapshot = await getDocs(q);
-      
+
       const batch = writeBatch(db);
       querySnapshot.docs.forEach((doc) => {
         batch.delete(doc.ref);
       });
-      
+
       await batch.commit();
-      
+
       // Reset chat session metadata
       await this.updateChatSession(chatSessionId, {
         lastMessage: undefined,
