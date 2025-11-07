@@ -64,8 +64,19 @@ export interface UserStats {
   networkGrowth: number;
 }
 
+export interface ChatSession {
+  id: string;
+  userId: string;
+  title: string;
+  createdAt: Date;
+  updatedAt: Date;
+  lastMessage?: string;
+  messageCount: number;
+}
+
 export interface ChatMessage {
   id: string;
+  chatSessionId: string;
   userId: string;
   role: 'user' | 'assistant';
   content: string;
@@ -396,28 +407,97 @@ export class StatsService {
 
 // Chat Service
 export class ChatService {
-  static async saveMessage(userId: string, message: Omit<ChatMessage, 'id' | 'userId' | 'createdAt'>): Promise<string>;
-  static async saveMessage(userId: string, role: 'user' | 'assistant', content: string): Promise<string>;
-  static async saveMessage(userId: string, roleOrMessage: Omit<ChatMessage, 'id' | 'userId' | 'createdAt'> | 'user' | 'assistant', content?: string): Promise<string> {
+  // Chat Sessions
+  static async createChatSession(userId: string, title: string = 'New Chat'): Promise<string> {
     try {
-      let messageData: Omit<ChatMessage, 'id' | 'userId' | 'createdAt'>;
-      
-      if (typeof roleOrMessage === 'string') {
-        // Called with (userId, role, content)
-        messageData = {
-          role: roleOrMessage as 'user' | 'assistant',
-          content: content!,
-        };
-      } else {
-        // Called with (userId, message)
-        messageData = roleOrMessage;
-      }
-
-      const docRef = await addDoc(collection(db, 'chat_messages'), {
-        ...messageData,
+      const docRef = await addDoc(collection(db, 'chatSessions'), {
         userId,
+        title,
+        createdAt: Timestamp.now(),
+        updatedAt: Timestamp.now(),
+        messageCount: 0,
+      });
+      return docRef.id;
+    } catch (error) {
+      console.error('Error creating chat session:', error);
+      throw error;
+    }
+  }
+
+  static async getChatSessions(userId: string): Promise<ChatSession[]> {
+    try {
+      const q = query(
+        collection(db, 'chatSessions'),
+        where('userId', '==', userId),
+        orderBy('updatedAt', 'desc')
+      );
+      const querySnapshot = await getDocs(q);
+      return querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+        createdAt: doc.data().createdAt?.toDate() || new Date(),
+        updatedAt: doc.data().updatedAt?.toDate() || new Date(),
+      })) as ChatSession[];
+    } catch (error) {
+      console.error('Error getting chat sessions:', error);
+      return [];
+    }
+  }
+
+  static async updateChatSession(chatSessionId: string, updates: Partial<Omit<ChatSession, 'id' | 'userId' | 'createdAt'>>): Promise<void> {
+    try {
+      const chatSessionRef = doc(db, 'chatSessions', chatSessionId);
+      await updateDoc(chatSessionRef, {
+        ...updates,
+        updatedAt: Timestamp.now(),
+      });
+    } catch (error) {
+      console.error('Error updating chat session:', error);
+      throw error;
+    }
+  }
+
+  static async deleteChatSession(chatSessionId: string): Promise<void> {
+    try {
+      // Delete all messages in the chat session
+      const messagesQuery = query(
+        collection(db, 'chatMessages'),
+        where('chatSessionId', '==', chatSessionId)
+      );
+      const messagesSnapshot = await getDocs(messagesQuery);
+      
+      const batch = writeBatch(db);
+      messagesSnapshot.docs.forEach((doc) => {
+        batch.delete(doc.ref);
+      });
+      
+      // Delete the chat session
+      batch.delete(doc(db, 'chatSessions', chatSessionId));
+      
+      await batch.commit();
+    } catch (error) {
+      console.error('Error deleting chat session:', error);
+      throw error;
+    }
+  }
+
+  // Chat Messages
+  static async saveMessage(chatSessionId: string, userId: string, role: 'user' | 'assistant', content: string): Promise<string> {
+    try {
+      const docRef = await addDoc(collection(db, 'chatMessages'), {
+        chatSessionId,
+        userId,
+        role,
+        content,
         createdAt: Timestamp.now(),
       });
+
+      // Update chat session metadata
+      await this.updateChatSession(chatSessionId, {
+        lastMessage: content,
+        messageCount: await this.getMessageCount(chatSessionId) + 1,
+      });
+
       return docRef.id;
     } catch (error) {
       console.error('Error saving chat message:', error);
@@ -425,63 +505,113 @@ export class ChatService {
     }
   }
 
-  static subscribeToChatHistory(userId: string, callback: (messages: ChatMessage[]) => void): () => void {
-    const q = query(
-      collection(db, 'chat_messages'),
-      where('userId', '==', userId),
-      orderBy('createdAt', 'asc')
-    );
-
-    return onSnapshot(q, (querySnapshot) => {
-      const messages: ChatMessage[] = [];
-      querySnapshot.forEach((doc) => {
-        const data = doc.data();
-        messages.push({
-          id: doc.id,
-          ...data,
-          createdAt: data.createdAt?.toDate() || new Date(),
-        } as ChatMessage);
-      });
-      callback(messages);
-    });
+  static async loadChatHistory(chatSessionId: string): Promise<Array<{role: 'user' | 'assistant', content: string}>> {
+    try {
+      // First try with the indexed query
+      try {
+        const q = query(
+          collection(db, 'chatMessages'),
+          where('chatSessionId', '==', chatSessionId),
+          orderBy('createdAt', 'asc')
+        );
+        const querySnapshot = await getDocs(q);
+        return querySnapshot.docs.map(doc => ({
+          role: doc.data().role,
+          content: doc.data().content,
+        }));
+      } catch (indexError) {
+        console.warn('Composite index not ready, falling back to unindexed query');
+        // Fallback: get all messages for chat session without ordering
+        const q = query(
+          collection(db, 'chatMessages'),
+          where('chatSessionId', '==', chatSessionId)
+        );
+        const querySnapshot = await getDocs(q);
+        
+        // Sort manually on the client side
+        const messages = querySnapshot.docs.map(doc => ({
+          role: doc.data().role,
+          content: doc.data().content,
+          createdAt: doc.data().createdAt?.toDate() || new Date(),
+        }));
+        
+        // Sort by createdAt
+        messages.sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
+        
+        // Return only role and content
+        return messages.map(({ role, content }) => ({ role, content }));
+      }
+    } catch (error) {
+      console.error('Error loading chat history:', error);
+      return [];
+    }
   }
 
-  static async clearChatHistory(userId: string): Promise<void> {
+  static async clearChatHistory(chatSessionId: string): Promise<void> {
     try {
       const q = query(
-        collection(db, 'chat_messages'),
-        where('userId', '==', userId)
+        collection(db, 'chatMessages'),
+        where('chatSessionId', '==', chatSessionId)
       );
       const querySnapshot = await getDocs(q);
       
       const batch = writeBatch(db);
-      querySnapshot.forEach((doc) => {
+      querySnapshot.docs.forEach((doc) => {
         batch.delete(doc.ref);
       });
       
       await batch.commit();
-      console.log('Chat history cleared for user:', userId);
+      
+      // Reset chat session metadata
+      await this.updateChatSession(chatSessionId, {
+        lastMessage: undefined,
+        messageCount: 0,
+      });
     } catch (error) {
       console.error('Error clearing chat history:', error);
       throw error;
     }
   }
 
-  static async loadChatHistory(userId: string): Promise<Array<{role: 'user' | 'assistant', content: string}>> {
+  private static async getMessageCount(chatSessionId: string): Promise<number> {
     try {
       const q = query(
-        collection(db, 'chat_messages'),
-        where('userId', '==', userId),
-        orderBy('createdAt', 'asc')
+        collection(db, 'chatMessages'),
+        where('chatSessionId', '==', chatSessionId)
       );
       const querySnapshot = await getDocs(q);
-      return querySnapshot.docs.map(doc => ({
-        role: doc.data().role,
-        content: doc.data().content,
-      }));
+      return querySnapshot.size;
     } catch (error) {
-      console.error('Error loading chat history:', error);
-      return [];
+      console.error('Error getting message count:', error);
+      return 0;
+    }
+  }
+
+  // Legacy methods for backward compatibility (deprecated)
+  static async saveMessageLegacy(userId: string, role: 'user' | 'assistant', content: string): Promise<string> {
+    // Create a default chat session if none exists
+    const sessions = await this.getChatSessions(userId);
+    let sessionId = sessions[0]?.id;
+    
+    if (!sessionId) {
+      sessionId = await this.createChatSession(userId, 'Default Chat');
+    }
+    
+    return this.saveMessage(sessionId, userId, role, content);
+  }
+
+  static async loadChatHistoryLegacy(userId: string): Promise<Array<{role: 'user' | 'assistant', content: string}>> {
+    // Load from the most recent chat session
+    const sessions = await this.getChatSessions(userId);
+    if (sessions.length === 0) return [];
+    
+    return this.loadChatHistory(sessions[0].id);
+  }
+
+  static async clearChatHistoryLegacy(userId: string): Promise<void> {
+    const sessions = await this.getChatSessions(userId);
+    for (const session of sessions) {
+      await this.clearChatHistory(session.id);
     }
   }
 }
