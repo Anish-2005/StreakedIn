@@ -773,36 +773,52 @@ export class RemindersService {
         return null;
       }
 
-      const context = `You are an AI assistant that helps users create structured reminders from natural language descriptions. Your task is to parse the user's request and extract the key information needed to create a reminder.
+      const context = `You are a professional productivity assistant specializing in creating structured reminders from natural language requests. Your expertise lies in parsing user intentions and generating appropriate reminder configurations.
 
-User's request: "${prompt}"
+USER REQUEST: "${prompt}"
 
-Please analyze this request and extract the following information to create a reminder:
+ANALYSIS OBJECTIVE:
+Extract and structure the following reminder components from the user's natural language request:
 
-1. **title**: Create a clear, concise, and actionable title (3-8 words) that summarizes what the reminder is for. Make it specific and descriptive.
+REQUIRED OUTPUT FIELDS:
+• title: A professional, concise title (4-10 words) that clearly identifies the reminder's purpose. Use action-oriented language and be specific about the task or event.
 
-2. **description**: Provide an optional detailed description that gives more context or additional information about the reminder. Keep it brief but informative.
+• description: A professional description providing essential context, timing details, or specific instructions. Include relevant details like time, location, or additional context that would help the user understand the reminder's importance. Keep it informative and actionable (1-2 sentences).
 
-3. **type**: Choose the most appropriate notification type from these options:
-   - 'browser' for browser notifications (default, most common)
-   - 'email' for email notifications (when the user mentions email or sending messages)
-   - 'sms' for SMS/text notifications (when the user specifically mentions text or SMS)
+• type: Select the most appropriate notification delivery method:
+  - 'browser': Default choice for general reminders and notifications
+  - 'email': Use when user mentions email, messages, or professional communications
+  - 'sms': Use only when user specifically requests text messages or SMS notifications
 
-4. **frequency**: Determine how often this reminder should occur from these options:
-   - 'once' for one-time reminders
-   - 'daily' for daily reminders
-   - 'weekly' for weekly reminders
-   - 'monthly' for monthly reminders
+• frequency: Determine the reminder recurrence pattern:
+  - 'once': Single occurrence reminders
+  - 'daily': Daily recurring reminders
+  - 'weekly': Weekly recurring reminders
+  - 'monthly': Monthly recurring reminders
 
-Guidelines:
-- Look for time indicators (daily, weekly, every Monday, etc.) to determine frequency
-- Look for notification method preferences (email, text, etc.) to determine type
-- Make the title actionable and specific
-- If no frequency is specified, default to 'once'
-- If no type is specified, default to 'browser'
-- Focus on the core action or event the user wants to be reminded about
+PROFESSIONAL GUIDELINES:
+• Parse temporal indicators (e.g., "every Monday", "daily at 9 AM", "weekly") to determine frequency
+• Identify communication preferences (email, text, SMS) to select appropriate notification type
+• Craft titles that are professional, actionable, and immediately understandable
+• Always include a description with relevant context, timing, or specific details that enhance the reminder's value
+• Include timing information, location details, or specific instructions in the description when mentioned
+• Default to 'browser' notification type unless user specifies otherwise
+• Default to 'once' frequency unless temporal patterns are clearly indicated
+• Focus on the core professional objective or task requiring reminder
 
-Return ONLY a valid JSON object with these exact field names: title, description, type, frequency. Do not include any other text or explanation.`;
+OUTPUT FORMAT:
+Return exclusively a valid JSON object containing only these fields: title, description, type, frequency.
+Do not include explanatory text, markdown formatting, or additional commentary outside the JSON structure.
+
+EXAMPLES:
+Input: "Remind me to review quarterly reports every Friday at 2 PM"
+Output: {"title":"Review Quarterly Reports","description":"Conduct weekly review of quarterly performance reports every Friday at 2:00 PM to ensure accurate tracking and timely updates.","type":"browser","frequency":"weekly"}
+
+Input: "Send me an email reminder for the team meeting tomorrow"
+Output: {"title":"Team Meeting Reminder","description":"Important team meeting scheduled for tomorrow. Prepare agenda items and review action items from previous meeting.","type":"email","frequency":"once"}
+
+Input: "Remind me daily to drink water"
+Output: {"title":"Daily Hydration Reminder","description":"Stay hydrated throughout the day with regular water intake. Aim for 8 glasses of water daily for optimal health and productivity.","type":"browser","frequency":"daily"}`;
 
       const response = await fetch(`${AISuggestionsService['GEMINI_API_URL']}?key=${AISuggestionsService['GEMINI_API_KEY']}`, {
         method: 'POST',
