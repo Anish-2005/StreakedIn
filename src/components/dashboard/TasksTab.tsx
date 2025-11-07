@@ -175,6 +175,49 @@ export default function TasksTab({}: TasksTabProps) {
     }
   };
 
+  const startEditingTask = (task: Task) => {
+    setEditingTask(task);
+    setEditTitle(task.title);
+    setEditPriority((task.priority as 'low' | 'medium' | 'high') || 'medium');
+    setEditDueDate(task.dueDate || '');
+    setShowEditModal(true);
+  };
+
+  const cancelEditingTask = () => {
+    setEditingTask(null);
+    setEditTitle('');
+    setEditPriority('medium');
+    setEditDueDate('');
+    setShowEditModal(false);
+  };
+
+  const saveEditedTask = async () => {
+    if (!editingTask || !editTitle.trim()) return;
+
+    try {
+      const updateData: any = {
+        title: editTitle.trim(),
+        priority: editPriority,
+        updatedAt: new Date()
+      };
+
+      // Only include dueDate if it has a value
+      if (editDueDate.trim()) {
+        updateData.dueDate = editDueDate;
+      } else {
+        // If dueDate is being cleared, we need to explicitly set it to null or delete the field
+        updateData.dueDate = null;
+      }
+
+      const taskRef = doc(db, 'tasks', editingTask.id);
+      await updateDoc(taskRef, updateData);
+
+      cancelEditingTask();
+    } catch (error) {
+      console.error('Error updating task:', error);
+    }
+  };
+
   const handleAIPrompt = async () => {
     if (!aiPrompt.trim() || !user || isGeneratingAI) return;
 
@@ -357,8 +400,9 @@ export default function TasksTab({}: TasksTabProps) {
           <h3 className="text-lg font-semibold text-white">Add New Task</h3>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div className="md:col-span-2">
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-slate-300 mb-2">Task Title</label>
             <Input
               placeholder="What needs to be done?"
               value={newTaskTitle}
@@ -368,22 +412,30 @@ export default function TasksTab({}: TasksTabProps) {
             />
           </div>
 
-          <Select
-            value={newTaskPriority}
-            onChange={(e) => setNewTaskPriority(e.target.value)}
-            className="bg-slate-700/50 border-slate-600"
-          >
-            <option value="low">🟢 Low Priority</option>
-            <option value="medium">🟡 Medium Priority</option>
-            <option value="high">🔴 High Priority</option>
-          </Select>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-slate-300 mb-2">Priority</label>
+              <Select
+                value={newTaskPriority}
+                onChange={(e) => setNewTaskPriority(e.target.value)}
+                className="bg-slate-700/50 border-slate-600"
+              >
+                <option value="low">🟢 Low Priority</option>
+                <option value="medium">🟡 Medium Priority</option>
+                <option value="high">🔴 High Priority</option>
+              </Select>
+            </div>
 
-          <Input
-            type="date"
-            value={newTaskDueDate}
-            onChange={(e) => setNewTaskDueDate(e.target.value)}
-            className="bg-slate-700/50 border-slate-600"
-          />
+            <div>
+              <label className="block text-sm font-medium text-slate-300 mb-2">Due Date (Optional)</label>
+              <Input
+                type="date"
+                value={newTaskDueDate}
+                onChange={(e) => setNewTaskDueDate(e.target.value)}
+                className="bg-slate-700/50 border-slate-600 text-white"
+              />
+            </div>
+          </div>
         </div>
 
         <div className="flex justify-end gap-3 mt-4">
@@ -542,6 +594,14 @@ export default function TasksTab({}: TasksTabProps) {
 
                     {/* Actions */}
                     <div className="flex items-center gap-2 ml-4">
+                      <motion.button
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.9 }}
+                        onClick={() => startEditingTask(task)}
+                        className="p-2 text-slate-400 hover:text-blue-400 hover:bg-blue-500/20 rounded-lg transition-colors opacity-0 group-hover:opacity-100"
+                      >
+                        <Edit className="w-4 h-4" />
+                      </motion.button>
                       <motion.button
                         whileHover={{ scale: 1.1 }}
                         whileTap={{ scale: 0.9 }}
@@ -714,6 +774,100 @@ export default function TasksTab({}: TasksTabProps) {
                   <div className="flex items-center gap-2">
                     <Plus className="w-4 h-4" />
                     Add Task
+                  </div>
+                </Button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Edit Task Modal */}
+      <AnimatePresence>
+        {showEditModal && editingTask && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            onClick={() => cancelEditingTask()}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="bg-slate-800/90 backdrop-blur-md border border-slate-600/50 rounded-xl p-6 w-full max-w-lg"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-blue-500/20 rounded-lg">
+                    <Edit className="w-5 h-5 text-blue-400" />
+                  </div>
+                  <h3 className="text-lg font-semibold text-white">Edit Task</h3>
+                </div>
+                <button
+                  onClick={() => cancelEditingTask()}
+                  className="p-1 text-slate-400 hover:text-white transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-slate-300 mb-2">Task Title</label>
+                  <Input
+                    placeholder="What needs to be done?"
+                    value={editTitle}
+                    onChange={(e) => setEditTitle(e.target.value)}
+                    onKeyPress={(e) => e.key === 'Enter' && saveEditedTask()}
+                    className="text-white placeholder-slate-400"
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-slate-300 mb-2">Priority</label>
+                    <Select
+                      value={editPriority}
+                      onChange={(e) => setEditPriority(e.target.value as 'low' | 'medium' | 'high')}
+                      className="bg-slate-700/50 border-slate-600"
+                    >
+                      <option value="low">🟢 Low Priority</option>
+                      <option value="medium">🟡 Medium Priority</option>
+                      <option value="high">🔴 High Priority</option>
+                    </Select>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-slate-300 mb-2">Due Date</label>
+                    <Input
+                      type="date"
+                      value={editDueDate}
+                      onChange={(e) => setEditDueDate(e.target.value)}
+                      className="bg-slate-700/50 border-slate-600"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex justify-end gap-3 mt-6">
+                <Button
+                  onClick={() => cancelEditingTask()}
+                  variant="secondary"
+                  className="px-4 py-2"
+                >
+                  Cancel
+                </Button>
+                <Button
+                  onClick={saveEditedTask}
+                  disabled={!editTitle.trim()}
+                  className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2"
+                >
+                  <div className="flex items-center gap-2">
+                    <Edit className="w-4 h-4" />
+                    Save Changes
                   </div>
                 </Button>
               </div>
