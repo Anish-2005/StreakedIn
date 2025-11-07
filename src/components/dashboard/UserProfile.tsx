@@ -24,7 +24,7 @@ export default function UserProfile({ user, userProfile, isCollapsed }: UserProf
   };
 
   return (
-    <div className={`relative ${isCollapsed ? 'p-3' : 'p-6'} border-t border-slate-700/60`}>
+    <div className={`relative ${isCollapsed ? 'p-2' : 'p-6'} border-t border-slate-700/60`}>
       {/* Background gradient */}
       <div className="absolute inset-0 bg-gradient-to-t from-slate-800/50 to-transparent rounded-t-xl"></div>
 
@@ -65,7 +65,7 @@ export default function UserProfile({ user, userProfile, isCollapsed }: UserProf
 
         {/* Tooltip for collapsed state */}
         {isCollapsed && (
-          <div className="absolute left-full ml-3 px-4 py-3 bg-slate-800/95 backdrop-blur-md text-white rounded-lg border border-slate-600/50 opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none z-50 shadow-xl">
+          <div className="absolute left-full ml-2 px-4 py-3 bg-slate-800/95 backdrop-blur-md text-white rounded-lg border border-slate-600/50 opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none z-50 shadow-xl">
             <div className="font-semibold text-sm mb-1">{getDisplayName(user)}</div>
             <div className="text-slate-400 text-xs">{userProfile?.plan || 'Professional Plan'}</div>
             <div className="flex items-center space-x-1 mt-2">

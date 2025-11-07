@@ -43,7 +43,7 @@ export default function Sidebar({ activeTab, setActiveTab, isSidebarOpen, setIsS
   }, [user]);
 
   return (
-    <div className={`fixed inset-y-0 left-0 z-50 transition-all duration-500 ${
+    <div className={`fixed inset-y-0 left-0 z-50 transition-all duration-500 ease-in-out ${
       isMobile
         ? `w-72 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`
         : `${isSidebarOpen ? 'w-72' : 'w-20'}`
@@ -59,13 +59,14 @@ export default function Sidebar({ activeTab, setActiveTab, isSidebarOpen, setIsS
       {/* Content Container */}
       <div className="relative h-full flex flex-col">
         {/* Enhanced Logo Section */}
-        <div className={`flex ${isSidebarOpen ? 'items-center justify-between' : 'justify-center'} h-20 ${isSidebarOpen ? 'px-6' : 'px-3'} border-b border-slate-700/60`}>
-          <div className={`flex ${isSidebarOpen ? 'items-center space-x-4' : 'justify-center'}`}>
+        <div className={`flex flex-col ${isSidebarOpen ? 'items-center justify-between' : 'items-center'} ${isSidebarOpen ? 'h-20 px-6' : 'h-24 px-2'} border-b border-slate-700/60 relative`}>
+          {/* Logo and title row */}
+          <div className={`flex ${isSidebarOpen ? 'items-center space-x-4' : 'justify-center mt-2'} ${isSidebarOpen ? 'w-full' : 'mb-2'}`}>
             <div className="relative group">
               <div className={`bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-xl flex items-center justify-center border border-white/10 group-hover:border-white/20 transition-colors ${
-                isSidebarOpen ? 'w-12 h-12' : 'w-10 h-10'
+                isSidebarOpen ? 'w-12 h-12' : 'w-12 h-12'
               }`}>
-                <TrendingUp className={`text-blue-300 ${isSidebarOpen ? 'w-6 h-6' : 'w-5 h-5'}`} />
+                <TrendingUp className={`text-blue-300 ${isSidebarOpen ? 'w-6 h-6' : 'w-6 h-6'}`} />
               </div>
               {/* Logo glow */}
               <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl blur opacity-0 group-hover:opacity-30 transition-opacity"></div>
@@ -80,23 +81,25 @@ export default function Sidebar({ activeTab, setActiveTab, isSidebarOpen, setIsS
             )}
           </div>
 
+          {/* Expand button row for collapsed state */}
+          {!isSidebarOpen && (
+            <div className="flex justify-center mb-2">
+              <button
+                onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                className="group p-2 hover:bg-white/10 rounded-xl transition-all duration-300 hover:scale-110"
+                title="Expand Sidebar"
+              >
+                <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-white transition-all duration-300" />
+              </button>
+            </div>
+          )}
+
           {isSidebarOpen && (
             <button
               onClick={() => setIsSidebarOpen(!isSidebarOpen)}
               className="group p-2 hover:bg-white/10 rounded-xl transition-all duration-300 hover:scale-110"
             >
               <ChevronRight className="w-5 h-5 text-slate-400 group-hover:text-white transition-all duration-300 rotate-180" />
-            </button>
-          )}
-
-          {/* Collapse button for collapsed state */}
-          {!isSidebarOpen && (
-            <button
-              onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-              className="absolute top-4 right-2 group p-2 hover:bg-white/10 rounded-xl transition-all duration-300 hover:scale-110"
-              title="Expand Sidebar"
-            >
-              <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-white transition-all duration-300" />
             </button>
           )}
         </div>

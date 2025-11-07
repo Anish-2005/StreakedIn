@@ -26,8 +26,8 @@ const navigationItems: NavigationItem[] = [
 
 export default function Navigation({ activeTab, onTabChange, isCollapsed }: NavigationProps) {
   return (
-    <nav className={`flex-1 ${isCollapsed ? 'px-3 py-8' : 'px-6 py-8'}`}>
-      <div className="space-y-3">
+    <nav className={`flex-1 ${isCollapsed ? 'px-2 py-6' : 'px-6 py-8'}`}>
+      <div className={`space-y-${isCollapsed ? '2' : '3'}`}>
         {navigationItems.map((item) => {
           const isActive = activeTab === item.id;
           return (
@@ -35,7 +35,7 @@ export default function Navigation({ activeTab, onTabChange, isCollapsed }: Navi
               key={item.id}
               onClick={() => onTabChange(item.id)}
               className={`group relative w-full flex items-center justify-center ${
-                isCollapsed ? 'px-3 py-4' : 'space-x-4 px-4 py-3.5'
+                isCollapsed ? 'px-2 py-3' : 'space-x-4 px-4 py-3.5'
               } rounded-xl transition-all duration-300 hover:scale-110 ${
                 isActive
                   ? 'bg-gradient-to-r from-white/15 to-white/5 border border-white/20 shadow-lg shadow-blue-500/20'
@@ -91,7 +91,7 @@ export default function Navigation({ activeTab, onTabChange, isCollapsed }: Navi
 
               {/* Tooltip for collapsed state */}
               {isCollapsed && (
-                <div className="absolute left-full ml-3 px-3 py-2 bg-slate-800/95 backdrop-blur-md text-white text-sm rounded-lg border border-slate-600/50 opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none whitespace-nowrap z-50 shadow-xl">
+                <div className="absolute left-full ml-2 px-3 py-2 bg-slate-800/95 backdrop-blur-md text-white text-sm rounded-lg border border-slate-600/50 opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none whitespace-nowrap z-50 shadow-xl">
                   {item.name}
                   {/* Tooltip arrow */}
                   <div className="absolute right-full top-1/2 -translate-y-1/2 w-0 h-0 border-t-4 border-b-4 border-r-4 border-transparent border-r-slate-800/95"></div>
