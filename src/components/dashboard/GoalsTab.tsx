@@ -1,6 +1,6 @@
 "use client";
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, Filter, Edit3, MoreHorizontal, Calendar, Target, Brain, Trash2, CheckCircle, Sparkles, X } from 'lucide-react';
+import { Plus, Filter, Edit3, MoreHorizontal, Calendar, Target, Brain, Trash2, CheckCircle, Sparkles, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { GoalsService, AISuggestionsService, Goal } from '../../lib/services';
@@ -27,12 +27,23 @@ export default function GoalsTab({}: GoalsTabProps) {
     progress: 0
   });
 
+  // AI carousel state
+  const [currentSuggestionIndex, setCurrentSuggestionIndex] = useState(0);
+
   // AI-related state
   const [showAIPrompt, setShowAIPrompt] = useState(false);
   const [aiPrompt, setAiPrompt] = useState('');
   const [isGeneratingAI, setIsGeneratingAI] = useState(false);
   const [aiGeneratedGoal, setAiGeneratedGoal] = useState<Partial<Goal> | null>(null);
   const [showAIConfirmation, setShowAIConfirmation] = useState(false);
+
+  const nextSuggestion = () => {
+    setCurrentSuggestionIndex((prev) => (prev + 1) % aiSuggestions.length);
+  };
+
+  const prevSuggestion = () => {
+    setCurrentSuggestionIndex((prev) => (prev - 1 + aiSuggestions.length) % aiSuggestions.length);
+  };
 
   useEffect(() => {
     if (!user) return;
@@ -433,32 +444,173 @@ export default function GoalsTab({}: GoalsTabProps) {
           </div>
 
           {/* AI Goal Suggestions */}
-          <Card>
-            <h3 className="font-semibold text-white mb-4">AI Goal Suggestions</h3>
-            <div className="space-y-3">
-              {aiSuggestions.map((suggestion, index) => (
-                <div key={index} className="flex items-center justify-between p-3 rounded-lg bg-slate-800/30 border border-slate-700/40">
-                  <span className="text-sm text-slate-300 flex-1">{suggestion}</span>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => handleAISuggestionClick(suggestion)}
-                    className="text-blue-400 hover:text-blue-300"
-                  >
-                    Add
-                  </Button>
-                </div>
-              ))}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="bg-gradient-to-br from-slate-800/60 to-slate-700/60 backdrop-blur-md border border-slate-600/50 rounded-xl p-6"
+          >
+            <div className="flex items-center gap-3 mb-6">
+              <div className="p-2 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-lg">
+                <Brain className="w-5 h-5 text-purple-400" />
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-white">AI Goal Suggestions</h3>
+                <p className="text-slate-300 text-sm">Smart recommendations based on your progress</p>
+              </div>
             </div>
+
+            <div className="space-y-4 mb-6">
+              {aiSuggestions.length === 0 ? (
+                <div className="text-center py-12 bg-slate-800/30 rounded-lg border border-slate-700/40">
+                  <Brain className="w-12 h-12 mx-auto mb-4 text-slate-400" />
+                  <p className="text-slate-400 text-sm">No suggestions available</p>
+                  <p className="text-slate-500 text-xs mt-1">Generate suggestions to get started</p>
+                </div>
+              ) : (
+                <div className="relative">
+                  {/* Main suggestion card */}
+                  <motion.div
+                    key={currentSuggestionIndex}
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -20 }}
+                    transition={{ duration: 0.3 }}
+                    className="bg-gradient-to-r from-slate-800/50 to-slate-700/50 border border-slate-600/50 rounded-xl p-6 hover:border-slate-500/60 transition-all duration-300"
+                  >
+                    <div className="flex items-start gap-4">
+                      <div className="flex-1 min-w-0">
+                        {aiSuggestions[currentSuggestionIndex].includes('Learning Modules') ? (
+                          // Formatted suggestion with modules (AI-generated format)
+                          <div className="space-y-4">
+                            {(() => {
+                              const lines = aiSuggestions[currentSuggestionIndex].split('\n').filter(line => line.trim());
+                              const mainGoal = lines[0];
+                              // Find modules - they could be numbered like "1. Module" or just listed after "Learning Modules"
+                              const modulesStartIndex = lines.findIndex(line => line.includes('Learning Modules')) + 1;
+                              const modules = lines.slice(modulesStartIndex)
+                                .filter(line => line.trim() && !/^\d+$/.test(line.trim())) // Filter out standalone numbers
+                                .map(line => line.replace(/^\d+\.?\s*/, '').trim()) // Remove numbering
+                                .filter(line => line.length > 0);
+
+                              return (
+                                <>
+                                  <div className="text-white text-base leading-relaxed">
+                                    {mainGoal}
+                                  </div>
+                                  <div className="bg-slate-700/30 rounded-lg p-4 border border-slate-600/30">
+                                    <h4 className="text-blue-300 font-medium mb-3 flex items-center gap-2">
+                                      <Target className="w-4 h-4" />
+                                      Learning Modules
+                                    </h4>
+                                    <div className="space-y-2">
+                                      {modules.map((module, idx) => (
+                                        <div key={idx} className="flex items-start gap-3 p-3 bg-slate-800/40 rounded-lg border border-slate-600/20">
+                                          <div className="flex-shrink-0 w-6 h-6 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-full flex items-center justify-center mt-0.5">
+                                            <span className="text-xs font-semibold text-blue-300">{idx + 1}</span>
+                                          </div>
+                                          <span className="text-slate-200 text-sm leading-relaxed">{module}</span>
+                                        </div>
+                                      ))}
+                                    </div>
+                                  </div>
+                                </>
+                              );
+                            })()}
+                          </div>
+                        ) : aiSuggestions[currentSuggestionIndex].includes('**') ? (
+                          // Formatted suggestion with modules (structured format)
+                          <div className="space-y-4">
+                            <div className="text-white text-base leading-relaxed">
+                              {aiSuggestions[currentSuggestionIndex].split('**')[0].trim()}
+                            </div>
+                            <div className="bg-slate-700/30 rounded-lg p-4 border border-slate-600/30">
+                              <h4 className="text-blue-300 font-medium mb-3 flex items-center gap-2">
+                                <Target className="w-4 h-4" />
+                                Learning Modules
+                              </h4>
+                              <div className="space-y-2">
+                                {aiSuggestions[currentSuggestionIndex]
+                                  .split('**')[1]
+                                  .split('\n')
+                                  .filter(line => line.trim())
+                                  .map((module, idx) => (
+                                    <div key={idx} className="flex items-start gap-3 p-3 bg-slate-800/40 rounded-lg border border-slate-600/20">
+                                      <div className="flex-shrink-0 w-6 h-6 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-full flex items-center justify-center mt-0.5">
+                                        <span className="text-xs font-semibold text-blue-300">{idx + 1}</span>
+                                      </div>
+                                      <span className="text-slate-200 text-sm leading-relaxed">{module.trim()}</span>
+                                    </div>
+                                  ))}
+                              </div>
+                            </div>
+                            {aiSuggestions[currentSuggestionIndex].split('**')[2] && (
+                              <div className="text-slate-300 text-sm">
+                                {aiSuggestions[currentSuggestionIndex].split('**')[2].trim()}
+                              </div>
+                            )}
+                          </div>
+                        ) : (
+                          // Regular suggestion
+                          <p className="text-white text-base leading-relaxed">
+                            {aiSuggestions[currentSuggestionIndex]}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  </motion.div>
+
+                  {/* Navigation */}
+                  {aiSuggestions.length > 1 && (
+                    <div className="flex items-center justify-between mt-4">
+                      <Button
+                        onClick={prevSuggestion}
+                        variant="ghost"
+                        size="sm"
+                        className="text-slate-400 hover:text-white hover:bg-slate-700/50 p-2"
+                      >
+                        <ChevronLeft className="w-4 h-4" />
+                      </Button>
+
+                      {/* Indicators */}
+                      <div className="flex items-center gap-2">
+                        {aiSuggestions.map((_, index) => (
+                          <button
+                            key={index}
+                            onClick={() => setCurrentSuggestionIndex(index)}
+                            className={`w-2 h-2 rounded-full transition-all duration-200 ${
+                              index === currentSuggestionIndex
+                                ? 'bg-blue-500 w-6'
+                                : 'bg-slate-600 hover:bg-slate-500'
+                            }`}
+                          />
+                        ))}
+                      </div>
+
+                      <Button
+                        onClick={nextSuggestion}
+                        variant="ghost"
+                        size="sm"
+                        className="text-slate-400 hover:text-white hover:bg-slate-700/50 p-2"
+                      >
+                        <ChevronRight className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+
             <Button
-              variant="outline"
-              className="w-full mt-4"
-              icon={<Brain className="w-4 h-4" />}
               onClick={() => AISuggestionsService.generateGoalSuggestions(user?.uid || '').then(setAiSuggestions)}
+              className="w-full bg-gradient-to-r from-purple-500/10 to-pink-500/10 hover:from-purple-500/20 hover:to-pink-500/20 border border-purple-500/30 hover:border-purple-500/50 text-purple-300 hover:text-purple-200 transition-all duration-200"
             >
-              Generate More Suggestions
+              <div className="flex items-center justify-center gap-2">
+                <Sparkles className="w-4 h-4" />
+                <span className="font-medium">Generate More Suggestions</span>
+              </div>
             </Button>
-          </Card>
+          </motion.div>
         </div>
       </div>
 

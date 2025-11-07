@@ -1448,6 +1448,13 @@ export class AISuggestionsService {
       if (!this.GEMINI_API_KEY || !this.apiWorking) {
         console.warn('Gemini API key not found or API not working, using fallback suggestions');
         return [
+          `Complete Website Development by Monday Deadline
+Learning Modules
+1. Plan Website Structure and Content (Today)
+2. Design Mockups (Tomorrow)
+3. Develop Core Pages (Day 3)
+4. Add Interactive Features (Day 4)
+5. Test and Deploy (Monday)`,
           'Learn a new professional skill this month',
           'Expand your professional network by 20 connections',
           'Complete a certification in your field',
@@ -1493,7 +1500,17 @@ User Data:
 - Current Goals: ${context.goals.map(g => `${g.title} (${g.category}, ${g.progress}% complete, ${g.status})`).join(', ')}
 - Current Tasks: ${context.tasks.map(t => `${t.title} (${t.priority}, ${t.completed ? 'completed' : 'pending'})`).join(', ')}
 
-Provide 5 specific, actionable goal suggestions that would help this user be more productive. Make them SMART goals where possible. Return only the suggestions as a numbered list, no additional text.`;
+For complex goals that would benefit from being broken down, format them with a structured breakdown like this:
+
+Complete Website Development by Monday Deadline
+Learning Modules
+1. Plan Website Structure and Content (Today)
+2. Design Mockups (Tomorrow)
+3. Develop Core Pages (Day 3)
+4. Add Interactive Features (Day 4)
+5. Test and Deploy (Monday)
+
+Use this exact multi-line format for complex goals. For simpler goals, just provide the goal text normally. Mix both formats in your response. Return only the suggestions, one per line or in the structured format above.`;
 
       console.log('Making Gemini API request for goal suggestions...');
 
@@ -1555,6 +1572,13 @@ Provide 5 specific, actionable goal suggestions that would help this user be mor
         .map((line: string) => line.replace(/^\d+\.\s*/, '').trim());
 
       return suggestions.length > 0 ? suggestions : [
+        `Complete Website Development by Monday Deadline
+Learning Modules
+1. Plan Website Structure and Content (Today)
+2. Design Mockups (Tomorrow)
+3. Develop Core Pages (Day 3)
+4. Add Interactive Features (Day 4)
+5. Test and Deploy (Monday)`,
         'Learn a new professional skill this month',
         'Expand your professional network by 20 connections',
         'Complete a certification in your field',
@@ -1565,6 +1589,13 @@ Provide 5 specific, actionable goal suggestions that would help this user be mor
       console.error('Error generating AI suggestions:', error);
       this.apiWorking = false; // Disable API calls on any error
       return [
+        `Complete Website Development by Monday Deadline
+Learning Modules
+1. Plan Website Structure and Content (Today)
+2. Design Mockups (Tomorrow)
+3. Develop Core Pages (Day 3)
+4. Add Interactive Features (Day 4)
+5. Test and Deploy (Monday)`,
         'Learn a new professional skill this month',
         'Expand your professional network',
         'Complete a certification in your field',
