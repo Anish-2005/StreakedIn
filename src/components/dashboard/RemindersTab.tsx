@@ -12,7 +12,9 @@ interface Reminder {
   nextTrigger?: string;
 }
 
-interface RemindersTabProps {}
+interface RemindersTabProps {
+  // No props needed for this component
+}
 
 export default function RemindersTab({}: RemindersTabProps) {
   const [reminders, setReminders] = useState<Reminder[]>([]);

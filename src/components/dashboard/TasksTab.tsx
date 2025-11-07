@@ -15,7 +15,9 @@ interface Task {
   dueDate?: string;
 }
 
-interface TasksTabProps {}
+interface TasksTabProps {
+  // No props needed for this component
+}
 
 export default function TasksTab({}: TasksTabProps) {
   const { user } = useAuth();

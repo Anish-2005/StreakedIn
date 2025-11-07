@@ -6,7 +6,9 @@ import { useAuth } from '../../contexts/AuthContext';
 import { GoalsService, AISuggestionsService, Goal } from '../../lib/services';
 import { Card, Button, Input, Select, Badge, ProgressBar } from '../common';
 
-interface GoalsTabProps {}
+interface GoalsTabProps {
+  // No props needed for this component
+}
 
 export default function GoalsTab({}: GoalsTabProps) {
   const { user } = useAuth();

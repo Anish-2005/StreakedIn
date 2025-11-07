@@ -6,7 +6,9 @@ import { useAuth } from '../../contexts/AuthContext';
 import { AnalyticsService, GoalsService, TasksService, Goal, Task } from '../../lib/services';
 import { Card, Button, StatsCard } from '../common';
 
-interface AnalyticsTabProps {}
+interface AnalyticsTabProps {
+  // No props needed for this component
+}
 
 export default function AnalyticsTab({}: AnalyticsTabProps) {
   const { user } = useAuth();

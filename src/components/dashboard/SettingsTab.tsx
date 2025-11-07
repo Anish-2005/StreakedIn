@@ -4,7 +4,9 @@ import { useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { Card, ToggleSwitch, Button, FormField } from '../common';
 
-interface SettingsTabProps {}
+interface SettingsTabProps {
+  // No props needed for this component
+}
 
 export default function SettingsTab({}: SettingsTabProps) {
   const { user } = useAuth();
