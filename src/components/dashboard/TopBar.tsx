@@ -98,6 +98,8 @@ export default function TopBar({
               <SearchBar
                 onSearch={onSearch}
                 className="w-48 md:w-64 lg:w-80"
+                externalQuery={searchQuery}
+                onClear={onClearSearch}
               />
             </div>
 
@@ -138,6 +140,8 @@ export default function TopBar({
             <SearchBar
               onSearch={onSearch}
               className="w-full"
+              externalQuery={searchQuery}
+              onClear={onClearSearch}
             />
           </div>
         </div>

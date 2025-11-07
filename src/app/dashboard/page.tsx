@@ -43,6 +43,15 @@ export default function Dashboard() {
   }>({ goals: [], tasks: [] });
   const [isSearching, setIsSearching] = useState<boolean>(false);
 
+  // Clear search when switching tabs
+  const handleTabChange = (newTab: string) => {
+    setActiveTab(newTab);
+    if (searchQuery) {
+      setSearchQuery('');
+      setSearchResults({ goals: [], tasks: [] });
+    }
+  };
+
   useEffect(() => {
     if (!loading && !user) {
       router.push('/login');
@@ -167,7 +176,7 @@ export default function Dashboard() {
 
       <Sidebar
         activeTab={activeTab}
-        setActiveTab={setActiveTab}
+        setActiveTab={handleTabChange}
         isSidebarOpen={isSidebarOpen}
         setIsSidebarOpen={setIsSidebarOpen}
         isMobile={isMobile}
@@ -319,7 +328,7 @@ export default function Dashboard() {
 
         <TabContainer
           activeTab={activeTab}
-          setActiveTab={setActiveTab}
+          setActiveTab={handleTabChange}
           isMobile={isMobile}
         />
       </div>

@@ -6,16 +6,24 @@ interface SearchBarProps {
   onSearch?: (query: string) => void;
   className?: string;
   debounceMs?: number;
+  externalQuery?: string;
+  onClear?: () => void;
 }
 
 export default function SearchBar({
   placeholder = "Search goals, tasks...",
   onSearch,
   className = "",
-  debounceMs = 300
+  debounceMs = 300,
+  externalQuery,
+  onClear
 }: SearchBarProps) {
-  const [query, setQuery] = useState('');
+  const [internalQuery, setInternalQuery] = useState('');
   const [debouncedQuery, setDebouncedQuery] = useState('');
+
+  // Use external query if provided, otherwise use internal state
+  const query = externalQuery !== undefined ? externalQuery : internalQuery;
+  const setQuery = externalQuery !== undefined ? () => {} : setInternalQuery;
 
   // Debounce the search query
   useEffect(() => {
@@ -32,12 +40,21 @@ export default function SearchBar({
   }, [debouncedQuery, onSearch]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setQuery(e.target.value);
+    const value = e.target.value;
+    if (externalQuery !== undefined) {
+      // If using external query, call onSearch immediately for controlled component
+      onSearch?.(value);
+    } else {
+      setInternalQuery(value);
+    }
   };
 
   const handleClear = () => {
-    setQuery('');
-    setDebouncedQuery('');
+    if (externalQuery !== undefined && onClear) {
+      onClear();
+    } else {
+      setInternalQuery('');
+    }
   };
 
   return (
