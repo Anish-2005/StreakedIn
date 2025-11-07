@@ -211,8 +211,8 @@ export default function RemindersTab({}: RemindersTabProps) {
           {reminders.length === 0 ? (
             <div className="text-center py-12 bg-slate-800/30 backdrop-blur-md border border-slate-700/50 rounded-xl">
               <Bell className="w-12 h-12 text-slate-500 mx-auto mb-4" />
-              <p className="text-slate-400">No reminders yet</p>
-              <p className="text-slate-500 text-sm mt-2">Create your first reminder to stay on track!</p>
+              <p className="text-slate-400">No reminders set up yet</p>
+              <p className="text-slate-500 text-sm mt-2">Get started by creating your first reminder to stay organized and productive!</p>
             </div>
           ) : (
             reminders.map((reminder) => (
@@ -329,11 +329,11 @@ export default function RemindersTab({}: RemindersTabProps) {
       {showAIPrompt && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-slate-800 border border-slate-700 rounded-xl p-6 w-full max-w-md mx-4">
-            <h3 className="text-lg font-semibold text-white mb-4">Create Reminder with AI</h3>
+            <h3 className="text-lg font-semibold text-white mb-4">Create Reminder with AI Assistant</h3>
             <textarea
               value={aiPrompt}
               onChange={(e) => setAiPrompt(e.target.value)}
-              placeholder="Describe the reminder you want to create... e.g., 'Remind me to review my weekly goals every Monday at 9 AM'"
+              placeholder="Describe the reminder you want to create naturally... e.g., 'Remind me to review my weekly goals every Monday at 9 AM' or 'Send me a daily reminder to drink water'"
               className="w-full p-3 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
               rows={4}
             />
@@ -354,7 +354,7 @@ export default function RemindersTab({}: RemindersTabProps) {
                 ) : (
                   <Sparkles className="w-4 h-4" />
                 )}
-                <span>{aiLoading ? 'Generating...' : 'Create'}</span>
+            <span>{aiLoading ? 'Generating...' : 'Generate Reminder'}</span>
               </button>
             </div>
           </div>
@@ -365,7 +365,7 @@ export default function RemindersTab({}: RemindersTabProps) {
       {showConfirmation && pendingReminder && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-slate-800 border border-slate-700 rounded-xl p-6 w-full max-w-md mx-4">
-            <h3 className="text-lg font-semibold text-white mb-4">Confirm Reminder</h3>
+            <h3 className="text-lg font-semibold text-white mb-4">Confirm AI-Generated Reminder</h3>
             <div className="bg-slate-700/50 rounded-lg p-4 mb-4">
               <h4 className="font-medium text-white mb-2">{pendingReminder.title}</h4>
               {pendingReminder.description && (
@@ -376,19 +376,19 @@ export default function RemindersTab({}: RemindersTabProps) {
                 <span>Frequency: {pendingReminder.frequency}</span>
               </div>
             </div>
-            <p className="text-slate-300 text-sm mb-6">Is this reminder okay?</p>
+            <p className="text-slate-300 text-sm mb-6">Does this reminder look correct?</p>
             <div className="flex space-x-3">
               <button
                 onClick={handleRejectReminder}
                 className="flex-1 px-4 py-2 bg-red-500/20 text-red-400 rounded-lg hover:bg-red-500/30 transition-colors"
               >
-                No
+                No, Try Again
               </button>
               <button
                 onClick={handleConfirmReminder}
                 className="flex-1 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
               >
-                Yes, Create Reminder
+                Yes, Save Reminder
               </button>
             </div>
           </div>

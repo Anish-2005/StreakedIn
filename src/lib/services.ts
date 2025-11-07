@@ -773,17 +773,36 @@ export class RemindersService {
         return null;
       }
 
-      const context = `Parse this reminder request and create a structured reminder object. The user wants to create a reminder.
+      const context = `You are an AI assistant that helps users create structured reminders from natural language descriptions. Your task is to parse the user's request and extract the key information needed to create a reminder.
 
-User request: "${prompt}"
+User's request: "${prompt}"
 
-Extract the following information:
-- title: A clear, concise title for the reminder
-- description: Optional detailed description
-- type: One of 'email', 'browser', or 'sms' (default to 'browser')
-- frequency: One of 'daily', 'weekly', 'monthly', or 'once' (default to 'once')
+Please analyze this request and extract the following information to create a reminder:
 
-Return a JSON object with these fields. Make the title descriptive and actionable.`;
+1. **title**: Create a clear, concise, and actionable title (3-8 words) that summarizes what the reminder is for. Make it specific and descriptive.
+
+2. **description**: Provide an optional detailed description that gives more context or additional information about the reminder. Keep it brief but informative.
+
+3. **type**: Choose the most appropriate notification type from these options:
+   - 'browser' for browser notifications (default, most common)
+   - 'email' for email notifications (when the user mentions email or sending messages)
+   - 'sms' for SMS/text notifications (when the user specifically mentions text or SMS)
+
+4. **frequency**: Determine how often this reminder should occur from these options:
+   - 'once' for one-time reminders
+   - 'daily' for daily reminders
+   - 'weekly' for weekly reminders
+   - 'monthly' for monthly reminders
+
+Guidelines:
+- Look for time indicators (daily, weekly, every Monday, etc.) to determine frequency
+- Look for notification method preferences (email, text, etc.) to determine type
+- Make the title actionable and specific
+- If no frequency is specified, default to 'once'
+- If no type is specified, default to 'browser'
+- Focus on the core action or event the user wants to be reminded about
+
+Return ONLY a valid JSON object with these exact field names: title, description, type, frequency. Do not include any other text or explanation.`;
 
       const response = await fetch(`${AISuggestionsService['GEMINI_API_URL']}?key=${AISuggestionsService['GEMINI_API_KEY']}`, {
         method: 'POST',
