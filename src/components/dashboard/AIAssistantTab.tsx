@@ -344,9 +344,9 @@ export default function AIAssistantTab({}: AIAssistantTabProps) {
 
         {/* Main Chat Area */}
         <div className="lg:col-span-6">
-          <div className="bg-slate-800/30 backdrop-blur-md border border-slate-700/50 rounded-xl h-full flex flex-col">
+          <div className="bg-slate-800/30 backdrop-blur-md border border-slate-700/50 rounded-xl h-[600px] flex flex-col">
             {/* Chat Header */}
-            <div className="p-4 border-b border-slate-700/50 flex items-center justify-between">
+            <div className="p-4 border-b border-slate-700/50 flex items-center justify-between flex-shrink-0">
               <h3 className="font-semibold text-white">Chat with AI Assistant</h3>
               <button
                 onClick={clearChatHistory}
@@ -359,7 +359,7 @@ export default function AIAssistantTab({}: AIAssistantTabProps) {
             </div>
 
             {/* Chat Messages */}
-            <div className="flex-1 p-4 overflow-y-auto space-y-4 min-h-0">
+            <div className="flex-1 p-4 overflow-y-auto space-y-4 min-h-0" style={{ scrollbarWidth: 'thin', scrollbarColor: '#475569 #1e293b' }}>
               {conversationHistory.length === 0 ? (
                 <div className="text-center text-slate-400 py-12">
                   <Brain className="w-12 h-12 text-slate-500 mx-auto mb-4" />
