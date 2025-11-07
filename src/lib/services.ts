@@ -83,6 +83,19 @@ export interface ChatMessage {
   createdAt: Date;
 }
 
+export interface Reminder {
+  id: string;
+  title: string;
+  description?: string;
+  type: 'email' | 'browser' | 'sms';
+  frequency: 'daily' | 'weekly' | 'monthly' | 'once';
+  enabled: boolean;
+  nextTrigger?: Date;
+  userId: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 // Goals Service
 export class GoalsService {
   static async createGoal(userId: string, goalData: Omit<Goal, 'id' | 'userId' | 'createdAt' | 'updatedAt'>): Promise<string> {
@@ -678,6 +691,141 @@ export class ChatService {
     const sessions = await this.getChatSessions(userId);
     for (const session of sessions) {
       await this.clearChatHistory(session.id);
+    }
+  }
+}
+
+// Reminders Service
+export class RemindersService {
+  static async createReminder(userId: string, reminderData: Omit<Reminder, 'id' | 'userId' | 'createdAt' | 'updatedAt'>): Promise<string> {
+    try {
+      const docRef = await addDoc(collection(db, 'reminders'), {
+        ...reminderData,
+        userId,
+        createdAt: Timestamp.now(),
+        updatedAt: Timestamp.now(),
+      });
+      return docRef.id;
+    } catch (error) {
+      console.error('Error creating reminder:', error);
+      throw error;
+    }
+  }
+
+  static async updateReminder(reminderId: string, updates: Partial<Omit<Reminder, 'id' | 'userId' | 'createdAt'>>): Promise<void> {
+    try {
+      const reminderRef = doc(db, 'reminders', reminderId);
+      await updateDoc(reminderRef, {
+        ...updates,
+        updatedAt: Timestamp.now(),
+      });
+    } catch (error) {
+      console.error('Error updating reminder:', error);
+      throw error;
+    }
+  }
+
+  static async deleteReminder(reminderId: string): Promise<void> {
+    try {
+      await deleteDoc(doc(db, 'reminders', reminderId));
+    } catch (error) {
+      console.error('Error deleting reminder:', error);
+      throw error;
+    }
+  }
+
+  static subscribeToReminders(userId: string, callback: (reminders: Reminder[]) => void): () => void {
+    const q = query(
+      collection(db, 'reminders'),
+      where('userId', '==', userId),
+      orderBy('createdAt', 'desc')
+    );
+
+    return onSnapshot(q, (querySnapshot) => {
+      const reminders: Reminder[] = [];
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        reminders.push({
+          id: doc.id,
+          ...data,
+          nextTrigger: data.nextTrigger?.toDate(),
+          createdAt: data.createdAt?.toDate() || new Date(),
+          updatedAt: data.updatedAt?.toDate() || new Date(),
+        } as Reminder);
+      });
+      callback(reminders);
+    });
+  }
+
+  static async generateReminderFromPrompt(userId: string, prompt: string): Promise<Partial<Reminder> | null> {
+    try {
+      // Check if API key is available
+      if (!AISuggestionsService['GEMINI_API_KEY'] || !AISuggestionsService['apiWorking']) {
+        console.warn('Gemini API not available for reminder generation');
+        return null;
+      }
+
+      const context = `Parse this reminder request and create a structured reminder object. The user wants to create a reminder.
+
+User request: "${prompt}"
+
+Extract the following information:
+- title: A clear, concise title for the reminder
+- description: Optional detailed description
+- type: One of 'email', 'browser', or 'sms' (default to 'browser')
+- frequency: One of 'daily', 'weekly', 'monthly', or 'once' (default to 'once')
+
+Return a JSON object with these fields. Make the title descriptive and actionable.`;
+
+      const response = await fetch(`${AISuggestionsService['GEMINI_API_URL']}?key=${AISuggestionsService['GEMINI_API_KEY']}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          contents: [{
+            parts: [{
+              text: context
+            }]
+          }],
+          generationConfig: {
+            temperature: 0.3,
+            topK: 40,
+            topP: 0.95,
+            maxOutputTokens: 512,
+          }
+        })
+      });
+
+      if (!response.ok) {
+        console.warn('Failed to generate reminder from AI');
+        return null;
+      }
+
+      const data = await response.json();
+      const aiResponse = data.candidates?.[0]?.content?.parts?.[0]?.text;
+
+      if (!aiResponse) {
+        return null;
+      }
+
+      // Try to parse the JSON response
+      try {
+        const parsed = JSON.parse(aiResponse);
+        return {
+          title: parsed.title || 'New Reminder',
+          description: parsed.description,
+          type: parsed.type || 'browser',
+          frequency: parsed.frequency || 'once',
+          enabled: true,
+        };
+      } catch (parseError) {
+        console.warn('Failed to parse AI reminder response');
+        return null;
+      }
+    } catch (error) {
+      console.error('Error generating reminder from prompt:', error);
+      return null;
     }
   }
 }
