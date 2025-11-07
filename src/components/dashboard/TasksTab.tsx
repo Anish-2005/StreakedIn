@@ -1,6 +1,6 @@
 "use client";
 import { motion, AnimatePresence } from 'framer-motion';
-import { CheckSquare, Trash2, Plus, Calendar, Flag, Clock, CheckCircle2, Circle, Filter, Sparkles, X } from 'lucide-react';
+import { CheckSquare, Trash2, Plus, Calendar, Flag, Clock, CheckCircle2, Circle, Filter, Sparkles, X, Edit } from 'lucide-react';
 import { useState, useEffect, useMemo } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { db } from '../../lib/firebase';
@@ -14,6 +14,14 @@ interface Task {
   completed: boolean;
   priority?: string;
   dueDate?: string;
+}
+
+interface AIGeneratedTask {
+  title?: string;
+  description?: string;
+  priority?: string;
+  dueDate?: string;
+  completed?: boolean;
 }
 
 interface TasksTabProps {
@@ -34,8 +42,15 @@ export default function TasksTab({}: TasksTabProps) {
   const [showAIPrompt, setShowAIPrompt] = useState(false);
   const [aiPrompt, setAiPrompt] = useState('');
   const [isGeneratingAI, setIsGeneratingAI] = useState(false);
-  const [aiGeneratedTask, setAiGeneratedTask] = useState<Partial<Task> | null>(null);
+  const [aiGeneratedTask, setAiGeneratedTask] = useState<AIGeneratedTask | null>(null);
   const [showAIConfirmation, setShowAIConfirmation] = useState(false);
+
+  // Edit-related state
+  const [editingTask, setEditingTask] = useState<Task | null>(null);
+  const [editTitle, setEditTitle] = useState('');
+  const [editPriority, setEditPriority] = useState<'low' | 'medium' | 'high'>('medium');
+  const [editDueDate, setEditDueDate] = useState('');
+  const [showEditModal, setShowEditModal] = useState(false);
 
   // Filtered and sorted tasks
   const filteredAndSortedTasks = useMemo(() => {
@@ -114,14 +129,20 @@ export default function TasksTab({}: TasksTabProps) {
 
     setIsAddingTask(true);
     try {
-      await addDoc(collection(db, 'tasks'), {
+      const taskData: any = {
         title: newTaskTitle.trim(),
         completed: false,
         priority: newTaskPriority,
-        dueDate: newTaskDueDate,
         userId: user.uid,
         createdAt: new Date()
-      });
+      };
+
+      // Only include dueDate if it has a value
+      if (newTaskDueDate.trim()) {
+        taskData.dueDate = newTaskDueDate;
+      }
+
+      await addDoc(collection(db, 'tasks'), taskData);
       setNewTaskTitle('');
       setNewTaskPriority('medium');
       setNewTaskDueDate('');
@@ -191,15 +212,21 @@ export default function TasksTab({}: TasksTabProps) {
     if (!aiGeneratedTask || !user) return;
 
     try {
-      await addDoc(collection(db, 'tasks'), {
+      const taskData: any = {
         title: aiGeneratedTask.title || 'New Task',
-        description: aiGeneratedTask.description,
+        description: aiGeneratedTask.description || undefined,
         completed: false,
         priority: aiGeneratedTask.priority || 'medium',
-        dueDate: aiGeneratedTask.dueDate,
         userId: user.uid,
         createdAt: new Date()
-      });
+      };
+
+      // Only include dueDate if it has a value
+      if (aiGeneratedTask.dueDate) {
+        taskData.dueDate = aiGeneratedTask.dueDate;
+      }
+
+      await addDoc(collection(db, 'tasks'), taskData);
       setShowAIConfirmation(false);
       setAiGeneratedTask(null);
     } catch (error) {
@@ -654,7 +681,7 @@ export default function TasksTab({}: TasksTabProps) {
 
               <div className="bg-slate-700/30 rounded-lg p-4 mb-6">
                 <h4 className="text-white font-medium mb-2">{aiGeneratedTask.title}</h4>
-                {aiGeneratedTask.description && (
+                {aiGeneratedTask.description && aiGeneratedTask.description.trim() && (
                   <p className="text-slate-300 text-sm mb-3">{aiGeneratedTask.description}</p>
                 )}
                 <div className="flex items-center gap-4 text-sm">
