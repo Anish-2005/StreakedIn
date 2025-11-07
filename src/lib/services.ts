@@ -735,10 +735,10 @@ export class RemindersService {
   }
 
   static subscribeToReminders(userId: string, callback: (reminders: Reminder[]) => void): () => void {
+    // Use unindexed query to avoid index requirements, sort client-side
     const q = query(
       collection(db, 'reminders'),
-      where('userId', '==', userId),
-      orderBy('createdAt', 'desc')
+      where('userId', '==', userId)
     );
 
     return onSnapshot(q, (querySnapshot) => {
@@ -753,7 +753,15 @@ export class RemindersService {
           updatedAt: data.updatedAt?.toDate() || new Date(),
         } as Reminder);
       });
+
+      // Sort manually on the client side by createdAt descending
+      reminders.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+
       callback(reminders);
+    }, (error) => {
+      console.error('Error in reminders snapshot listener:', error);
+      // If there's an error, try to provide empty array to prevent crashes
+      callback([]);
     });
   }
 
