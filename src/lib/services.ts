@@ -1436,33 +1436,39 @@ export class AISuggestionsService {
   }
   private static readonly GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
   private static apiWorking = true; // Flag to track if API is working - reset to true with working key
+  private static quotaExceeded = false;
+  private static quotaResetTime: number | null = null;
+  private static cachedSuggestions: { [userId: string]: { suggestions: string[], timestamp: number } } = {};
+  private static readonly CACHE_DURATION = 24 * 60 * 60 * 1000; // 24 hours
 
   static resetApiStatus(): void {
     this.apiWorking = true;
+    this.quotaExceeded = false;
+    this.quotaResetTime = null;
     console.log('Gemini API status reset - will attempt API calls again');
   }
 
   static async generateGoalSuggestions(userId: string): Promise<string[]> {
-    try {
-      // Check if API key is available and API is working
-      if (!this.GEMINI_API_KEY || !this.apiWorking) {
-        console.warn('Gemini API key not found or API not working, using fallback suggestions');
-        return [
-          `Complete Website Development by Monday Deadline
-Learning Modules
-1. Plan Website Structure and Content (Today)
-2. Design Mockups (Tomorrow)
-3. Develop Core Pages (Day 3)
-4. Add Interactive Features (Day 4)
-5. Test and Deploy (Monday)`,
-          'Learn a new professional skill this month',
-          'Expand your professional network by 20 connections',
-          'Complete a certification in your field',
-          'Start a personal project to build your portfolio',
-          'Read one industry-related book per week'
-        ];
-      }
+    // Check if quota is exceeded and not yet reset
+    if (this.quotaExceeded && this.quotaResetTime && Date.now() < this.quotaResetTime) {
+      console.warn('Gemini API quota exceeded, using cached or fallback suggestions');
+      return this.getFallbackSuggestions();
+    }
 
+    // Check cache first
+    const cached = this.cachedSuggestions[userId];
+    if (cached && (Date.now() - cached.timestamp) < this.CACHE_DURATION) {
+      console.log('Using cached AI suggestions');
+      return cached.suggestions;
+    }
+
+    // Check if API key is available and API is working
+    if (!this.GEMINI_API_KEY || !this.apiWorking) {
+      console.warn('Gemini API key not found or API not working, using fallback suggestions');
+      return this.getFallbackSuggestions();
+    }
+
+    try {
       console.log('Gemini API key found, length:', this.GEMINI_API_KEY.length);
 
       // Get user's current goals and tasks to generate relevant suggestions
@@ -1538,16 +1544,46 @@ Use this exact multi-line format for complex goals. For simpler goals, just prov
 
       if (!response.ok) {
         const errorText = await response.text();
-        console.error('Gemini API error details:', response.status, errorText);
 
-        // If it's a 404 or authentication error, the API key might be invalid
+        // Handle quota exceeded error specifically
+        if (response.status === 429) {
+          console.warn('Gemini API quota exceeded');
+          this.quotaExceeded = true;
+
+          // Try to extract retry delay from error response
+          try {
+            const errorData = JSON.parse(errorText);
+            const retryDelay = errorData.error?.details?.find((d: any) => d['@type'] === 'type.googleapis.com/google.rpc.RetryInfo')?.retryDelay;
+            if (retryDelay) {
+              const delayMs = parseInt(retryDelay.seconds || '0') * 1000 + parseInt(retryDelay.nanos || '0') / 1000000;
+              this.quotaResetTime = Date.now() + delayMs;
+              console.log(`Quota will reset in ${delayMs}ms`);
+            } else {
+              // Default to 1 hour if no retry info
+              this.quotaResetTime = Date.now() + (60 * 60 * 1000);
+            }
+          } catch (parseError) {
+            // Default to 1 hour if parsing fails
+            this.quotaResetTime = Date.now() + (60 * 60 * 1000);
+          }
+
+          return this.getFallbackSuggestions();
+        }
+
+        // Handle other API errors (don't log them as errors since they're expected)
         if (response.status === 404 || response.status === 403 || response.status === 401) {
           console.warn('Gemini API key appears to be invalid or not properly configured');
+        } else {
+          console.warn('Gemini API error:', response.status, errorText);
         }
 
         this.apiWorking = false; // Disable API calls if it fails
-        throw new Error(`Gemini API error: ${response.status} - ${errorText}`);
+        return this.getFallbackSuggestions();
       }
+
+      // Reset quota exceeded flag on successful response
+      this.quotaExceeded = false;
+      this.quotaResetTime = null;
 
       const data = await response.json();
       console.log('Gemini API response data:', data);
@@ -1556,13 +1592,7 @@ Use this exact multi-line format for complex goals. For simpler goals, just prov
 
       if (!aiResponse) {
         console.warn('No valid response from Gemini API, using fallback');
-        return [
-          'Learn a new professional skill this month',
-          'Expand your professional network by 20 connections',
-          'Complete a certification in your field',
-          'Start a personal project to build your portfolio',
-          'Read one industry-related book per week'
-        ];
+        return this.getFallbackSuggestions();
       }
 
       // Parse the numbered list into an array
@@ -1571,53 +1601,51 @@ Use this exact multi-line format for complex goals. For simpler goals, just prov
         .filter((line: string) => line.trim().match(/^\d+\./))
         .map((line: string) => line.replace(/^\d+\.\s*/, '').trim());
 
-      return suggestions.length > 0 ? suggestions : [
-        `Complete Website Development by Monday Deadline
-Learning Modules
-1. Plan Website Structure and Content (Today)
-2. Design Mockups (Tomorrow)
-3. Develop Core Pages (Day 3)
-4. Add Interactive Features (Day 4)
-5. Test and Deploy (Monday)`,
-        'Learn a new professional skill this month',
-        'Expand your professional network by 20 connections',
-        'Complete a certification in your field',
-        'Start a personal project to build your portfolio',
-        'Read one industry-related book per week'
-      ];
+      const finalSuggestions = suggestions.length > 0 ? suggestions : this.getFallbackSuggestions();
+
+      // Cache the results
+      this.cachedSuggestions[userId] = {
+        suggestions: finalSuggestions,
+        timestamp: Date.now()
+      };
+
+      return finalSuggestions;
     } catch (error) {
-      console.error('Error generating AI suggestions:', error);
+      console.warn('Error generating AI suggestions:', error);
       this.apiWorking = false; // Disable API calls on any error
-      return [
-        `Complete Website Development by Monday Deadline
-Learning Modules
-1. Plan Website Structure and Content (Today)
-2. Design Mockups (Tomorrow)
-3. Develop Core Pages (Day 3)
-4. Add Interactive Features (Day 4)
-5. Test and Deploy (Monday)`,
-        'Learn a new professional skill this month',
-        'Expand your professional network',
-        'Complete a certification in your field',
-        'Start a personal project',
-        'Read industry-related books'
-      ];
+      return this.getFallbackSuggestions();
     }
   }
 
+  private static getFallbackSuggestions(): string[] {
+    return [
+      `Complete Website Development by Monday Deadline
+Learning Modules
+1. Plan Website Structure and Content (Today)
+2. Design Mockups (Tomorrow)
+3. Develop Core Pages (Day 3)
+4. Add Interactive Features (Day 4)
+5. Test and Deploy (Monday)`,
+      'Learn a new professional skill this month',
+      'Expand your professional network by 20 connections',
+      'Complete a certification in your field',
+      'Start a personal project to build your portfolio',
+      'Read one industry-related book per week'
+    ];
+  }
+
   static async generateAIResponse(userId: string, prompt: string, conversationHistory?: Array<{role: 'user' | 'assistant', content: string}>): Promise<string> {
+    // Check if quota is exceeded and not yet reset
+    if (this.quotaExceeded && this.quotaResetTime && Date.now() < this.quotaResetTime) {
+      console.warn('Gemini API quota exceeded, using fallback response');
+      return this.getFallbackResponse();
+    }
+
     try {
       // Check if API key is available and API is working
       if (!this.GEMINI_API_KEY || !this.apiWorking) {
         console.warn('Gemini API key not found or API not working, using fallback response');
-        return `I apologize, but I'm having trouble connecting to my AI services right now. Based on your current goals and progress, here are some general recommendations:
-
-1. **Review your active goals**: Make sure they're still aligned with your current priorities
-2. **Break down large tasks**: Divide complex goals into smaller, manageable steps
-3. **Set daily priorities**: Focus on 3-5 key tasks each day to maintain momentum
-4. **Track your progress**: Regular check-ins help maintain motivation and identify areas for improvement
-
-Would you like me to help you create specific tasks or adjust your current goals?`;
+        return this.getFallbackResponse();
       }
 
       // Get user's current data for context
@@ -1688,16 +1716,46 @@ Provide a helpful, actionable response focused on productivity, goal achievement
 
       if (!response.ok) {
         const errorText = await response.text();
-        console.error('Gemini API error details:', response.status, errorText);
 
-        // If it's a 404 or authentication error, the API key might be invalid
+        // Handle quota exceeded error specifically
+        if (response.status === 429) {
+          console.warn('Gemini API quota exceeded');
+          this.quotaExceeded = true;
+
+          // Try to extract retry delay from error response
+          try {
+            const errorData = JSON.parse(errorText);
+            const retryDelay = errorData.error?.details?.find((d: any) => d['@type'] === 'type.googleapis.com/google.rpc.RetryInfo')?.retryDelay;
+            if (retryDelay) {
+              const delayMs = parseInt(retryDelay.seconds || '0') * 1000 + parseInt(retryDelay.nanos || '0') / 1000000;
+              this.quotaResetTime = Date.now() + delayMs;
+              console.log(`Quota will reset in ${delayMs}ms`);
+            } else {
+              // Default to 1 hour if no retry info
+              this.quotaResetTime = Date.now() + (60 * 60 * 1000);
+            }
+          } catch (parseError) {
+            // Default to 1 hour if parsing fails
+            this.quotaResetTime = Date.now() + (60 * 60 * 1000);
+          }
+
+          return this.getFallbackResponse();
+        }
+
+        // Handle other API errors (don't log them as errors since they're expected)
         if (response.status === 404 || response.status === 403 || response.status === 401) {
           console.warn('Gemini API key appears to be invalid or not properly configured');
+        } else {
+          console.warn('Gemini API error:', response.status, errorText);
         }
 
         this.apiWorking = false; // Disable API calls if it fails
-        throw new Error(`Gemini API error: ${response.status} - ${errorText}`);
+        return this.getFallbackResponse();
       }
+
+      // Reset quota exceeded flag on successful response
+      this.quotaExceeded = false;
+      this.quotaResetTime = null;
 
       const data = await response.json();
       console.log('Gemini API response data:', data);
@@ -1706,21 +1764,19 @@ Provide a helpful, actionable response focused on productivity, goal achievement
 
       if (!aiResponse) {
         console.warn('No valid response from Gemini API, using fallback');
-        return `I apologize, but I'm having trouble connecting to my AI services right now. Based on your current goals and progress, here are some general recommendations:
-
-1. **Review your active goals**: Make sure they're still aligned with your current priorities
-2. **Break down large tasks**: Divide complex goals into smaller, manageable steps
-3. **Set daily priorities**: Focus on 3-5 key tasks each day to maintain momentum
-4. **Track your progress**: Regular check-ins help maintain motivation and identify areas for improvement
-
-Would you like me to help you create specific tasks or adjust your current goals?`;
+        return this.getFallbackResponse();
       }
 
       return aiResponse;
     } catch (error) {
-      console.error('Error generating AI response:', error);
+      console.warn('Error generating AI response:', error);
       this.apiWorking = false; // Disable API calls on any error
-      return `I apologize, but I'm having trouble connecting to my AI services right now. Based on your current goals and progress, here are some general recommendations:
+      return this.getFallbackResponse();
+    }
+  }
+
+  private static getFallbackResponse(): string {
+    return `I apologize, but I'm having trouble connecting to my AI services right now. Based on your current goals and progress, here are some general recommendations:
 
 1. **Review your active goals**: Make sure they're still aligned with your current priorities
 2. **Break down large tasks**: Divide complex goals into smaller, manageable steps
@@ -1728,6 +1784,5 @@ Would you like me to help you create specific tasks or adjust your current goals
 4. **Track your progress**: Regular check-ins help maintain motivation and identify areas for improvement
 
 Would you like me to help you create specific tasks or adjust your current goals?`;
-    }
   }
 }
