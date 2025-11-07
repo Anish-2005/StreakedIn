@@ -426,18 +426,42 @@ export class ChatService {
 
   static async getChatSessions(userId: string): Promise<ChatSession[]> {
     try {
-      const q = query(
-        collection(db, 'chatSessions'),
-        where('userId', '==', userId),
-        orderBy('updatedAt', 'desc')
-      );
-      const querySnapshot = await getDocs(q);
-      return querySnapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data(),
-        createdAt: doc.data().createdAt?.toDate() || new Date(),
-        updatedAt: doc.data().updatedAt?.toDate() || new Date(),
-      })) as ChatSession[];
+      // First try with the indexed query
+      try {
+        const q = query(
+          collection(db, 'chatSessions'),
+          where('userId', '==', userId),
+          orderBy('updatedAt', 'desc')
+        );
+        const querySnapshot = await getDocs(q);
+        return querySnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data(),
+          createdAt: doc.data().createdAt?.toDate() || new Date(),
+          updatedAt: doc.data().updatedAt?.toDate() || new Date(),
+        })) as ChatSession[];
+      } catch (indexError) {
+        console.warn('Composite index not ready for chatSessions, falling back to unindexed query');
+        // Fallback: get all sessions for user without ordering
+        const q = query(
+          collection(db, 'chatSessions'),
+          where('userId', '==', userId)
+        );
+        const querySnapshot = await getDocs(q);
+
+        // Sort manually on the client side
+        const sessions = querySnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data(),
+          createdAt: doc.data().createdAt?.toDate() || new Date(),
+          updatedAt: doc.data().updatedAt?.toDate() || new Date(),
+        })) as ChatSession[];
+
+        // Sort by updatedAt descending
+        sessions.sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime());
+
+        return sessions;
+      }
     } catch (error) {
       console.error('Error getting chat sessions:', error);
       return [];
