@@ -24,7 +24,7 @@ export default function UserProfile({ user, userProfile, isCollapsed }: UserProf
   };
 
   return (
-    <div className={`relative ${isCollapsed ? 'p-2' : 'p-6'} border-t border-slate-700/60`}>
+    <div className={`relative ${isCollapsed ? 'p-2' : 'p-4'} border-t border-slate-700/60`}>
       {/* Background gradient */}
       <div className="absolute inset-0 bg-gradient-to-t from-slate-800/50 to-transparent rounded-t-xl"></div>
 

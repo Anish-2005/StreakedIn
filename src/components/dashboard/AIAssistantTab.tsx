@@ -13,6 +13,7 @@ export default function AIAssistantTab({}: AIAssistantTabProps) {
   const [aiResponse, setAiResponse] = useState<string>('');
   const [isAiLoading, setIsAiLoading] = useState<boolean>(false);
   const [isSpeaking, setIsSpeaking] = useState<boolean>(false);
+  const [lastUserMessage, setLastUserMessage] = useState<string>('');
 
   useEffect(() => {
     return () => {
@@ -78,9 +79,13 @@ export default function AIAssistantTab({}: AIAssistantTabProps) {
   const handleAiPrompt = async () => {
     if (!aiPrompt.trim() || !user) return;
 
+    const messageToSend = aiPrompt.trim();
+    setLastUserMessage(messageToSend); // Store the message for display in chat
+    setAiPrompt(''); // Clear the input immediately
+
     setIsAiLoading(true);
     try {
-      const response = await AISuggestionsService.generateAIResponse(user.uid, aiPrompt);
+      const response = await AISuggestionsService.generateAIResponse(user.uid, messageToSend);
       setAiResponse(response);
     } catch (error) {
       console.error('Error getting AI response:', error);
@@ -131,7 +136,7 @@ export default function AIAssistantTab({}: AIAssistantTabProps) {
                 {/* User Message */}
                 <div className="flex justify-end">
                   <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-2xl rounded-br-none px-4 py-2 max-w-xs">
-                    {aiPrompt}
+                    {lastUserMessage}
                   </div>
                 </div>
 

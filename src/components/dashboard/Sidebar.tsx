@@ -57,7 +57,7 @@ export default function Sidebar({ activeTab, setActiveTab, isSidebarOpen, setIsS
       <div className="absolute right-0 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-blue-400/30 to-transparent"></div>
 
       {/* Content Container */}
-      <div className="relative h-full flex flex-col">
+      <div className="relative h-full flex flex-col overflow-hidden">
         {/* Enhanced Logo Section */}
         <div className={`flex flex-col items-center ${isSidebarOpen ? 'h-20 px-6 py-3' : 'h-20 px-2 py-3'} border-b border-slate-700/60 relative`}>
           {/* Logo and title row */}
@@ -83,11 +83,21 @@ export default function Sidebar({ activeTab, setActiveTab, isSidebarOpen, setIsS
         </div>
 
         {/* Navigation */}
-        <Navigation
-          activeTab={activeTab}
-          onTabChange={setActiveTab}
-          isCollapsed={!isSidebarOpen}
-        />
+        {isSidebarOpen ? (
+          <div className="flex-1 overflow-y-auto">
+            <Navigation
+              activeTab={activeTab}
+              onTabChange={setActiveTab}
+              isCollapsed={!isSidebarOpen}
+            />
+          </div>
+        ) : (
+          <Navigation
+            activeTab={activeTab}
+            onTabChange={setActiveTab}
+            isCollapsed={!isSidebarOpen}
+          />
+        )}
 
         {/* Sidebar Toggle Button */}
         <div className={`flex ${isSidebarOpen ? 'justify-end px-6 py-4' : 'justify-center px-2 py-3'}`}>
@@ -102,12 +112,14 @@ export default function Sidebar({ activeTab, setActiveTab, isSidebarOpen, setIsS
           </button>
         </div>
 
-        {/* User Profile */}
-        <UserProfile
-          user={user}
-          userProfile={userProfile}
-          isCollapsed={!isSidebarOpen}
-        />
+        {/* User Profile - Fixed at bottom */}
+        <div className="flex-shrink-0">
+          <UserProfile
+            user={user}
+            userProfile={userProfile}
+            isCollapsed={!isSidebarOpen}
+          />
+        </div>
       </div>
     </div>
   );
