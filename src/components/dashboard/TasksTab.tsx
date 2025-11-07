@@ -15,6 +15,7 @@ interface Task {
   completed: boolean;
   priority?: string;
   dueDate?: string;
+  createdAt?: string;
 }
 
 interface AIGeneratedTask {
@@ -614,6 +615,14 @@ export default function TasksTab({}: TasksTabProps) {
                       )}
 
                       <div className="flex items-center gap-4 text-sm">
+                        {/* Created Date */}
+                        {task.createdAt && (
+                          <div className="flex items-center gap-1 text-slate-400">
+                            <Calendar className="w-3 h-3" />
+                            <span>Added {new Date(task.createdAt).toLocaleDateString()}</span>
+                          </div>
+                        )}
+
                         {/* Due Date */}
                         {dueDateInfo && (
                           <div className={`flex items-center gap-1 ${

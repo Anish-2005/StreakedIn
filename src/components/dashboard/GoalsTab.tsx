@@ -36,6 +36,7 @@ export default function GoalsTab({}: GoalsTabProps) {
   const [isGeneratingAI, setIsGeneratingAI] = useState(false);
   const [aiGeneratedGoal, setAiGeneratedGoal] = useState<Partial<Goal> | null>(null);
   const [showAIConfirmation, setShowAIConfirmation] = useState(false);
+  const [isGeneratingSuggestions, setIsGeneratingSuggestions] = useState(false);
 
   const nextSuggestion = () => {
     setCurrentSuggestionIndex((prev) => (prev + 1) % aiSuggestions.length);
@@ -56,8 +57,7 @@ export default function GoalsTab({}: GoalsTabProps) {
       setLoading(false);
     });
 
-    // Load AI suggestions
-    AISuggestionsService.generateGoalSuggestions(user.uid).then(setAiSuggestions);
+    // AI suggestions will be generated manually by user
 
     return unsubscribe;
   }, [user]);
@@ -171,6 +171,20 @@ export default function GoalsTab({}: GoalsTabProps) {
       setAiPrompt('');
     } finally {
       setIsGeneratingAI(false);
+    }
+  };
+
+  const handleGenerateSuggestions = async () => {
+    if (!user || isGeneratingSuggestions) return;
+
+    setIsGeneratingSuggestions(true);
+    try {
+      const suggestions = await AISuggestionsService.generateGoalSuggestions(user.uid);
+      setAiSuggestions(suggestions);
+    } catch (error) {
+      console.error('Error generating suggestions:', error);
+    } finally {
+      setIsGeneratingSuggestions(false);
     }
   };
 
@@ -464,8 +478,24 @@ export default function GoalsTab({}: GoalsTabProps) {
               {aiSuggestions.length === 0 ? (
                 <div className="text-center py-12 bg-slate-800/30 rounded-lg border border-slate-700/40">
                   <Brain className="w-12 h-12 mx-auto mb-4 text-slate-400" />
-                  <p className="text-slate-400 text-sm">No suggestions available</p>
-                  <p className="text-slate-500 text-xs mt-1">Generate suggestions to get started</p>
+                  <p className="text-slate-400 text-sm mb-4">Ready to get personalized goal suggestions?</p>
+                  <Button
+                    onClick={handleGenerateSuggestions}
+                    disabled={isGeneratingSuggestions}
+                    className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-6 py-2"
+                  >
+                    {isGeneratingSuggestions ? (
+                      <div className="flex items-center gap-2">
+                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                        Generating...
+                      </div>
+                    ) : (
+                      <div className="flex items-center gap-2">
+                        <Sparkles className="w-4 h-4" />
+                        Generate AI Suggestions
+                      </div>
+                    )}
+                  </Button>
                 </div>
               ) : (
                 <div className="relative">
@@ -602,13 +632,21 @@ export default function GoalsTab({}: GoalsTabProps) {
             </div>
 
             <Button
-              onClick={() => AISuggestionsService.generateGoalSuggestions(user?.uid || '').then(setAiSuggestions)}
+              onClick={handleGenerateSuggestions}
+              disabled={isGeneratingSuggestions}
               className="w-full bg-gradient-to-r from-purple-500/10 to-pink-500/10 hover:from-purple-500/20 hover:to-pink-500/20 border border-purple-500/30 hover:border-purple-500/50 text-purple-300 hover:text-purple-200 transition-all duration-200"
             >
-              <div className="flex items-center justify-center gap-2">
-                <Sparkles className="w-4 h-4" />
-                <span className="font-medium">Generate More Suggestions</span>
-              </div>
+              {isGeneratingSuggestions ? (
+                <div className="flex items-center justify-center gap-2">
+                  <div className="w-4 h-4 border-2 border-purple-300 border-t-transparent rounded-full animate-spin" />
+                  <span className="font-medium">Generating...</span>
+                </div>
+              ) : (
+                <div className="flex items-center justify-center gap-2">
+                  <Sparkles className="w-4 h-4" />
+                  <span className="font-medium">Generate More Suggestions</span>
+                </div>
+              )}
             </Button>
           </motion.div>
         </div>

@@ -89,7 +89,7 @@ export default function OverviewTab({ setActiveTab }: OverviewTabProps) {
         <StatsCard
           title="Tasks Due"
           value={loading ? "..." : `${getTasksDueToday}`}
-          change={`${getOverdueTasks} overdue`}
+          change={`${getPendingTasks} pending`}
           icon={<Clock className="w-6 h-6" />}
           color="text-orange-400"
         />
