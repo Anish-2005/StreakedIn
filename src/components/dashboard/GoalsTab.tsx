@@ -631,23 +631,25 @@ export default function GoalsTab({}: GoalsTabProps) {
               )}
             </div>
 
-            <Button
-              onClick={handleGenerateSuggestions}
-              disabled={isGeneratingSuggestions}
-              className="w-full bg-gradient-to-r from-purple-500/10 to-pink-500/10 hover:from-purple-500/20 hover:to-pink-500/20 border border-purple-500/30 hover:border-purple-500/50 text-purple-300 hover:text-purple-200 transition-all duration-200"
-            >
-              {isGeneratingSuggestions ? (
-                <div className="flex items-center justify-center gap-2">
-                  <div className="w-4 h-4 border-2 border-purple-300 border-t-transparent rounded-full animate-spin" />
-                  <span className="font-medium">Generating...</span>
-                </div>
-              ) : (
-                <div className="flex items-center justify-center gap-2">
-                  <Sparkles className="w-4 h-4" />
-                  <span className="font-medium">Generate More Suggestions</span>
-                </div>
-              )}
-            </Button>
+            {aiSuggestions.length > 0 && (
+              <Button
+                onClick={handleGenerateSuggestions}
+                disabled={isGeneratingSuggestions}
+                className="w-full bg-gradient-to-r from-purple-500/10 to-pink-500/10 hover:from-purple-500/20 hover:to-pink-500/20 border border-purple-500/30 hover:border-purple-500/50 text-purple-300 hover:text-purple-200 transition-all duration-200"
+              >
+                {isGeneratingSuggestions ? (
+                  <div className="flex items-center justify-center gap-2">
+                    <div className="w-4 h-4 border-2 border-purple-300 border-t-transparent rounded-full animate-spin" />
+                    <span className="font-medium">Generating...</span>
+                  </div>
+                ) : (
+                  <div className="flex items-center justify-center gap-2">
+                    <Sparkles className="w-4 h-4" />
+                    <span className="font-medium">Generate More Suggestions</span>
+                  </div>
+                )}
+              </Button>
+            )}
           </motion.div>
         </div>
       </div>

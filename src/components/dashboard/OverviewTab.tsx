@@ -102,140 +102,185 @@ export default function OverviewTab({ setActiveTab }: OverviewTabProps) {
         />
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-        {/* Goals Progress */}
-        <Card className="lg:col-span-2">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 sm:mb-6 gap-2 sm:gap-0">
-            <h2 className="text-base sm:text-lg font-semibold text-white">Goals Progress</h2>
-            <Button variant="ghost" size="sm" icon={<Plus className="w-4 h-4" />} className="self-start sm:self-auto">
+      <div className="grid grid-cols-1 xl:grid-cols-12 gap-6">
+        {/* Goals Progress - Takes up 6 columns on xl screens */}
+        <Card className="xl:col-span-6">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl font-semibold text-white">Goals Progress</h2>
+            <Button
+              variant="primary"
+              size="sm"
+              icon={<Plus className="w-4 h-4" />}
+              onClick={() => setActiveTab('goals')}
+            >
               Add Goal
             </Button>
           </div>
-          <div className="space-y-3 sm:space-y-4">
+          <div className="space-y-4">
             {goals.length === 0 ? (
-              <div className="text-center py-6 sm:py-8 text-slate-400">
-                <Target className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-3 sm:mb-4 opacity-50" />
-                <p className="text-sm sm:text-base">No goals yet. Create your first goal!</p>
+              <div className="text-center py-12">
+                <Target className="w-16 h-16 mx-auto mb-4 opacity-50 text-slate-400" />
+                <p className="text-slate-400 mb-4">No goals yet. Create your first goal!</p>
+                <Button
+                  variant="primary"
+                  icon={<Plus className="w-4 h-4" />}
+                  onClick={() => setActiveTab('goals')}
+                >
+                  Create Your First Goal
+                </Button>
               </div>
             ) : (
-              goals.slice(0, 3).map((goal) => (
-                <div key={goal.id} className="border border-slate-700/50 rounded-lg p-3 sm:p-4">
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-2 gap-1 sm:gap-2">
-                    <div className="flex flex-col sm:flex-row sm:items-center space-y-1 sm:space-y-0 sm:space-x-3 min-w-0 flex-1">
-                      <h3 className="font-semibold text-white text-sm sm:text-base truncate">{goal.title}</h3>
+              goals.slice(0, 4).map((goal) => (
+                <div key={goal.id} className="bg-slate-800/40 border border-slate-700/50 rounded-xl p-5 hover:border-slate-600/70 transition-colors">
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-semibold text-white text-lg mb-1 truncate">{goal.title}</h3>
+                      <div className="flex items-center gap-4 text-sm text-slate-400">
+                        <span className="flex items-center gap-1">
+                          <Clock className="w-3 h-3" />
+                          Due {goal.deadline ? new Date(goal.deadline).toLocaleDateString() : 'No deadline'}
+                        </span>
+                        <span className="px-2 py-1 bg-slate-700/50 rounded-full text-xs">
+                          {goal.category}
+                        </span>
+                      </div>
                     </div>
-                    <span className="text-xs sm:text-sm text-slate-400 self-end sm:self-auto">
-                      Due {new Date(goal.deadline).toLocaleDateString()}
-                    </span>
+                    <div className="text-right ml-4">
+                      <div className="text-2xl font-bold text-white">{goal.progress}%</div>
+                      <div className="text-xs text-slate-400">Complete</div>
+                    </div>
                   </div>
-                  <div className="flex items-center space-x-3 sm:space-x-4">
-                    <ProgressBar value={goal.progress} className="flex-1" />
-                    <span className="text-xs sm:text-sm font-semibold text-slate-300 whitespace-nowrap">{goal.progress}%</span>
-                  </div>
+                  <ProgressBar value={goal.progress} className="w-full h-2" />
+                  {goal.description && (
+                    <p className="text-slate-300 text-sm mt-3 line-clamp-2">{goal.description}</p>
+                  )}
                 </div>
               ))
             )}
-          </div>
-        </Card>
-
-        {/* Goals Achieved */}
-        <Card>
-          <h2 className="text-base sm:text-lg font-semibold text-white mb-4 sm:mb-6">Goals Achieved</h2>
-          <div className="space-y-3 sm:space-y-4">
-            {goals.filter(goal => goal.progress === 100).length === 0 ? (
-              <div className="text-center py-6 sm:py-8 text-slate-400">
-                <CheckCircle className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-3 sm:mb-4 opacity-50" />
-                <p className="text-sm sm:text-base">No goals achieved yet. Keep pushing!</p>
-              </div>
-            ) : (
-              goals
-                .filter(goal => goal.progress === 100)
-                .sort((a, b) => new Date(b.updatedAt || b.createdAt).getTime() - new Date(a.updatedAt || a.createdAt).getTime())
-                .slice(0, 3)
-                .map((goal) => (
-                  <div key={goal.id} className="border border-green-500/30 bg-green-500/5 rounded-lg p-3 sm:p-4">
-                    <div className="flex items-center space-x-2 sm:space-x-3 mb-2">
-                      <div className="w-7 h-7 sm:w-8 sm:h-8 bg-green-500/20 rounded-full flex items-center justify-center flex-shrink-0">
-                        <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4 text-green-400" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <h3 className="font-semibold text-white text-sm sm:text-base truncate">{goal.title}</h3>
-                        <p className="text-xs sm:text-sm text-green-400">Completed!</p>
-                      </div>
-                    </div>
-                    <div className="text-xs text-slate-400 ml-9 sm:ml-11">
-                      Achieved on {new Date(goal.updatedAt || goal.createdAt).toLocaleDateString()}
-                    </div>
-                  </div>
-                ))
-            )}
-            {goals.filter(goal => goal.progress === 100).length > 3 && (
+            {goals.length > 4 && (
               <Button
                 variant="ghost"
-                size="sm"
-                className="w-full mt-2 text-sm"
+                className="w-full mt-4"
                 onClick={() => setActiveTab('goals')}
               >
-                View All Achieved Goals
+                View All Goals ({goals.length})
               </Button>
             )}
           </div>
         </Card>
 
-        {/* Quick Actions */}
-        <Card>
-          <h2 className="text-base sm:text-lg font-semibold text-white mb-4 sm:mb-6">Quick Actions</h2>
-          <div className="space-y-2 sm:space-y-3">
-            {[
-              { icon: <Plus className="w-4 h-4 sm:w-5 sm:h-5" />, label: 'Create New Goal', action: () => setActiveTab('goals') },
-              { icon: <Clock className="w-4 h-4 sm:w-5 sm:h-5" />, label: 'Set Reminder', action: () => setActiveTab('reminders') },
-              { icon: <Brain className="w-4 h-4 sm:w-5 sm:h-5" />, label: 'AI Suggestions', action: () => setActiveTab('ai-assistant') },
-              { icon: <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5" />, label: 'View Analytics', action: () => setActiveTab('analytics') }
-            ].map((action, index) => (
-              <Button
-                key={index}
-                variant="outline"
-                className="w-full justify-start text-sm sm:text-base"
-                icon={action.icon}
-                onClick={action.action}
-              >
-                {action.label}
-              </Button>
-            ))}
-          </div>
+        {/* Right Column - Takes up 6 columns on xl screens */}
+        <div className="xl:col-span-6 space-y-6">
+          {/* Goals Achieved */}
+          <Card>
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-xl font-semibold text-white">Goals Achieved</h2>
+              <div className="flex items-center gap-2">
+                <CheckCircle className="w-5 h-5 text-green-400" />
+                <span className="text-green-400 font-semibold">
+                  {goals.filter(goal => goal.progress === 100).length}
+                </span>
+              </div>
+            </div>
+            <div className="space-y-4">
+              {goals.filter(goal => goal.progress === 100).length === 0 ? (
+                <div className="text-center py-8">
+                  <CheckCircle className="w-12 h-12 mx-auto mb-4 opacity-50 text-slate-400" />
+                  <p className="text-slate-400">No goals achieved yet. Keep pushing!</p>
+                </div>
+              ) : (
+                goals
+                  .filter(goal => goal.progress === 100)
+                  .sort((a, b) => new Date(b.updatedAt || b.createdAt).getTime() - new Date(a.updatedAt || a.createdAt).getTime())
+                  .slice(0, 3)
+                  .map((goal) => (
+                    <div key={goal.id} className="bg-green-500/10 border border-green-500/30 rounded-xl p-4">
+                      <div className="flex items-center gap-3 mb-2">
+                        <div className="w-10 h-10 bg-green-500/20 rounded-full flex items-center justify-center">
+                          <CheckCircle className="w-5 h-5 text-green-400" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <h3 className="font-semibold text-white truncate">{goal.title}</h3>
+                          <p className="text-sm text-green-400">Completed!</p>
+                        </div>
+                      </div>
+                      <div className="text-xs text-slate-400 ml-13">
+                        Achieved on {new Date(goal.updatedAt || goal.createdAt).toLocaleDateString()}
+                      </div>
+                    </div>
+                  ))
+              )}
+              {goals.filter(goal => goal.progress === 100).length > 3 && (
+                <Button
+                  variant="ghost"
+                  className="w-full"
+                  onClick={() => setActiveTab('goals')}
+                >
+                  View All Achieved Goals
+                </Button>
+              )}
+            </div>
+          </Card>
 
-          {/* AI Suggestions Preview */}
-          {aiSuggestions.length > 0 && (
-            <div className="mt-4 sm:mt-6">
-              <h3 className="text-sm sm:text-lg font-semibold text-white mb-2 sm:mb-3">AI Suggestions</h3>
-              <div className="space-y-2">
-                {aiSuggestions.slice(0, 2).map((suggestion, index) => (
-                  <div key={index} className="text-xs sm:text-sm text-slate-300 bg-slate-800/30 rounded-lg p-2 sm:p-3">
-                    {suggestion}
-                  </div>
-                ))}
+          {/* Quick Actions */}
+          <Card>
+            <h2 className="text-xl font-semibold text-white mb-6">Quick Actions</h2>
+            <div className="grid grid-cols-2 gap-3 mb-6">
+              {[
+                { icon: <Plus className="w-5 h-5" />, label: ' Create New Goal', action: () => setActiveTab('goals'), color: 'bg-blue-500 hover:bg-blue-600' },
+                { icon: <Clock className="w-5 h-5" />, label: ' Set Reminder', action: () => setActiveTab('reminders'), color: 'bg-orange-500 hover:bg-orange-600' },
+                { icon: <Brain className="w-5 h-5" />, label: ' AI Suggestions', action: () => setActiveTab('ai-assistant'), color: 'bg-purple-500 hover:bg-purple-600' },
+                { icon: <TrendingUp className="w-5 h-5" />, label: ' View Analytics', action: () => setActiveTab('analytics'), color: 'bg-green-500 hover:bg-green-600' }
+              ].map((action, index) => (
+                <Button
+                  key={index}
+                  className={`w-full h-20 flex gap-2 items-center justify-center ${action.color} text-white border-0`}
+                  onClick={action.action}
+                >
+                  
+                  <span className="text-sm font-medium flex gap-2">{action.icon} {action.label}</span>
+                </Button>
+              ))}
+            </div>
+
+            {/* AI Suggestions Preview */}
+            <div className="border-t border-slate-700/50 pt-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold text-white">AI Suggestions</h3>
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="w-full mt-2 text-sm"
                   onClick={() => setActiveTab('ai-assistant')}
                 >
-                  View All Suggestions
+                  View All
                 </Button>
               </div>
-            </div>
-          )}
 
-          {/* AI Service Unavailable Message */}
-          {aiSuggestions.length === 0 && (
-            <div className="mt-4 sm:mt-6">
-              <div className="text-xs sm:text-sm text-slate-400 bg-slate-800/20 rounded-lg p-2 sm:p-3">
-                <Brain className="w-4 h-4 inline mr-2" />
-                AI suggestions are currently unavailable. Using fallback recommendations.
-              </div>
+              {aiSuggestions.length > 0 ? (
+                <div className="space-y-3">
+                  {aiSuggestions.slice(0, 2).map((suggestion, index) => (
+                    <div key={index} className="bg-slate-800/50 border border-slate-700/50 rounded-lg p-4">
+                      <div className="flex items-start gap-3">
+                        <Brain className="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0" />
+                        <p className="text-slate-300 text-sm leading-relaxed">{suggestion}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="bg-slate-800/30 border border-slate-700/40 rounded-lg p-4">
+                  <div className="flex items-center gap-3">
+                    <Brain className="w-5 h-5 text-slate-400" />
+                    <div>
+                      <p className="text-slate-400 text-sm">AI suggestions are currently unavailable</p>
+                      <p className="text-slate-500 text-xs mt-1">Using intelligent fallback recommendations</p>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
-          )}
-        </Card>
+          </Card>
+        </div>
       </div>
     </motion.div>
   );
