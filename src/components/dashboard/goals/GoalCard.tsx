@@ -2,17 +2,7 @@
 
 import { Card, Button, Badge, ProgressBar } from '../../common';
 import { Calendar, Target, Brain, CheckCircle, Edit3, Trash2 } from 'lucide-react';
-
-interface Goal {
-  id: string;
-  title: string;
-  description?: string;
-  deadline?: string;
-  category?: string;
-  progress: number;
-  aiSuggested?: boolean;
-  status?: string;
-}
+import type { Goal } from '../../../lib/services';
 
 interface GoalCardProps {
   goal: Goal;

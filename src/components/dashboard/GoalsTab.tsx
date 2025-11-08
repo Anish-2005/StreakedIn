@@ -1,10 +1,17 @@
 "use client";
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, Filter, Edit3, MoreHorizontal, Calendar, Target, Brain, Trash2, CheckCircle, Sparkles, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import { Sparkles, Plus } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { GoalsService, AISuggestionsService, Goal } from '../../lib/services';
 import { Card, Button, Input, Select, Badge, ProgressBar } from '../common';
+import {
+  GoalsHeader,
+  GoalForm,
+  GoalsList,
+  QuickGoalSetup,
+  AISuggestionsPanel
+} from '../../components/dashboard/goals';
 
 interface GoalsTabProps {
   // No props needed for this component
@@ -238,426 +245,50 @@ export default function GoalsTab({}: GoalsTabProps) {
       exit={{ opacity: 0, y: -20 }}
       className="space-y-6"
     >
-      {/* Goals Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-white">Goals & Targets</h1>
-          <p className="text-slate-300">Set and track your professional development goals</p>
-        </div>
-        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
-          <Button variant="outline" icon={<Filter />} className="w-full sm:w-auto">
-            Filter
-          </Button>
-          <Button
-            variant="primary"
-            icon={<Plus />}
-            onClick={() => setShowCreateForm(!showCreateForm)}
-            className="w-full sm:w-auto"
-          >
-            New Goal
-          </Button>
-          <Button
-            onClick={() => setShowAIPrompt(true)}
-            className="w-full sm:w-auto bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-6 py-2"
-          >
-            <div className="flex items-center gap-2">
-              <Sparkles className="w-4 h-4" />
-              AI Create
-            </div>
-          </Button>
-        </div>
-      </div>
+      <GoalsHeader
+        showCreateForm={showCreateForm}
+        onToggleCreate={() => setShowCreateForm(prev => !prev)}
+        onOpenAIPrompt={() => setShowAIPrompt(true)}
+      />
 
-      {/* Create/Edit Goal Form */}
       {showCreateForm && (
-        <Card className="mb-6">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-white">
-              {editingGoal ? 'Edit Goal' : 'Create New Goal'}
-            </h2>
-            <Button variant="ghost" onClick={resetForm}>
-              Cancel
-            </Button>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="md:col-span-2">
-              <Input
-                placeholder="Goal title..."
-                value={formData.title}
-                onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
-              />
-            </div>
-
-            <div className="md:col-span-2">
-              <textarea
-                placeholder="Goal description (optional)..."
-                value={formData.description}
-                onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
-                className="w-full border border-slate-700/50 rounded-lg px-3 py-2 text-sm bg-slate-900/20 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/60 focus:border-transparent resize-none"
-                rows={3}
-              />
-            </div>
-
-            <Select
-              value={formData.category}
-              onChange={(value) => setFormData(prev => ({ ...prev, category: value }))}
-            >
-              {categories.map(category => (
-                <option key={category} value={category}>{category}</option>
-              ))}
-            </Select>
-
-            <Input
-              type="date"
-              value={formData.deadline}
-              onChange={(e) => setFormData(prev => ({ ...prev, deadline: e.target.value }))}
-            />
-
-            <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-slate-300 mb-2">
-                Initial Progress: {formData.progress}%
-              </label>
-              <input
-                type="range"
-                min="0"
-                max="100"
-                value={formData.progress}
-                onChange={(e) => setFormData(prev => ({ ...prev, progress: parseInt(e.target.value) }))}
-                className="w-full"
-              />
-            </div>
-          </div>
-
-          <div className="flex justify-end mt-4">
-            <Button onClick={editingGoal ? handleUpdateGoal : handleCreateGoal}>
-              {editingGoal ? 'Update Goal' : 'Create Goal'}
-            </Button>
-          </div>
-        </Card>
+        <GoalForm
+          formData={formData}
+          setFormData={setFormData}
+          categories={categories}
+          editingGoal={editingGoal}
+          onCancel={resetForm}
+          onSubmit={editingGoal ? handleUpdateGoal : handleCreateGoal}
+        />
       )}
 
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
-        {/* Goals List */}
         <div className="xl:col-span-2 space-y-4">
-          {loading ? (
-            <div className="text-center py-8">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto"></div>
-              <p className="text-slate-400 mt-2">Loading goals...</p>
-            </div>
-          ) : goals.length === 0 ? (
-            <Card className="text-center py-8">
-              <Target className="w-12 h-12 mx-auto mb-4 opacity-50 text-slate-400" />
-              <p className="text-slate-400">No goals yet. Create your first goal!</p>
-            </Card>
-          ) : (
-            goals.map((goal) => (
-              <Card key={goal.id} hover>
-                <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 mb-4">
-                  <div className="flex-1 min-w-0">
-                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mb-2">
-                      <h3 className="font-semibold text-white text-lg">{goal.title}</h3>
-                      <div className="flex flex-wrap gap-2">
-                        {goal.aiSuggested && (
-                          <Badge variant="purple" size="sm" icon={<Brain className="w-3 h-3" />}>
-                            AI Suggested
-                          </Badge>
-                        )}
-                        {goal.status === 'completed' && (
-                          <Badge variant="success" size="sm" icon={<CheckCircle className="w-3 h-3" />}>
-                            Completed
-                          </Badge>
-                        )}
-                      </div>
-                    </div>
-                    {goal.description && (
-                      <p className="text-slate-300 text-sm mb-2">{goal.description}</p>
-                    )}
-                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-sm text-slate-300">
-                      <span className="flex items-center space-x-1">
-                        <Calendar className="w-4 h-4" />
-                        <span>Due {new Date(goal.deadline).toLocaleDateString()}</span>
-                      </span>
-                      <span className="flex items-center space-x-1">
-                        <Target className="w-4 h-4" />
-                        <span>{goal.category}</span>
-                      </span>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2 self-start">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => handleEditGoal(goal)}
-                      className="p-2"
-                    >
-                      <Edit3 className="w-4 h-4" />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => handleDeleteGoal(goal.id)}
-                      className="p-2 text-red-400 hover:text-red-300 hover:bg-red-500/20"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </Button>
-                  </div>
-                </div>
-
-                {/* Progress Bar */}
-                <div className="mb-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-medium text-slate-300">Progress</span>
-                    <span className="text-sm font-semibold text-white">{goal.progress}%</span>
-                  </div>
-                  <ProgressBar value={goal.progress} className="w-full" />
-                </div>
-
-                {/* Actions */}
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                  <div className="flex flex-col sm:flex-row gap-2">
-                    <Button variant="outline" size="sm" className="w-full sm:w-auto">
-                      Update Progress
-                    </Button>
-                    <Button variant="ghost" size="sm" className="w-full sm:w-auto">
-                      View Details
-                    </Button>
-                  </div>
-                  <Button variant="ghost" size="sm" icon={<Brain className="w-4 h-4" />} className="w-full sm:w-auto">
-                    Get AI Tips
-                  </Button>
-                </div>
-              </Card>
-            ))
-          )}
+          <GoalsList
+            goals={goals}
+            loading={loading}
+            onEdit={handleEditGoal}
+            onDelete={handleDeleteGoal}
+            getPriorityColor={getPriorityColor}
+          />
         </div>
 
-        {/* Goal Creation & AI */}
         <div className="space-y-6">
-          {/* Quick Goal Creation */}
-          <div className="bg-slate-800/30 backdrop-blur-md border border-slate-700/50 rounded-xl p-4 sm:p-6">
-            <h3 className="font-semibold text-white mb-4">Quick Goal Setup</h3>
-            <div className="space-y-3">
-              <input
-                type="text"
-                placeholder="Goal title..."
-                className="w-full border border-slate-700/50 rounded-lg px-3 py-2 text-sm bg-slate-900/20 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/60 focus:border-transparent"
-              />
-              <select className="w-full border border-slate-700/50 rounded-lg px-3 py-2 text-sm bg-slate-900/20 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/60 focus:border-transparent">
-                <option>Select category</option>
-                <option>Career Development</option>
-                <option>Skill Learning</option>
-                <option>Networking</option>
-                <option>Health & Wellness</option>
-              </select>
-              <input
-                type="date"
-                className="w-full border border-slate-700/50 rounded-lg px-3 py-2 text-sm bg-slate-900/20 text-white focus:outline-none focus:ring-2 focus:ring-blue-500/60 focus:border-transparent"
-              />
-              <button className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg py-2 text-sm hover:opacity-95 transition-colors">
-                Create Goal
-              </button>
-            </div>
-          </div>
+          <QuickGoalSetup />
 
-          {/* AI Goal Suggestions */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="bg-gradient-to-br from-slate-800/60 to-slate-700/60 backdrop-blur-md border border-slate-600/50 rounded-xl p-4 sm:p-6"
-          >
-            <div className="flex items-center gap-3 mb-6">
-              <div className="p-2 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-lg">
-                <Brain className="w-5 h-5 text-purple-400" />
-              </div>
-              <div>
-                <h3 className="text-lg font-semibold text-white">AI Goal Suggestions</h3>
-                <p className="text-slate-300 text-sm">Smart recommendations based on your progress</p>
-              </div>
-            </div>
-
-            <div className="space-y-4 mb-6">
-              {aiSuggestions.length === 0 ? (
-                <div className="text-center py-12 bg-slate-800/30 rounded-lg border border-slate-700/40">
-                  <Brain className="w-12 h-12 mx-auto mb-4 text-slate-400" />
-                  <p className="text-slate-400 text-sm mb-4">Ready to get personalized goal suggestions?</p>
-                  <Button
-                    onClick={handleGenerateSuggestions}
-                    disabled={isGeneratingSuggestions}
-                    className="mx-auto bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-6 py-2"
-                  >
-                    {isGeneratingSuggestions ? (
-                      <div className="flex items-center gap-2">
-                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                        Generating...
-                      </div>
-                    ) : (
-                      <div className="flex items-center gap-2">
-                        <Sparkles className="w-4 h-4" />
-                        Generate AI Suggestions
-                      </div>
-                    )}
-                  </Button>
-                </div>
-              ) : (
-                <div className="relative">
-                  {/* Main suggestion card */}
-                  <motion.div
-                    key={currentSuggestionIndex}
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -20 }}
-                    transition={{ duration: 0.3 }}
-                    className="bg-gradient-to-r from-slate-800/50 to-slate-700/50 border border-slate-600/50 rounded-xl p-6 hover:border-slate-500/60 transition-all duration-300"
-                  >
-                    <div className="flex items-start gap-4">
-                      <div className="flex-1 min-w-0">
-                        {aiSuggestions[currentSuggestionIndex].includes('Learning Modules') ? (
-                          // Formatted suggestion with modules (AI-generated format)
-                          <div className="space-y-4">
-                            {(() => {
-                              const lines = aiSuggestions[currentSuggestionIndex].split('\n').filter(line => line.trim());
-                              const mainGoal = lines[0];
-                              // Find modules - they could be numbered like "1. Module" or just listed after "Learning Modules"
-                              const modulesStartIndex = lines.findIndex(line => line.includes('Learning Modules')) + 1;
-                              const modules = lines.slice(modulesStartIndex)
-                                .filter(line => line.trim() && !/^\d+$/.test(line.trim())) // Filter out standalone numbers
-                                .map(line => line.replace(/^\d+\.?\s*/, '').trim()) // Remove numbering
-                                .filter(line => line.length > 0);
-
-                              return (
-                                <>
-                                  <div className="text-white text-base leading-relaxed">
-                                    {mainGoal}
-                                  </div>
-                                  <div className="bg-slate-700/30 rounded-lg p-4 border border-slate-600/30">
-                                    <h4 className="text-blue-300 font-medium mb-3 flex items-center gap-2">
-                                      <Target className="w-4 h-4" />
-                                      Learning Modules
-                                    </h4>
-                                    <div className="space-y-2">
-                                      {modules.map((module, idx) => (
-                                        <div key={idx} className="flex items-start gap-3 p-3 bg-slate-800/40 rounded-lg border border-slate-600/20">
-                                          <div className="flex-shrink-0 w-6 h-6 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-full flex items-center justify-center mt-0.5">
-                                            <span className="text-xs font-semibold text-blue-300">{idx + 1}</span>
-                                          </div>
-                                          <span className="text-slate-200 text-sm leading-relaxed">{module}</span>
-                                        </div>
-                                      ))}
-                                    </div>
-                                  </div>
-                                </>
-                              );
-                            })()}
-                          </div>
-                        ) : aiSuggestions[currentSuggestionIndex].includes('**') ? (
-                          // Formatted suggestion with modules (structured format)
-                          <div className="space-y-4">
-                            <div className="text-white text-base leading-relaxed">
-                              {aiSuggestions[currentSuggestionIndex].split('**')[0].trim()}
-                            </div>
-                            <div className="bg-slate-700/30 rounded-lg p-4 border border-slate-600/30">
-                              <h4 className="text-blue-300 font-medium mb-3 flex items-center gap-2">
-                                <Target className="w-4 h-4" />
-                                Learning Modules
-                              </h4>
-                              <div className="space-y-2">
-                                {aiSuggestions[currentSuggestionIndex]
-                                  .split('**')[1]
-                                  .split('\n')
-                                  .filter(line => line.trim())
-                                  .map((module, idx) => (
-                                    <div key={idx} className="flex items-start gap-3 p-3 bg-slate-800/40 rounded-lg border border-slate-600/20">
-                                      <div className="flex-shrink-0 w-6 h-6 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-full flex items-center justify-center mt-0.5">
-                                        <span className="text-xs font-semibold text-blue-300">{idx + 1}</span>
-                                      </div>
-                                      <span className="text-slate-200 text-sm leading-relaxed">{module.trim()}</span>
-                                    </div>
-                                  ))}
-                              </div>
-                            </div>
-                            {aiSuggestions[currentSuggestionIndex].split('**')[2] && (
-                              <div className="text-slate-300 text-sm">
-                                {aiSuggestions[currentSuggestionIndex].split('**')[2].trim()}
-                              </div>
-                            )}
-                          </div>
-                        ) : (
-                          // Regular suggestion
-                          <p className="text-white text-base leading-relaxed">
-                            {aiSuggestions[currentSuggestionIndex]}
-                          </p>
-                        )}
-                      </div>
-                    </div>
-                  </motion.div>
-
-                  {/* Navigation */}
-                  {aiSuggestions.length > 1 && (
-                    <div className="flex items-center justify-between mt-4 gap-2">
-                      <Button
-                        onClick={prevSuggestion}
-                        variant="ghost"
-                        size="sm"
-                        className="text-slate-400 hover:text-white hover:bg-slate-700/50 p-2 flex-shrink-0"
-                      >
-                        <ChevronLeft className="w-4 h-4" />
-                      </Button>
-
-                      {/* Indicators */}
-                      <div className="flex items-center gap-1 sm:gap-2 flex-1 justify-center overflow-x-auto">
-                        {aiSuggestions.map((_, index) => (
-                          <button
-                            key={index}
-                            onClick={() => setCurrentSuggestionIndex(index)}
-                            className={`flex-shrink-0 w-2 h-2 rounded-full transition-all duration-200 ${
-                              index === currentSuggestionIndex
-                                ? 'bg-blue-500 w-4 sm:w-6'
-                                : 'bg-slate-600 hover:bg-slate-500'
-                            }`}
-                          />
-                        ))}
-                      </div>
-
-                      <Button
-                        onClick={nextSuggestion}
-                        variant="ghost"
-                        size="sm"
-                        className="text-slate-400 hover:text-white hover:bg-slate-700/50 p-2 flex-shrink-0"
-                      >
-                        <ChevronRight className="w-4 h-4" />
-                      </Button>
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
-
-            {aiSuggestions.length > 0 && (
-              <Button
-                onClick={handleGenerateSuggestions}
-                disabled={isGeneratingSuggestions}
-                className="w-full bg-gradient-to-r from-purple-500/10 to-pink-500/10 hover:from-purple-500/20 hover:to-pink-500/20 border border-purple-500/30 hover:border-purple-500/50 text-purple-300 hover:text-purple-200 transition-all duration-200"
-              >
-                {isGeneratingSuggestions ? (
-                  <div className="flex items-center justify-center gap-2">
-                    <div className="w-4 h-4 border-2 border-purple-300 border-t-transparent rounded-full animate-spin" />
-                    <span className="font-medium">Generating...</span>
-                  </div>
-                ) : (
-                  <div className="flex items-center justify-center gap-2">
-                    <Sparkles className="w-4 h-4" />
-                    <span className="font-medium">Generate More Suggestions</span>
-                  </div>
-                )}
-              </Button>
-            )}
-          </motion.div>
+          <AISuggestionsPanel
+            aiSuggestions={aiSuggestions}
+            currentSuggestionIndex={currentSuggestionIndex}
+            isGeneratingSuggestions={isGeneratingSuggestions}
+            onGenerate={handleGenerateSuggestions}
+            onPrev={prevSuggestion}
+            onNext={nextSuggestion}
+            onSelectSuggestion={(s) => handleAISuggestionClick(s)}
+          />
         </div>
       </div>
 
-      {/* AI Prompt Modal */}
+      {/* AI Prompt Modal (kept in parent for logic) */}
       <AnimatePresence>
         {showAIPrompt && (
           <motion.div
@@ -677,7 +308,7 @@ export default function GoalsTab({}: GoalsTabProps) {
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-3">
                   <div className="p-2 bg-purple-500/20 rounded-lg">
-                    <Sparkles className="w-5 h-5 text-purple-400" />
+                    <div className="w-4 h-4 bg-gradient-to-r from-purple-500 to-pink-500 rounded" />
                   </div>
                   <h3 className="text-lg font-semibold text-white">AI Goal Creation</h3>
                 </div>
@@ -685,7 +316,7 @@ export default function GoalsTab({}: GoalsTabProps) {
                   onClick={() => setShowAIPrompt(false)}
                   className="p-1 text-slate-400 hover:text-white transition-colors"
                 >
-                  <X className="w-5 h-5" />
+                  <span className="sr-only">Close</span>
                 </button>
               </div>
 
@@ -733,7 +364,7 @@ export default function GoalsTab({}: GoalsTabProps) {
         )}
       </AnimatePresence>
 
-      {/* AI Confirmation Modal */}
+      {/* AI Confirmation Modal kept in parent */}
       <AnimatePresence>
         {showAIConfirmation && aiGeneratedGoal && (
           <motion.div
@@ -753,7 +384,7 @@ export default function GoalsTab({}: GoalsTabProps) {
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-3">
                   <div className="p-2 bg-green-500/20 rounded-lg">
-                    <CheckCircle className="w-5 h-5 text-green-400" />
+                    <div className="w-4 h-4 bg-green-400 rounded" />
                   </div>
                   <h3 className="text-lg font-semibold text-white">AI Generated Goal</h3>
                 </div>
@@ -761,7 +392,7 @@ export default function GoalsTab({}: GoalsTabProps) {
                   onClick={() => setShowAIConfirmation(false)}
                   className="p-1 text-slate-400 hover:text-white transition-colors"
                 >
-                  <X className="w-5 h-5" />
+                  <span className="sr-only">Close</span>
                 </button>
               </div>
 
@@ -772,7 +403,6 @@ export default function GoalsTab({}: GoalsTabProps) {
                 )}
                 <div className="flex items-center gap-4 text-sm">
                   <div className={`px-2 py-1 rounded-full text-xs font-medium border ${getPriorityColor(aiGeneratedGoal.category || 'Career Development')}`}>
-                    <Target className="w-3 h-3 inline mr-1" />
                     {aiGeneratedGoal.category || 'Career Development'}
                   </div>
                 </div>

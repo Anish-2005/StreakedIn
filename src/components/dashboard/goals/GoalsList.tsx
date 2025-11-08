@@ -2,17 +2,7 @@
 
 import GoalCard from './GoalCard';
 import { Card } from '../../common';
-
-interface Goal {
-  id: string;
-  title: string;
-  description?: string;
-  deadline?: string;
-  category?: string;
-  progress: number;
-  aiSuggested?: boolean;
-  status?: string;
-}
+import type { Goal } from '../../../lib/services';
 
 interface GoalsListProps {
   goals: Goal[];
