@@ -239,25 +239,26 @@ export default function GoalsTab({}: GoalsTabProps) {
       className="space-y-6"
     >
       {/* Goals Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-white">Goals & Targets</h1>
           <p className="text-slate-300">Set and track your professional development goals</p>
         </div>
-        <div className="flex space-x-3">
-          <Button variant="outline" icon={<Filter />}>
+        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+          <Button variant="outline" icon={<Filter />} className="w-full sm:w-auto">
             Filter
           </Button>
           <Button
             variant="primary"
             icon={<Plus />}
             onClick={() => setShowCreateForm(!showCreateForm)}
+            className="w-full sm:w-auto"
           >
             New Goal
           </Button>
           <Button
             onClick={() => setShowAIPrompt(true)}
-            className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-6 py-2"
+            className="w-full sm:w-auto bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-6 py-2"
           >
             <div className="flex items-center gap-2">
               <Sparkles className="w-4 h-4" />
@@ -336,9 +337,9 @@ export default function GoalsTab({}: GoalsTabProps) {
         </Card>
       )}
 
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
         {/* Goals List */}
-        <div className="lg:col-span-3 space-y-4">
+        <div className="xl:col-span-2 space-y-4">
           {loading ? (
             <div className="text-center py-8">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto"></div>
@@ -352,25 +353,27 @@ export default function GoalsTab({}: GoalsTabProps) {
           ) : (
             goals.map((goal) => (
               <Card key={goal.id} hover>
-                <div className="flex items-start justify-between mb-4">
-                  <div className="flex-1">
-                    <div className="flex items-center space-x-3 mb-2">
+                <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 mb-4">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mb-2">
                       <h3 className="font-semibold text-white text-lg">{goal.title}</h3>
-                      {goal.aiSuggested && (
-                        <Badge variant="purple" size="sm" icon={<Brain className="w-3 h-3" />}>
-                          AI Suggested
-                        </Badge>
-                      )}
-                      {goal.status === 'completed' && (
-                        <Badge variant="success" size="sm" icon={<CheckCircle className="w-3 h-3" />}>
-                          Completed
-                        </Badge>
-                      )}
+                      <div className="flex flex-wrap gap-2">
+                        {goal.aiSuggested && (
+                          <Badge variant="purple" size="sm" icon={<Brain className="w-3 h-3" />}>
+                            AI Suggested
+                          </Badge>
+                        )}
+                        {goal.status === 'completed' && (
+                          <Badge variant="success" size="sm" icon={<CheckCircle className="w-3 h-3" />}>
+                            Completed
+                          </Badge>
+                        )}
+                      </div>
                     </div>
                     {goal.description && (
                       <p className="text-slate-300 text-sm mb-2">{goal.description}</p>
                     )}
-                    <div className="flex items-center space-x-4 text-sm text-slate-300">
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-sm text-slate-300">
                       <span className="flex items-center space-x-1">
                         <Calendar className="w-4 h-4" />
                         <span>Due {new Date(goal.deadline).toLocaleDateString()}</span>
@@ -381,7 +384,7 @@ export default function GoalsTab({}: GoalsTabProps) {
                       </span>
                     </div>
                   </div>
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center gap-2 self-start">
                     <Button
                       variant="ghost"
                       size="sm"
@@ -411,16 +414,16 @@ export default function GoalsTab({}: GoalsTabProps) {
                 </div>
 
                 {/* Actions */}
-                <div className="flex items-center justify-between">
-                  <div className="flex space-x-2">
-                    <Button variant="outline" size="sm">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div className="flex flex-col sm:flex-row gap-2">
+                    <Button variant="outline" size="sm" className="w-full sm:w-auto">
                       Update Progress
                     </Button>
-                    <Button variant="ghost" size="sm">
+                    <Button variant="ghost" size="sm" className="w-full sm:w-auto">
                       View Details
                     </Button>
                   </div>
-                  <Button variant="ghost" size="sm" icon={<Brain className="w-4 h-4" />}>
+                  <Button variant="ghost" size="sm" icon={<Brain className="w-4 h-4" />} className="w-full sm:w-auto">
                     Get AI Tips
                   </Button>
                 </div>
@@ -432,7 +435,7 @@ export default function GoalsTab({}: GoalsTabProps) {
         {/* Goal Creation & AI */}
         <div className="space-y-6">
           {/* Quick Goal Creation */}
-          <div className="bg-slate-800/30 backdrop-blur-md border border-slate-700/50 rounded-xl p-6">
+          <div className="bg-slate-800/30 backdrop-blur-md border border-slate-700/50 rounded-xl p-4 sm:p-6">
             <h3 className="font-semibold text-white mb-4">Quick Goal Setup</h3>
             <div className="space-y-3">
               <input
@@ -462,7 +465,7 @@ export default function GoalsTab({}: GoalsTabProps) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="bg-gradient-to-br from-slate-800/60 to-slate-700/60 backdrop-blur-md border border-slate-600/50 rounded-xl p-6"
+            className="bg-gradient-to-br from-slate-800/60 to-slate-700/60 backdrop-blur-md border border-slate-600/50 rounded-xl p-4 sm:p-6"
           >
             <div className="flex items-center gap-3 mb-6">
               <div className="p-2 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-lg">
@@ -482,7 +485,7 @@ export default function GoalsTab({}: GoalsTabProps) {
                   <Button
                     onClick={handleGenerateSuggestions}
                     disabled={isGeneratingSuggestions}
-                    className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-6 py-2"
+                    className="mx-auto bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-6 py-2"
                   >
                     {isGeneratingSuggestions ? (
                       <div className="flex items-center gap-2">
@@ -592,25 +595,25 @@ export default function GoalsTab({}: GoalsTabProps) {
 
                   {/* Navigation */}
                   {aiSuggestions.length > 1 && (
-                    <div className="flex items-center justify-between mt-4">
+                    <div className="flex items-center justify-between mt-4 gap-2">
                       <Button
                         onClick={prevSuggestion}
                         variant="ghost"
                         size="sm"
-                        className="text-slate-400 hover:text-white hover:bg-slate-700/50 p-2"
+                        className="text-slate-400 hover:text-white hover:bg-slate-700/50 p-2 flex-shrink-0"
                       >
                         <ChevronLeft className="w-4 h-4" />
                       </Button>
 
                       {/* Indicators */}
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-1 sm:gap-2 flex-1 justify-center overflow-x-auto">
                         {aiSuggestions.map((_, index) => (
                           <button
                             key={index}
                             onClick={() => setCurrentSuggestionIndex(index)}
-                            className={`w-2 h-2 rounded-full transition-all duration-200 ${
+                            className={`flex-shrink-0 w-2 h-2 rounded-full transition-all duration-200 ${
                               index === currentSuggestionIndex
-                                ? 'bg-blue-500 w-6'
+                                ? 'bg-blue-500 w-4 sm:w-6'
                                 : 'bg-slate-600 hover:bg-slate-500'
                             }`}
                           />
@@ -621,7 +624,7 @@ export default function GoalsTab({}: GoalsTabProps) {
                         onClick={nextSuggestion}
                         variant="ghost"
                         size="sm"
-                        className="text-slate-400 hover:text-white hover:bg-slate-700/50 p-2"
+                        className="text-slate-400 hover:text-white hover:bg-slate-700/50 p-2 flex-shrink-0"
                       >
                         <ChevronRight className="w-4 h-4" />
                       </Button>
@@ -668,7 +671,7 @@ export default function GoalsTab({}: GoalsTabProps) {
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-slate-800/90 backdrop-blur-md border border-slate-600/50 rounded-xl p-6 w-full max-w-md"
+              className="bg-slate-800/90 backdrop-blur-md border border-slate-600/50 rounded-xl p-4 sm:p-6 w-full max-w-md mx-4"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex items-center justify-between mb-4">
@@ -699,18 +702,18 @@ export default function GoalsTab({}: GoalsTabProps) {
                 rows={3}
               />
 
-              <div className="flex justify-end gap-3">
+              <div className="flex flex-col sm:flex-row justify-end gap-3">
                 <Button
                   onClick={() => setShowAIPrompt(false)}
                   variant="secondary"
-                  className="px-4 py-2"
+                  className="px-4 py-2 w-full sm:w-auto"
                 >
                   Cancel
                 </Button>
                 <Button
                   onClick={handleAIPrompt}
                   disabled={!aiPrompt.trim() || isGeneratingAI}
-                  className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-6 py-2"
+                  className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-6 py-2 w-full sm:w-auto"
                 >
                   {isGeneratingAI ? (
                     <div className="flex items-center gap-2">
@@ -744,7 +747,7 @@ export default function GoalsTab({}: GoalsTabProps) {
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-slate-800/90 backdrop-blur-md border border-slate-600/50 rounded-xl p-6 w-full max-w-lg"
+              className="bg-slate-800/90 backdrop-blur-md border border-slate-600/50 rounded-xl p-4 sm:p-6 w-full max-w-lg mx-4"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex items-center justify-between mb-4">
@@ -779,20 +782,20 @@ export default function GoalsTab({}: GoalsTabProps) {
                 This goal was generated by AI based on your description. You can add it to your goals list or make changes later.
               </p>
 
-              <div className="flex justify-end gap-3">
+              <div className="flex flex-col sm:flex-row justify-end gap-3">
                 <Button
                   onClick={() => {
                     setShowAIConfirmation(false);
                     setAiGeneratedGoal(null);
                   }}
                   variant="secondary"
-                  className="px-4 py-2"
+                  className="px-4 py-2 w-full sm:w-auto"
                 >
                   Cancel
                 </Button>
                 <Button
                   onClick={confirmAICreatedGoal}
-                  className="bg-green-500 hover:bg-green-600 text-white px-6 py-2"
+                  className="bg-green-500 hover:bg-green-600 text-white px-6 py-2 w-full sm:w-auto"
                 >
                   <div className="flex items-center gap-2">
                     <Plus className="w-4 h-4" />
