@@ -1,5 +1,5 @@
 "use client";
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import { Sparkles, Plus } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
@@ -10,7 +10,9 @@ import {
   GoalForm,
   GoalsList,
   QuickGoalSetup,
-  AISuggestionsPanel
+  AISuggestionsPanel,
+  AIPromptModal,
+  AIConfirmationModal
 } from '../../components/dashboard/goals';
 
 interface GoalsTabProps {
@@ -288,155 +290,27 @@ export default function GoalsTab({}: GoalsTabProps) {
         </div>
       </div>
 
-      {/* AI Prompt Modal (kept in parent for logic) */}
-      <AnimatePresence>
-        {showAIPrompt && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-            onClick={() => setShowAIPrompt(false)}
-          >
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-slate-800/90 backdrop-blur-md border border-slate-600/50 rounded-xl p-4 sm:p-6 w-full max-w-md mx-4"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 bg-purple-500/20 rounded-lg">
-                    <div className="w-4 h-4 bg-gradient-to-r from-purple-500 to-pink-500 rounded" />
-                  </div>
-                  <h3 className="text-lg font-semibold text-white">AI Goal Creation</h3>
-                </div>
-                <button
-                  onClick={() => setShowAIPrompt(false)}
-                  className="p-1 text-slate-400 hover:text-white transition-colors"
-                >
-                  <span className="sr-only">Close</span>
-                </button>
-              </div>
+      {/* AI Prompt Modal */}
+      <AIPromptModal
+        isOpen={showAIPrompt}
+        aiPrompt={aiPrompt}
+        isGeneratingAI={isGeneratingAI}
+        onClose={() => setShowAIPrompt(false)}
+        onPromptChange={setAiPrompt}
+        onSubmit={handleAIPrompt}
+      />
 
-              <p className="text-slate-300 mb-4">
-                Describe the goal you want to create. Our AI will generate a well-structured goal with appropriate category and details.
-              </p>
-
-              <textarea
-                placeholder="e.g., Complete a professional certification in data science within 6 months"
-                value={aiPrompt}
-                onChange={(e) => setAiPrompt(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && !e.shiftKey && handleAIPrompt()}
-                className="w-full bg-slate-700/50 border border-slate-600 rounded-lg px-4 py-3 text-white placeholder-slate-400 resize-none focus:outline-none focus:ring-2 focus:ring-purple-500/50 mb-4"
-                rows={3}
-              />
-
-              <div className="flex flex-col sm:flex-row justify-end gap-3">
-                <Button
-                  onClick={() => setShowAIPrompt(false)}
-                  variant="secondary"
-                  className="px-4 py-2 w-full sm:w-auto"
-                >
-                  Cancel
-                </Button>
-                <Button
-                  onClick={handleAIPrompt}
-                  disabled={!aiPrompt.trim() || isGeneratingAI}
-                  className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-6 py-2 w-full sm:w-auto"
-                >
-                  {isGeneratingAI ? (
-                    <div className="flex items-center gap-2">
-                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                      Generating...
-                    </div>
-                  ) : (
-                    <div className="flex items-center gap-2">
-                      <Sparkles className="w-4 h-4" />
-                      Generate Goal
-                    </div>
-                  )}
-                </Button>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* AI Confirmation Modal kept in parent */}
-      <AnimatePresence>
-        {showAIConfirmation && aiGeneratedGoal && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-            onClick={() => setShowAIConfirmation(false)}
-          >
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-slate-800/90 backdrop-blur-md border border-slate-600/50 rounded-xl p-4 sm:p-6 w-full max-w-lg mx-4"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 bg-green-500/20 rounded-lg">
-                    <div className="w-4 h-4 bg-green-400 rounded" />
-                  </div>
-                  <h3 className="text-lg font-semibold text-white">AI Generated Goal</h3>
-                </div>
-                <button
-                  onClick={() => setShowAIConfirmation(false)}
-                  className="p-1 text-slate-400 hover:text-white transition-colors"
-                >
-                  <span className="sr-only">Close</span>
-                </button>
-              </div>
-
-              <div className="bg-slate-700/30 rounded-lg p-4 mb-6">
-                <h4 className="text-white font-medium mb-2">{aiGeneratedGoal.title}</h4>
-                {aiGeneratedGoal.description && aiGeneratedGoal.description.trim() && (
-                  <p className="text-slate-300 text-sm mb-3">{aiGeneratedGoal.description}</p>
-                )}
-                <div className="flex items-center gap-4 text-sm">
-                  <div className={`px-2 py-1 rounded-full text-xs font-medium border ${getPriorityColor(aiGeneratedGoal.category || 'Career Development')}`}>
-                    {aiGeneratedGoal.category || 'Career Development'}
-                  </div>
-                </div>
-              </div>
-
-              <p className="text-slate-400 text-sm mb-6">
-                This goal was generated by AI based on your description. You can add it to your goals list or make changes later.
-              </p>
-
-              <div className="flex flex-col sm:flex-row justify-end gap-3">
-                <Button
-                  onClick={() => {
-                    setShowAIConfirmation(false);
-                    setAiGeneratedGoal(null);
-                  }}
-                  variant="secondary"
-                  className="px-4 py-2 w-full sm:w-auto"
-                >
-                  Cancel
-                </Button>
-                <Button
-                  onClick={confirmAICreatedGoal}
-                  className="bg-green-500 hover:bg-green-600 text-white px-6 py-2 w-full sm:w-auto"
-                >
-                  <div className="flex items-center gap-2">
-                    <Plus className="w-4 h-4" />
-                    Add Goal
-                  </div>
-                </Button>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* AI Confirmation Modal */}
+      <AIConfirmationModal
+        isOpen={showAIConfirmation}
+        aiGeneratedGoal={aiGeneratedGoal}
+        onClose={() => {
+          setShowAIConfirmation(false);
+          setAiGeneratedGoal(null);
+        }}
+        onConfirm={confirmAICreatedGoal}
+        getPriorityColor={getPriorityColor}
+      />
     </motion.div>
   );
 }

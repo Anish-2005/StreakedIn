@@ -4,3 +4,5 @@ export { default as GoalCard } from './GoalCard';
 export { default as GoalsList } from './GoalsList';
 export { default as QuickGoalSetup } from './QuickGoalSetup';
 export { default as AISuggestionsPanel } from './AISuggestionsPanel';
+export { default as AIPromptModal } from './AIPromptModal';
+export { default as AIConfirmationModal } from './AIConfirmationModal';
