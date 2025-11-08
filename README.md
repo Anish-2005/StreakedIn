@@ -1,63 +1,210 @@
-# 🚀 StreakedIn - Professional Productivity Tracker
-
 <div align="center">
 
-![StreakedIn Banner](https://img.shields.io/badge/StreakedIn-Productivity%20Tracker-blue?style=for-the-badge&logo=react&logoColor=white)
-![Version](https://img.shields.io/badge/version-1.0.0-blue.svg?style=for-the-badge)
-![License](https://img.shields.io/badge/license-MIT-green.svg?style=for-the-badge)
-![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg?style=for-the-badge)
+<img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=32&duration=2800&pause=2000&color=00D4FF&center=true&vCenter=true&width=600&lines=StreakedIn+%F0%9F%9A%80;Professional+Productivity+Tracker;Transform+Your+Workflow!" alt="Typing SVG" />
 
-*Transform your productivity with intelligent goal tracking, AI-powered insights, and beautiful analytics*
+<h3>
+  <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Chart%20Increasing.png" alt="Chart" width="25" height="25" />
+  Transform your productivity with intelligent goal tracking
+  <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Chart%20Increasing.png" alt="Chart" width="25" height="25" />
+</h3>
 
-[🌐 Live Demo](https://streakedin.vercel.app) • [📖 Documentation](https://docs.streakedin.com) • [🐛 Report Bug](https://github.com/Anish-2005/StreakedIn/issues) • [✨ Request Feature](https://github.com/Anish-2005/StreakedIn/issues)
+<p align="center">
+  <img src="https://img.shields.io/badge/Next.js-15.0-black?style=for-the-badge&logo=next.js&logoColor=white" alt="Next.js" />
+  <img src="https://img.shields.io/badge/TypeScript-5.0-blue?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
+  <img src="https://img.shields.io/badge/Tailwind-3.4-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind" />
+  <img src="https://img.shields.io/badge/Firebase-10.0-FFCA28?style=for-the-badge&logo=firebase&logoColor=black" alt="Firebase" />
+</p>
 
----
+<p align="center">
+  <img src="https://img.shields.io/badge/version-1.0.0-00d4ff.svg?style=flat-square" alt="Version" />
+  <img src="https://img.shields.io/badge/license-MIT-green.svg?style=flat-square" alt="License" />
+  <img src="https://img.shields.io/badge/build-passing-brightgreen.svg?style=flat-square" alt="Build" />
+  <img src="https://img.shields.io/badge/PRs-welcome-ff69b4.svg?style=flat-square" alt="PRs" />
+  <img src="https://img.shields.io/github/stars/Anish-2005/StreakedIn?style=flat-square&color=yellow" alt="Stars" />
+</p>
+
+<p align="center">
+  <a href="https://streakedin.vercel.app">
+    <img src="https://img.shields.io/badge/🌐_Live_Demo-00d4ff?style=for-the-badge&logoColor=white" alt="Live Demo" />
+  </a>
+  <a href="https://docs.streakedin.com">
+    <img src="https://img.shields.io/badge/�_Documentation-9f7aea?style=for-the-badge&logoColor=white" alt="Docs" />
+  </a>
+  <a href="https://github.com/Anish-2005/StreakedIn/issues">
+    <img src="https://img.shields.io/badge/🐛_Report_Bug-red?style=for-the-badge&logoColor=white" alt="Report Bug" />
+  </a>
+  <a href="https://github.com/Anish-2005/StreakedIn/issues">
+    <img src="https://img.shields.io/badge/✨_Request_Feature-orange?style=for-the-badge&logoColor=white" alt="Feature Request" />
+  </a>
+</p>
+
+<br/>
+
+<img src="https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif" width="700">
 
 </div>
 
-## 📸 Screenshots
+<br/>
+
+<br/>
+
+## <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Camera%20with%20Flash.png" alt="Camera" width="30" height="30" /> Screenshots & Preview
 
 <div align="center">
 
-### 🖥️ Desktop Dashboard
-<img src="https://via.placeholder.com/800x400/1a1a2e/00d4ff?text=Desktop+Dashboard" alt="Desktop Dashboard" width="80%"/>
-
-### 📱 Mobile Experience
-<img src="https://via.placeholder.com/300x600/1a1a2e/00d4ff?text=Mobile+Dashboard" alt="Mobile Dashboard" width="30%"/>
-
-### 🎯 Goal Tracking Interface
-<img src="https://via.placeholder.com/800x300/1a1a2e/00d4ff?text=Goal+Tracking" alt="Goal Tracking" width="80%"/>
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Desktop%20Computer.png" alt="Desktop" width="40" height="40" />
+      <h3>Desktop Dashboard</h3>
+      <img src="https://via.placeholder.com/450x250/1a1a2e/00d4ff?text=Desktop+Dashboard+View" alt="Desktop Dashboard" width="100%"/>
+      <p><em>Full-featured dashboard with real-time analytics</em></p>
+    </td>
+    <td align="center" width="50%">
+      <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Mobile%20Phone.png" alt="Mobile" width="40" height="40" />
+      <h3>Mobile Experience</h3>
+      <img src="https://via.placeholder.com/200x350/1a1a2e/00d4ff?text=Mobile+View" alt="Mobile Dashboard" width="60%"/>
+      <p><em>Seamless mobile-responsive design</em></p>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" colspan="2">
+      <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Direct%20Hit.png" alt="Target" width="40" height="40" />
+      <h3>Goal Tracking Interface</h3>
+      <img src="https://via.placeholder.com/750x300/1a1a2e/00d4ff?text=Goal+Tracking+%26+Progress+Analytics" alt="Goal Tracking" width="90%"/>
+      <p><em>Intuitive goal management with visual progress indicators</em></p>
+    </td>
+  </tr>
+</table>
 
 </div>
 
----
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/74038190/212284115-f47cd8ff-2ffb-4b04-b5bf-4d1c14c0247f.gif" width="600">
+</p>
 
-## ✨ Features
+<br/>
+
+## <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Travel%20and%20places/Glowing%20Star.png" alt="Star" width="30" height="30" /> Features That Make You Productive
 
 <div align="center">
 
-### 🎯 Core Functionality
+### <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Direct%20Hit.png" alt="Target" width="25" /> Core Functionality
 
-| Feature | Description | Status |
-|---------|-------------|--------|
-| **📊 Dashboard Analytics** | Real-time productivity metrics and visual insights | ✅ Complete |
-| **🎯 Goal Management** | SMART goal setting with progress tracking | ✅ Complete |
-| **📝 Task Management** | Intelligent task scheduling and prioritization | ✅ Complete |
-| **🤖 AI Assistant** | AI-powered recommendations and insights | ✅ Complete |
-| **📱 Mobile Responsive** | Seamless experience across all devices | ✅ Complete |
-| **🔄 Real-time Sync** | Firebase-powered data synchronization | ✅ Complete |
+<table>
+  <tr>
+    <th width="25%">Feature</th>
+    <th width="50%">Description</th>
+    <th width="25%">Status</th>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Chart%20Increasing.png" width="30" /><br/>
+      <strong>Dashboard Analytics</strong>
+    </td>
+    <td>Real-time productivity metrics with beautiful visual insights and trend analysis</td>
+    <td align="center">
+      <img src="https://img.shields.io/badge/✅-Complete-success?style=flat-square" />
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Bullseye.png" width="30" /><br/>
+      <strong>Goal Management</strong>
+    </td>
+    <td>SMART goal setting with intelligent progress tracking and milestone celebrations</td>
+    <td align="center">
+      <img src="https://img.shields.io/badge/✅-Complete-success?style=flat-square" />
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Clipboard.png" width="30" /><br/>
+      <strong>Task Management</strong>
+    </td>
+    <td>Intelligent task scheduling with smart prioritization and time tracking</td>
+    <td align="center">
+      <img src="https://img.shields.io/badge/✅-Complete-success?style=flat-square" />
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Smilies/Robot.png" width="30" /><br/>
+      <strong>AI Assistant</strong>
+    </td>
+    <td>AI-powered recommendations, insights, and personalized productivity tips</td>
+    <td align="center">
+      <img src="https://img.shields.io/badge/✅-Complete-success?style=flat-square" />
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Mobile%20Phone.png" width="30" /><br/>
+      <strong>Mobile Responsive</strong>
+    </td>
+    <td>Seamless experience across all devices with adaptive UI components</td>
+    <td align="center">
+      <img src="https://img.shields.io/badge/✅-Complete-success?style=flat-square" />
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Symbols/Counterclockwise%20Arrows%20Button.png" width="30" /><br/>
+      <strong>Real-time Sync</strong>
+    </td>
+    <td>Firebase-powered instant data synchronization across all your devices</td>
+    <td align="center">
+      <img src="https://img.shields.io/badge/✅-Complete-success?style=flat-square" />
+    </td>
+  </tr>
+</table>
 
-### 🎨 User Experience
+<br/>
 
-- **🌙 Dark Theme** - Modern dark UI with glassmorphism effects
-- **📊 Interactive Charts** - Beautiful data visualizations
-- **🎭 Smooth Animations** - Framer Motion powered transitions
-- **♿ Accessibility** - WCAG compliant design
-- **⚡ Performance** - Optimized for speed and efficiency
+### <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Artist%20Palette.png" alt="Palette" width="25" /> Premium User Experience
 
 </div>
 
----
+<table align="center">
+  <tr>
+    <td align="center" width="33%">
+      <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Travel%20and%20places/Crescent%20Moon.png" width="50" /><br/>
+      <h3>🌙 Dark Theme</h3>
+      <p>Modern dark UI with stunning glassmorphism effects</p>
+    </td>
+    <td align="center" width="33%">
+      <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Bar%20Chart.png" width="50" /><br/>
+      <h3>📊 Interactive Charts</h3>
+      <p>Beautiful animated data visualizations</p>
+    </td>
+    <td align="center" width="33%">
+      <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Travel%20and%20places/Shooting%20Star.png" width="50" /><br/>
+      <h3>🎭 Smooth Animations</h3>
+      <p>Framer Motion powered transitions</p>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="33%">
+      <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Symbols/Wheelchair%20Symbol.png" width="50" /><br/>
+      <h3>♿ Accessibility</h3>
+      <p>WCAG compliant inclusive design</p>
+    </td>
+    <td align="center" width="33%">
+      <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Travel%20and%20places/High%20Voltage.png" width="50" /><br/>
+      <h3>⚡ Performance</h3>
+      <p>Optimized for lightning-fast speed</p>
+    </td>
+    <td align="center" width="33%">
+      <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Locked%20with%20Key.png" width="50" /><br/>
+      <h3>🔐 Secure</h3>
+      <p>Firebase authentication & encryption</p>
+    </td>
+  </tr>
+</table>
+
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/74038190/212284136-03988914-d899-44b4-b1d9-4eeccf656e44.gif" width="600">
+</p>
 
 ## 🏗️ Architecture
 
@@ -124,88 +271,175 @@ graph TD
 
 ---
 
-## 🛠️ Tech Stack
+<br/>
+
+## <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Hammer%20and%20Wrench.png" alt="Tools" width="30" height="30" /> Tech Stack
 
 <div align="center">
 
-### Frontend Framework
-![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=next.js&logoColor=white)
-![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
-![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
-
-### Styling & UI
-![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
-![Framer Motion](https://img.shields.io/badge/Framer_Motion-0055FF?style=for-the-badge&logo=framer&logoColor=white)
-![Lucide Icons](https://img.shields.io/badge/Lucide_Icons-000000?style=for-the-badge&logo=lucide&logoColor=white)
-
-### Backend & Database
-![Firebase](https://img.shields.io/badge/Firebase-039BE5?style=for-the-badge&logo=Firebase&logoColor=white)
-![Firestore](https://img.shields.io/badge/Firestore-FFCA28?style=for-the-badge&logo=Firebase&logoColor=black)
-
-### Development Tools
-![ESLint](https://img.shields.io/badge/ESLint-4B32C3?style=for-the-badge&logo=eslint&logoColor=white)
-![Prettier](https://img.shields.io/badge/Prettier-F7B93E?style=for-the-badge&logo=prettier&logoColor=black)
-![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
+<table>
+  <tr>
+    <td align="center" width="25%">
+      <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Desktop%20Computer.png" width="40" />
+      <h3>Frontend Framework</h3>
+    </td>
+    <td width="75%">
+      <img src="https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=next.js&logoColor=white" alt="Next.js" />
+      <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React" />
+      <img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Artist%20Palette.png" width="40" />
+      <h3>Styling & UI</h3>
+    </td>
+    <td>
+      <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind" />
+      <img src="https://img.shields.io/badge/Framer_Motion-0055FF?style=for-the-badge&logo=framer&logoColor=white" alt="Framer" />
+      <img src="https://img.shields.io/badge/Lucide_Icons-F56565?style=for-the-badge&logo=lucide&logoColor=white" alt="Lucide" />
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/File%20Folder.png" width="40" />
+      <h3>Backend & Database</h3>
+    </td>
+    <td>
+      <img src="https://img.shields.io/badge/Firebase-039BE5?style=for-the-badge&logo=Firebase&logoColor=white" alt="Firebase" />
+      <img src="https://img.shields.io/badge/Firestore-FFCA28?style=for-the-badge&logo=Firebase&logoColor=black" alt="Firestore" />
+      <img src="https://img.shields.io/badge/Firebase_Auth-F57C00?style=for-the-badge&logo=Firebase&logoColor=white" alt="Auth" />
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Wrench.png" width="40" />
+      <h3>Development Tools</h3>
+    </td>
+    <td>
+      <img src="https://img.shields.io/badge/ESLint-4B32C3?style=for-the-badge&logo=eslint&logoColor=white" alt="ESLint" />
+      <img src="https://img.shields.io/badge/Prettier-F7B93E?style=for-the-badge&logo=prettier&logoColor=black" alt="Prettier" />
+      <img src="https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white" alt="Vercel" />
+    </td>
+  </tr>
+</table>
 
 </div>
 
----
+<p align="center">
+  <img src="https://skillicons.dev/icons?i=nextjs,react,typescript,tailwind,firebase,vercel,vscode,git" alt="Tech Stack Icons" />
+</p>
 
-## 🚀 Quick Start
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/74038190/212284158-e840e285-664b-44d7-b79b-e264b5e54825.gif" width="400">
+</p>
+
+<br/>
+
+## <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Travel%20and%20places/Rocket.png" alt="Rocket" width="30" height="30" /> Quick Start Guide
 
 <div align="center">
 
-### Prerequisites
+### <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Package.png" alt="Package" width="25" /> Prerequisites
 
-- Node.js 18+ 📦
-- npm or yarn 📦
-- Firebase account 🔥
+<table>
+  <tr>
+    <td align="center" width="33%">
+      <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Green%20Book.png" width="50" /><br/>
+      <strong>Node.js 18+</strong>
+    </td>
+    <td align="center" width="33%">
+      <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Red%20Envelope.png" width="50" /><br/>
+      <strong>npm or yarn</strong>
+    </td>
+    <td align="center" width="33%">
+      <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Travel%20and%20places/Fire.png" width="50" /><br/>
+      <strong>Firebase Account</strong>
+    </td>
+  </tr>
+</table>
 
 </div>
 
-### Installation
+<br/>
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/Anish-2005/StreakedIn.git
-   cd StreakedIn
-   ```
+### <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Gear.png" alt="Gear" width="20" /> Installation Steps
 
-2. **Install dependencies**
-   ```bash
-   npm install
-   # or
-   yarn install
-   ```
+<details open>
+<summary><b>📥 Step 1: Clone the repository</b></summary>
 
-3. **Environment Setup**
-   ```bash
-   cp .env.example .env.local
-   ```
+```bash
+git clone https://github.com/Anish-2005/StreakedIn.git
+cd StreakedIn
+```
 
-   Configure your Firebase credentials in `.env.local`:
-   ```env
-   NEXT_PUBLIC_FIREBASE_API_KEY=your_api_key
-   NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_auth_domain
-   NEXT_PUBLIC_FIREBASE_PROJECT_ID=your_project_id
-   NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your_storage_bucket
-   NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
-   NEXT_PUBLIC_FIREBASE_APP_ID=your_app_id
-   ```
+</details>
 
-4. **Run the development server**
-   ```bash
-   npm run dev
-   # or
-   yarn dev
-   ```
+<details open>
+<summary><b>📦 Step 2: Install dependencies</b></summary>
 
-5. **Open your browser**
-   ```
-   http://localhost:3000
-   ```
+```bash
+npm install
+# or
+yarn install
+# or
+pnpm install
+```
 
----
+</details>
+
+<details open>
+<summary><b>⚙️ Step 3: Environment Setup</b></summary>
+
+Create a `.env.local` file in the root directory:
+
+```bash
+cp .env.example .env.local
+```
+
+Add your Firebase credentials:
+
+```env
+NEXT_PUBLIC_FIREBASE_API_KEY=your_api_key_here
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_auth_domain_here
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=your_project_id_here
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your_storage_bucket_here
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your_sender_id_here
+NEXT_PUBLIC_FIREBASE_APP_ID=your_app_id_here
+```
+
+</details>
+
+<details open>
+<summary><b>🚀 Step 4: Run the development server</b></summary>
+
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+```
+
+</details>
+
+<details open>
+<summary><b>🌐 Step 5: Open your browser</b></summary>
+
+Navigate to:
+```
+http://localhost:3000
+```
+
+<p align="center">
+  <img src="https://img.shields.io/badge/🎉_Success!_Your_app_is_running-00d4ff?style=for-the-badge" alt="Success" />
+</p>
+
+</details>
+
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/74038190/212257472-08e52665-c503-4bd9-aa20-f5a4dae769b5.gif" width="100">
+</p>
 
 ## 📖 Usage Guide
 
@@ -348,81 +582,249 @@ sequenceDiagram
 
 ---
 
-## 🤝 Contributing
+<br/>
+
+## <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Hand%20gestures/Handshake.png" alt="Handshake" width="30" height="30" /> Contributing
 
 <div align="center">
 
-We love your input! We want to make contributing to StreakedIn as easy and transparent as possible.
+<img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Smilies/Red%20Heart.png" alt="Heart" width="20" /> **We love your input!** We want to make contributing as easy and transparent as possible.
 
-### Development Workflow
+<br/><br/>
+
+### <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Spiral%20Calendar.png" alt="Calendar" width="25" /> Development Workflow
 
 ```mermaid
 graph LR
-    A[Fork Repository] --> B[Create Feature Branch]
-    B --> C[Make Changes]
-    C --> D[Write Tests]
-    D --> E[Submit PR]
-    E --> F[Code Review]
-    F --> G[Merge]
+    A[🍴 Fork] --> B[🌿 Branch]
+    B --> C[✏️ Code]
+    C --> D[🧪 Test]
+    D --> E[📤 PR]
+    E --> F[👀 Review]
+    F --> G[🎉 Merge]
 
-    style A fill:#1a1a2e,stroke:#00d4ff
-    style G fill:#48bb78,stroke:#48bb78
+    style A fill:#1a1a2e,stroke:#00d4ff,stroke-width:2px
+    style G fill:#48bb78,stroke:#48bb78,stroke-width:2px
 ```
 
-### How to Contribute
+<br/>
 
-1. **Fork the repository** 🍴
-2. **Create your feature branch** `git checkout -b feature/AmazingFeature`
-3. **Commit your changes** `git commit -m 'Add some AmazingFeature'`
-4. **Push to the branch** `git push origin feature/AmazingFeature`
-5. **Open a Pull Request** 📝
-
-### Code Standards
-
-- **TypeScript** for type safety
-- **ESLint** + **Prettier** for code formatting
-- **Conventional Commits** for commit messages
-- **Component composition** over inheritance
-- **Responsive design** first approach
+### <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Laptop.png" alt="Laptop" width="25" /> How to Contribute
 
 </div>
 
----
+<table>
+  <tr>
+    <td width="10%" align="center">
+      <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Fork%20and%20Knife%20with%20Plate.png" width="40" /><br/>
+      <strong>Step 1</strong>
+    </td>
+    <td width="90%">
+      <strong>Fork the repository</strong><br/>
+      Click the fork button at the top right
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Hammer%20and%20Wrench.png" width="40" /><br/>
+      <strong>Step 2</strong>
+    </td>
+    <td>
+      <strong>Create your feature branch</strong><br/>
+      <code>git checkout -b feature/AmazingFeature</code>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Memo.png" width="40" /><br/>
+      <strong>Step 3</strong>
+    </td>
+    <td>
+      <strong>Commit your changes</strong><br/>
+      <code>git commit -m 'Add some AmazingFeature'</code>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Outbox%20Tray.png" width="40" /><br/>
+      <strong>Step 4</strong>
+    </td>
+    <td>
+      <strong>Push to the branch</strong><br/>
+      <code>git push origin feature/AmazingFeature</code>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Page%20with%20Curl.png" width="40" /><br/>
+      <strong>Step 5</strong>
+    </td>
+    <td>
+      <strong>Open a Pull Request</strong><br/>
+      Submit your PR with a clear description
+    </td>
+  </tr>
+</table>
 
-## 📈 Roadmap
+<br/>
 
 <div align="center">
 
-### Phase 1: Core Features ✅
-- [x] User authentication & profiles
-- [x] Goal setting & tracking
-- [x] Task management
-- [x] Basic analytics
-- [x] Mobile responsiveness
-
-### Phase 2: Advanced Features 🚧
-- [ ] Team collaboration features
-- [ ] Advanced AI insights
-- [ ] Integration with calendar apps
-- [ ] Export functionality
-- [ ] Offline mode
-
-### Phase 3: Enterprise Features 📋
-- [ ] Multi-organization support
-- [ ] Advanced reporting
-- [ ] API for integrations
-- [ ] White-label solutions
-- [ ] Advanced security features
+### <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Bookmark%20Tabs.png" alt="Tabs" width="25" /> Code Standards
 
 </div>
 
----
+<p align="center">
+  <img src="https://img.shields.io/badge/TypeScript-For_Type_Safety-3178C6?style=flat-square&logo=typescript" />
+  <img src="https://img.shields.io/badge/ESLint-Code_Quality-4B32C3?style=flat-square&logo=eslint" />
+  <img src="https://img.shields.io/badge/Prettier-Code_Formatting-F7B93E?style=flat-square&logo=prettier" />
+  <img src="https://img.shields.io/badge/Conventional_Commits-Commit_Messages-FE5196?style=flat-square&logo=conventionalcommits" />
+</p>
 
-## 📄 License
+<table align="center">
+  <tr>
+    <td align="center">✅</td>
+    <td><strong>TypeScript</strong> for type safety</td>
+  </tr>
+  <tr>
+    <td align="center">✅</td>
+    <td><strong>ESLint</strong> + <strong>Prettier</strong> for code formatting</td>
+  </tr>
+  <tr>
+    <td align="center">✅</td>
+    <td><strong>Conventional Commits</strong> for commit messages</td>
+  </tr>
+  <tr>
+    <td align="center">✅</td>
+    <td><strong>Component composition</strong> over inheritance</td>
+  </tr>
+  <tr>
+    <td align="center">✅</td>
+    <td><strong>Responsive design</strong> first approach</td>
+  </tr>
+</table>
+
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/74038190/212257467-871d32b7-e401-42e8-a166-fcfd7baa4c6b.gif" width="100">
+</p>
+
+<br/>
+
+## <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/World%20Map.png" alt="Map" width="30" height="30" /> Roadmap
 
 <div align="center">
 
-**StreakedIn** is open source software licensed under the **MIT License**.
+<table>
+  <tr>
+    <th width="15%">Phase</th>
+    <th width="25%">Title</th>
+    <th width="50%">Features</th>
+    <th width="10%">Status</th>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Symbols/Check%20Mark%20Button.png" width="50" /><br/>
+      <strong>Phase 1</strong>
+    </td>
+    <td>
+      <strong>Core Features</strong>
+    </td>
+    <td>
+      ✅ User authentication & profiles<br/>
+      ✅ Goal setting & tracking<br/>
+      ✅ Task management<br/>
+      ✅ Basic analytics<br/>
+      ✅ Mobile responsiveness
+    </td>
+    <td align="center">
+      <img src="https://img.shields.io/badge/100%25-success?style=for-the-badge" />
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Hammer%20and%20Wrench.png" width="50" /><br/>
+      <strong>Phase 2</strong>
+    </td>
+    <td>
+      <strong>Advanced Features</strong>
+    </td>
+    <td>
+      🚧 Team collaboration features<br/>
+      🚧 Advanced AI insights<br/>
+      🚧 Calendar app integration<br/>
+      🚧 Export functionality<br/>
+      🚧 Offline mode support
+    </td>
+    <td align="center">
+      <img src="https://img.shields.io/badge/In_Progress-yellow?style=for-the-badge" />
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Clipboard.png" width="50" /><br/>
+      <strong>Phase 3</strong>
+    </td>
+    <td>
+      <strong>Enterprise Features</strong>
+    </td>
+    <td>
+      📋 Multi-organization support<br/>
+      📋 Advanced reporting dashboard<br/>
+      📋 RESTful API for integrations<br/>
+      📋 White-label solutions<br/>
+      📋 Advanced security features
+    </td>
+    <td align="center">
+      <img src="https://img.shields.io/badge/Planned-blue?style=for-the-badge" />
+    </td>
+  </tr>
+</table>
+
+<br/>
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Chart%20Increasing.png" width="30" />
+  <strong>Want to influence our roadmap?</strong>
+  <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Chart%20Increasing.png" width="30" />
+</p>
+
+<p align="center">
+  <a href="https://github.com/Anish-2005/StreakedIn/issues">
+    <img src="https://img.shields.io/badge/💡_Submit_Feature_Request-00d4ff?style=for-the-badge" alt="Feature Request" />
+  </a>
+  <a href="https://github.com/Anish-2005/StreakedIn/discussions">
+    <img src="https://img.shields.io/badge/💬_Join_Discussion-9f7aea?style=for-the-badge" alt="Discussions" />
+  </a>
+</p>
+
+</div>
+
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/74038190/212257454-16e3712e-945a-4ca2-b238-408ad0bf87e6.gif" width="100">
+</p>
+
+<br/>
+
+## <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Page%20with%20Curl.png" alt="License" width="30" height="30" /> License
+
+<div align="center">
+
+<img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Symbols/Check%20Mark.png" width="50" />
+
+<h3>MIT License</h3>
+
+**StreakedIn** is open source software
+
+<br/>
+
+<img src="https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge" alt="MIT License" />
+
+<br/><br/>
+
+<details>
+<summary><b>📜 View Full License</b></summary>
+
+<br/>
 
 ```
 MIT License
@@ -436,44 +838,130 @@ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 copies of the Software, and to permit persons to whom the Software is
 furnished to do so, subject to the following conditions:
 
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 ```
 
+</details>
+
 </div>
 
----
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/74038190/212257465-7ce8d493-cac5-494e-982a-5a9deb852c4b.gif" width="100">
+</p>
 
-## 🙏 Acknowledgments
+<br/>
+
+## <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Hand%20gestures/Folded%20Hands%20Light%20Skin%20Tone.png" alt="Thanks" width="30" height="30" /> Acknowledgments
 
 <div align="center">
 
-**Built with ❤️ using modern web technologies**
+<img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Smilies/Sparkling%20Heart.png" width="25" /> **Built with love using modern web technologies** <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Smilies/Sparkling%20Heart.png" width="25" />
 
-### Special Thanks
+<br/><br/>
 
-- **Next.js Team** for the amazing framework
-- **Tailwind CSS** for the utility-first CSS framework
-- **Framer Motion** for smooth animations
-- **Firebase** for backend services
-- **Lucide** for beautiful icons
+### <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Travel%20and%20places/Star.png" alt="Star" width="25" /> Special Thanks
 
-### Contributors
+<table>
+  <tr>
+    <td align="center" width="20%">
+      <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Desktop%20Computer.png" width="60" /><br/>
+      <strong>Next.js Team</strong><br/>
+      <sub>Amazing framework</sub>
+    </td>
+    <td align="center" width="20%">
+      <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Artist%20Palette.png" width="60" /><br/>
+      <strong>Tailwind CSS</strong><br/>
+      <sub>Utility-first styling</sub>
+    </td>
+    <td align="center" width="20%">
+      <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Travel%20and%20places/Shooting%20Star.png" width="60" /><br/>
+      <strong>Framer Motion</strong><br/>
+      <sub>Smooth animations</sub>
+    </td>
+    <td align="center" width="20%">
+      <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Travel%20and%20places/Fire.png" width="60" /><br/>
+      <strong>Firebase</strong><br/>
+      <sub>Backend services</sub>
+    </td>
+    <td align="center" width="20%">
+      <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Smilies/Smiling%20Face%20with%20Heart-Eyes.png" width="60" /><br/>
+      <strong>Lucide</strong><br/>
+      <sub>Beautiful icons</sub>
+    </td>
+  </tr>
+</table>
+
+<br/>
+
+### <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Hand%20gestures/Waving%20Hand.png" alt="Wave" width="25" /> Contributors
 
 <a href="https://github.com/Anish-2005/StreakedIn/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=Anish-2005/StreakedIn" />
+  <img src="https://contrib.rocks/image?repo=Anish-2005/StreakedIn" alt="Contributors" />
 </a>
+
+<br/><br/>
+
+<img src="https://user-images.githubusercontent.com/74038190/212284136-03988914-d899-44b4-b1d9-4eeccf656e44.gif" width="600">
+
+<br/><br/>
+
+### <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Smilies/Beating%20Heart.png" alt="Heart" width="25" /> Show Your Support
+
+<p align="center">
+  <strong>If you found this project helpful, please consider:</strong>
+</p>
+
+<p align="center">
+  <a href="https://github.com/Anish-2005/StreakedIn">
+    <img src="https://img.shields.io/badge/⭐_Star_this_repo-yellow?style=for-the-badge&logo=github" alt="Star" />
+  </a>
+  <a href="https://github.com/Anish-2005/StreakedIn/fork">
+    <img src="https://img.shields.io/badge/🍴_Fork_this_repo-orange?style=for-the-badge&logo=github" alt="Fork" />
+  </a>
+  <a href="https://github.com/Anish-2005/StreakedIn/issues">
+    <img src="https://img.shields.io/badge/💡_Share_Ideas-blue?style=for-the-badge&logo=github" alt="Ideas" />
+  </a>
+</p>
+
+<br/>
 
 ---
 
-<div align="center">
+<br/>
 
-**Made with ❤️ by [Anish-2005](https://github.com/Anish-2005)**
+<h3>
+  <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Hand%20gestures/Writing%20Hand.png" alt="Writing" width="25" />
+  Made with 
+  <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Smilies/Red%20Heart.png" alt="Heart" width="25" />
+  by <a href="https://github.com/Anish-2005">Anish-2005</a>
+  <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Hand%20gestures/Writing%20Hand.png" alt="Writing" width="25" />
+</h3>
 
-⭐ **Star this repo** if you found it helpful!
+<br/>
 
-[⬆️ Back to Top](#-streakedin---professional-productivity-tracker)
+<p align="center">
+  <a href="#-features-that-make-you-productive">
+    <img src="https://img.shields.io/badge/⬆️_Back_to_Top-00d4ff?style=for-the-badge" alt="Back to top" />
+  </a>
+</p>
 
-</div>
+<br/>
+
+<img src="https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif" width="700">
+
+<br/>
+
+<p align="center">
+  <img src="https://komarev.com/ghpvc/?username=Anish-2005&repo=StreakedIn&color=00d4ff&style=for-the-badge&label=Repository+Views" alt="Views" />
+</p>
 
 </div>
