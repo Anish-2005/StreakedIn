@@ -1,11 +1,19 @@
 "use client";
-import { motion, AnimatePresence } from 'framer-motion';
-import { CheckSquare, Trash2, Plus, Calendar, Flag, Clock, CheckCircle2, Circle, Filter, Sparkles, X, Edit } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { useState, useEffect, useMemo } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { db } from '../../lib/firebase';
 import { collection, addDoc, updateDoc, deleteDoc, doc, query, where, onSnapshot, orderBy } from 'firebase/firestore';
 import { Card, Button, Input, Select, Badge, Checkbox } from '../common';
+import {
+  TasksHeader,
+  TasksFilters,
+  AddTaskForm,
+  TasksList,
+  AIPromptModal,
+  AIConfirmationModal,
+  EditTaskModal
+} from '../../components/dashboard/tasks';
 import { TasksService } from '../../lib/services';
 
 interface Task {
@@ -342,599 +350,79 @@ export default function TasksTab({}: TasksTabProps) {
       className="space-y-6"
     >
       {/* Header with Stats */}
-      <div className="space-y-4">
-        <div>
-          <h1 className="text-3xl font-bold text-white mb-2">Task Manager</h1>
-          <p className="text-slate-300">Organize, prioritize, and conquer your tasks</p>
-        </div>
-
-        {/* Task Statistics */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          <div className="bg-slate-800/40 backdrop-blur-sm border border-slate-700/50 rounded-lg px-3 py-2 text-center">
-            <div className="text-lg font-semibold text-white">{taskStats.total}</div>
-            <div className="text-xs text-slate-400">Total</div>
-          </div>
-          <div className="bg-blue-500/10 border border-blue-500/20 rounded-lg px-3 py-2 text-center">
-            <div className="text-lg font-semibold text-blue-400">{taskStats.pending}</div>
-            <div className="text-xs text-slate-400">Pending</div>
-          </div>
-          <div className="bg-green-500/10 border border-green-500/20 rounded-lg px-3 py-2 text-center">
-            <div className="text-lg font-semibold text-green-400">{taskStats.completed}</div>
-            <div className="text-xs text-slate-400">Done</div>
-          </div>
-          {taskStats.overdue > 0 && (
-            <div className="bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2 text-center">
-              <div className="text-lg font-semibold text-red-400">{taskStats.overdue}</div>
-              <div className="text-xs text-slate-400">Overdue</div>
-            </div>
-          )}
-        </div>
-      </div>
+      <TasksHeader taskStats={taskStats} />
 
       {/* Filters and Controls */}
-      <div className="flex flex-col gap-4">
-        <div className="flex flex-col sm:flex-row gap-3 sm:items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Filter className="w-4 h-4 text-slate-400" />
-            <div className="flex flex-wrap gap-2">
-              {(['all', 'pending', 'completed'] as const).map((filterType) => (
-                <button
-                  key={filterType}
-                  onClick={() => setFilter(filterType)}
-                  className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
-                    filter === filterType
-                      ? 'bg-blue-500 text-white'
-                      : 'bg-slate-700/50 text-slate-300 hover:bg-slate-600/50'
-                  }`}
-                >
-                  {filterType.charAt(0).toUpperCase() + filterType.slice(1)}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <span className="text-sm text-slate-400">Sort by:</span>
-            <Select
-              value={sortBy}
-              onChange={(value) => setSortBy(value as any)}
-              className="w-32"
-            >
-              <option value="created">Created</option>
-              <option value="priority">Priority</option>
-              <option value="dueDate">Due Date</option>
-            </Select>
-          </div>
-        </div>
-      </div>
+      <TasksFilters
+        filter={filter}
+        sortBy={sortBy}
+        onFilterChange={setFilter}
+        onSortChange={setSortBy}
+      />
 
       {/* Add Task Form */}
-      <motion.div
-        layout
-        className="bg-gradient-to-r from-slate-800/60 to-slate-700/60 backdrop-blur-md border border-slate-600/50 rounded-xl p-6"
-      >
-        <div className="flex items-center gap-3 mb-4">
-          <div className="p-2 bg-blue-500/20 rounded-lg">
-            <Plus className="w-5 h-5 text-blue-400" />
-          </div>
-          <h3 className="text-lg font-semibold text-white">Add New Task</h3>
-        </div>
-
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-slate-300 mb-2">Task Title</label>
-            <Input
-              placeholder="What needs to be done?"
-              value={newTaskTitle}
-              onChange={(e) => setNewTaskTitle(e.target.value)}
-              onKeyPress={(e) => e.key === 'Enter' && addTask()}
-              className="text-white placeholder-slate-400"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-slate-300 mb-2">Description (Optional)</label>
-            <textarea
-              placeholder="Add more details about this task..."
-              value={newTaskDescription}
-              onChange={(e) => setNewTaskDescription(e.target.value)}
-              className="w-full px-4 py-3 border border-slate-600/60 bg-slate-800/60 text-white placeholder-slate-400 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500/60 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed resize-none text-base"
-              rows={3}
-            />
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-slate-300 mb-2">Priority</label>
-              <Select
-                value={newTaskPriority}
-                onChange={(value) => setNewTaskPriority(value)}
-                className="bg-slate-700/50 border-slate-600"
-              >
-                <option value="low">🟢 Low Priority</option>
-                <option value="medium">🟡 Medium Priority</option>
-                <option value="high">🔴 High Priority</option>
-              </Select>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-slate-300 mb-2">Due Date (Optional)</label>
-              <Input
-                type="date"
-                value={newTaskDueDate}
-                onChange={(e) => setNewTaskDueDate(e.target.value)}
-                className="bg-slate-700/50 border-slate-600 text-white"
-              />
-            </div>
-          </div>
-        </div>
-
-        <div className="flex flex-col sm:flex-row justify-end gap-3 mt-4">
-          <Button
-            onClick={() => setShowAIPrompt(true)}
-            className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-6 py-2 w-full sm:w-auto"
-          >
-            <div className="flex items-center gap-2">
-              <Sparkles className="w-4 h-4" />
-              AI Create
-            </div>
-          </Button>
-          <Button
-            onClick={addTask}
-            disabled={!newTaskTitle.trim() || isAddingTask}
-            className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 w-full sm:w-auto"
-          >
-            {isAddingTask ? (
-              <div className="flex items-center gap-2">
-                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                Adding...
-              </div>
-            ) : (
-              <div className="flex items-center gap-2">
-                <Plus className="w-4 h-4" />
-                Add Task
-              </div>
-            )}
-          </Button>
-        </div>
-      </motion.div>
+      <AddTaskForm
+        newTaskTitle={newTaskTitle}
+        newTaskDescription={newTaskDescription}
+        newTaskPriority={newTaskPriority}
+        newTaskDueDate={newTaskDueDate}
+        isAddingTask={isAddingTask}
+        onTitleChange={setNewTaskTitle}
+        onDescriptionChange={setNewTaskDescription}
+        onPriorityChange={setNewTaskPriority}
+        onDueDateChange={setNewTaskDueDate}
+        onAddTask={addTask}
+        onOpenAIPrompt={() => setShowAIPrompt(true)}
+      />
 
       {/* Tasks List */}
-      <div className="space-y-3">
-        <AnimatePresence mode="popLayout">
-          {filteredAndSortedTasks.length === 0 ? (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              className="text-center py-16 bg-gradient-to-br from-slate-800/40 to-slate-700/40 backdrop-blur-md border border-slate-600/30 rounded-xl"
-            >
-              <div className="max-w-md mx-auto">
-                <div className="w-16 h-16 bg-slate-700/50 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <CheckSquare className="w-8 h-8 text-slate-400" />
-                </div>
-                <h3 className="text-xl font-semibold text-white mb-2">
-                  {filter === 'all' ? 'No tasks yet' :
-                   filter === 'pending' ? 'No pending tasks' :
-                   'No completed tasks'}
-                </h3>
-                <p className="text-slate-400 mb-6">
-                  {filter === 'all' ? 'Create your first task to get started on your productivity journey!' :
-                   filter === 'pending' ? 'All caught up! Great job staying on top of things.' :
-                   'Complete some tasks to see them here.'}
-                </p>
-                {filter === 'all' && (
-                  <Button
-                    onClick={() => {
-                      const input = document.querySelector('input[placeholder="What needs to be done?"]') as HTMLInputElement;
-                      input?.focus();
-                    }}
-                    className="bg-blue-500 hover:bg-blue-600 text-white"
-                  >
-                    <Plus className="w-4 h-4 mr-2" />
-                    Create Your First Task
-                  </Button>
-                )}
-              </div>
-            </motion.div>
-          ) : (
-            filteredAndSortedTasks.map((task, index) => {
-              const dueDateInfo = formatDueDate(task.dueDate || '');
-              const isOverdue = dueDateInfo?.urgent && dueDateInfo.text.includes('Overdue');
-
-              return (
-                <motion.div
-                  key={task.id}
-                  layout
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ delay: index * 0.05 }}
-                  className={`group relative overflow-hidden rounded-xl border transition-all duration-300 ${
-                    task.completed
-                      ? 'bg-green-500/5 border-green-500/20'
-                      : isOverdue
-                      ? 'bg-red-500/5 border-red-500/20'
-                      : 'bg-slate-800/40 border-slate-700/50 hover:border-slate-600/70'
-                  }`}
-                >
-                  {/* Priority indicator stripe */}
-                  <div className={`absolute left-0 top-0 bottom-0 w-1 ${
-                    task.priority === 'high' ? 'bg-red-500' :
-                    task.priority === 'medium' ? 'bg-yellow-500' :
-                    'bg-green-500'
-                  }`} />
-
-                  <div className="flex flex-col sm:flex-row sm:items-center p-4 sm:p-6">
-                    {/* Checkbox */}
-                    <motion.button
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.9 }}
-                      onClick={() => toggleTask(task.id)}
-                      className={`flex-shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center mb-3 sm:mb-0 sm:mr-4 transition-all ${
-                        task.completed
-                          ? 'bg-green-500 border-green-500 text-white'
-                          : 'border-slate-500 hover:border-slate-400'
-                      }`}
-                    >
-                      <AnimatePresence>
-                        {task.completed && (
-                          <motion.div
-                            initial={{ scale: 0, rotate: -180 }}
-                            animate={{ scale: 1, rotate: 0 }}
-                            exit={{ scale: 0, rotate: 180 }}
-                          >
-                            <CheckCircle2 className="w-4 h-4" />
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                      {!task.completed && <Circle className="w-3 h-3" />}
-                    </motion.button>
-
-                    {/* Task Content */}
-                    <div className="flex-1 min-w-0 mb-3 sm:mb-0">
-                      <motion.h3
-                        className={`text-lg font-medium mb-1 transition-all ${
-                          task.completed
-                            ? 'text-slate-400 line-through'
-                            : 'text-white group-hover:text-blue-300'
-                        }`}
-                        animate={{ opacity: task.completed ? 0.6 : 1 }}
-                      >
-                        {task.title}
-                      </motion.h3>
-
-                      {task.description && task.description.trim() && (
-                        <p className={`text-sm mb-2 transition-all ${
-                          task.completed
-                            ? 'text-slate-500 line-through'
-                            : 'text-slate-300'
-                        }`}>
-                          {task.description}
-                        </p>
-                      )}
-
-                      <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-sm">
-                        {/* Created Date */}
-                        {task.createdAt && (
-                          <div className="flex items-center gap-1 text-slate-400">
-                            <Calendar className="w-3 h-3" />
-                            <span>Added {new Date(task.createdAt).toLocaleDateString()}</span>
-                          </div>
-                        )}
-
-                        {/* Due Date */}
-                        {dueDateInfo && (
-                          <div className={`flex items-center gap-1 ${
-                            dueDateInfo.urgent ? 'text-red-400' : 'text-slate-400'
-                          }`}>
-                            <Clock className="w-3 h-3" />
-                            <span>{dueDateInfo.text}</span>
-                          </div>
-                        )}
-
-                        {/* Priority Badge */}
-                        <div className={`px-2 py-1 rounded-full text-xs font-medium border ${getPriorityColor(task.priority || 'medium')}`}>
-                          <Flag className="w-3 h-3 inline mr-1" />
-                          {task.priority}
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Actions */}
-                    <div className="flex items-center gap-2 self-start sm:self-center">
-                      <motion.button
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.9 }}
-                        onClick={() => startEditingTask(task)}
-                        className="p-2 text-slate-400 hover:text-blue-400 hover:bg-blue-500/20 rounded-lg transition-colors"
-                      >
-                        <Edit className="w-4 h-4" />
-                      </motion.button>
-                      <motion.button
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.9 }}
-                        onClick={() => deleteTask(task.id)}
-                        className="p-2 text-slate-400 hover:text-red-400 hover:bg-red-500/20 rounded-lg transition-colors"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </motion.button>
-                    </div>
-                  </div>
-
-                  {/* Completion Animation Overlay */}
-                  <AnimatePresence>
-                    {task.completed && (
-                      <motion.div
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        exit={{ scale: 0 }}
-                        className="absolute inset-0 bg-green-500/10 pointer-events-none"
-                      />
-                    )}
-                  </AnimatePresence>
-                </motion.div>
-              );
-            })
-          )}
-        </AnimatePresence>
-      </div>
+      <TasksList
+        tasks={filteredAndSortedTasks}
+        filter={filter}
+        onToggle={toggleTask}
+        onEdit={startEditingTask}
+        onDelete={deleteTask}
+        getPriorityColor={getPriorityColor}
+        formatDueDate={formatDueDate}
+      />
 
       {/* AI Prompt Modal */}
-      <AnimatePresence>
-        {showAIPrompt && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-            onClick={() => setShowAIPrompt(false)}
-          >
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-slate-800/90 backdrop-blur-md border border-slate-600/50 rounded-xl p-4 sm:p-6 w-full max-w-md mx-4"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 bg-purple-500/20 rounded-lg">
-                    <Sparkles className="w-5 h-5 text-purple-400" />
-                  </div>
-                  <h3 className="text-lg font-semibold text-white">AI Task Creation</h3>
-                </div>
-                <button
-                  onClick={() => setShowAIPrompt(false)}
-                  className="p-1 text-slate-400 hover:text-white transition-colors"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
-
-              <p className="text-slate-300 mb-4">
-                Describe the task you want to create. Our AI will generate a well-structured task with appropriate priority and details.
-              </p>
-
-              <textarea
-                placeholder="e.g., Complete the quarterly financial report by Friday"
-                value={aiPrompt}
-                onChange={(e) => setAiPrompt(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && !e.shiftKey && handleAIPrompt()}
-                className="w-full bg-slate-700/50 border border-slate-600 rounded-lg px-4 py-3 text-white placeholder-slate-400 resize-none focus:outline-none focus:ring-2 focus:ring-purple-500/50 mb-4"
-                rows={3}
-              />
-
-              <div className="flex flex-col sm:flex-row justify-end gap-3">
-                <Button
-                  onClick={() => setShowAIPrompt(false)}
-                  variant="secondary"
-                  className="px-4 py-2 w-full sm:w-auto"
-                >
-                  Cancel
-                </Button>
-                <Button
-                  onClick={handleAIPrompt}
-                  disabled={!aiPrompt.trim() || isGeneratingAI}
-                  className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-6 py-2 w-full sm:w-auto"
-                >
-                  {isGeneratingAI ? (
-                    <div className="flex items-center gap-2">
-                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                      Generating...
-                    </div>
-                  ) : (
-                    <div className="flex items-center gap-2">
-                      <Sparkles className="w-4 h-4" />
-                      Generate Task
-                    </div>
-                  )}
-                </Button>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <AIPromptModal
+        isOpen={showAIPrompt}
+        aiPrompt={aiPrompt}
+        isGeneratingAI={isGeneratingAI}
+        onClose={() => setShowAIPrompt(false)}
+        onPromptChange={setAiPrompt}
+        onSubmit={handleAIPrompt}
+      />
 
       {/* AI Confirmation Modal */}
-      <AnimatePresence>
-        {showAIConfirmation && aiGeneratedTask && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-            onClick={() => setShowAIConfirmation(false)}
-          >
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-slate-800/90 backdrop-blur-md border border-slate-600/50 rounded-xl p-4 sm:p-6 w-full max-w-lg mx-4"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 bg-green-500/20 rounded-lg">
-                    <CheckCircle2 className="w-5 h-5 text-green-400" />
-                  </div>
-                  <h3 className="text-lg font-semibold text-white">AI Generated Task</h3>
-                </div>
-                <button
-                  onClick={() => setShowAIConfirmation(false)}
-                  className="p-1 text-slate-400 hover:text-white transition-colors"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
-
-              <div className="bg-slate-700/30 rounded-lg p-4 mb-6">
-                <h4 className="text-white font-medium mb-2">{aiGeneratedTask.title}</h4>
-                {aiGeneratedTask.description && aiGeneratedTask.description.trim() && (
-                  <p className="text-slate-300 text-sm mb-3">{aiGeneratedTask.description}</p>
-                )}
-                <div className="flex items-center gap-4 text-sm">
-                  <div className={`px-2 py-1 rounded-full text-xs font-medium border ${getPriorityColor(aiGeneratedTask.priority || 'medium')}`}>
-                    <Flag className="w-3 h-3 inline mr-1" />
-                    {aiGeneratedTask.priority || 'medium'} priority
-                  </div>
-                </div>
-              </div>
-
-              <p className="text-slate-400 text-sm mb-6">
-                This task was generated by AI based on your description. You can add it to your task list or make changes later.
-              </p>
-
-              <div className="flex flex-col sm:flex-row justify-end gap-3">
-                <Button
-                  onClick={() => {
-                    setShowAIConfirmation(false);
-                    setAiGeneratedTask(null);
-                  }}
-                  variant="secondary"
-                  className="px-4 py-2 w-full sm:w-auto"
-                >
-                  Cancel
-                </Button>
-                <Button
-                  onClick={confirmAICreatedTask}
-                  className="bg-green-500 hover:bg-green-600 text-white px-6 py-2 w-full sm:w-auto"
-                >
-                  <div className="flex items-center gap-2">
-                    <Plus className="w-4 h-4" />
-                    Add Task
-                  </div>
-                </Button>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <AIConfirmationModal
+        isOpen={showAIConfirmation}
+        aiGeneratedTask={aiGeneratedTask}
+        onClose={() => {
+          setShowAIConfirmation(false);
+          setAiGeneratedTask(null);
+        }}
+        onConfirm={confirmAICreatedTask}
+        getPriorityColor={getPriorityColor}
+      />
 
       {/* Edit Task Modal */}
-      <AnimatePresence>
-        {showEditModal && editingTask && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-            onClick={() => cancelEditingTask()}
-          >
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-slate-800/90 backdrop-blur-md border border-slate-600/50 rounded-xl p-4 sm:p-6 w-full max-w-lg mx-4"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 bg-blue-500/20 rounded-lg">
-                    <Edit className="w-5 h-5 text-blue-400" />
-                  </div>
-                  <h3 className="text-lg font-semibold text-white">Edit Task</h3>
-                </div>
-                <button
-                  onClick={() => cancelEditingTask()}
-                  className="p-1 text-slate-400 hover:text-white transition-colors"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
-
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-2">Task Title</label>
-                  <Input
-                    placeholder="What needs to be done?"
-                    value={editTitle}
-                    onChange={(e) => setEditTitle(e.target.value)}
-                    onKeyPress={(e) => e.key === 'Enter' && saveEditedTask()}
-                    className="text-white placeholder-slate-400"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-2">Description (Optional)</label>
-                  <textarea
-                    placeholder="Add more details about this task..."
-                    value={editDescription}
-                    onChange={(e) => setEditDescription(e.target.value)}
-                    className="w-full px-4 py-3 border border-slate-600/60 bg-slate-800/60 text-white placeholder-slate-400 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500/60 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed resize-none text-base"
-                    rows={3}
-                  />
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-slate-300 mb-2">Priority</label>
-                    <Select
-                      value={editPriority}
-                      onChange={(value) => setEditPriority(value as 'low' | 'medium' | 'high')}
-                      className="bg-slate-700/50 border-slate-600"
-                    >
-                      <option value="low">🟢 Low Priority</option>
-                      <option value="medium">🟡 Medium Priority</option>
-                      <option value="high">🔴 High Priority</option>
-                    </Select>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-slate-300 mb-2">Due Date</label>
-                    <Input
-                      type="date"
-                      value={editDueDate}
-                      onChange={(e) => setEditDueDate(e.target.value)}
-                      className="bg-slate-700/50 border-slate-600"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex flex-col sm:flex-row justify-end gap-3 mt-6">
-                <Button
-                  onClick={() => cancelEditingTask()}
-                  variant="secondary"
-                  className="px-4 py-2 w-full sm:w-auto"
-                >
-                  Cancel
-                </Button>
-                <Button
-                  onClick={saveEditedTask}
-                  disabled={!editTitle.trim()}
-                  className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 w-full sm:w-auto"
-                >
-                  <div className="flex items-center gap-2">
-                    <Edit className="w-4 h-4" />
-                    Save Changes
-                  </div>
-                </Button>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <EditTaskModal
+        isOpen={showEditModal}
+        editingTask={editingTask}
+        editTitle={editTitle}
+        editDescription={editDescription}
+        editPriority={editPriority}
+        editDueDate={editDueDate}
+        onClose={cancelEditingTask}
+        onTitleChange={setEditTitle}
+        onDescriptionChange={setEditDescription}
+        onPriorityChange={setEditPriority}
+        onDueDateChange={setEditDueDate}
+        onSave={saveEditedTask}
+      />
     </motion.div>
   );
 }
