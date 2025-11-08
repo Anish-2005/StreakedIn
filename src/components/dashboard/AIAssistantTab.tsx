@@ -279,13 +279,6 @@ export default function AIAssistantTab({}: AIAssistantTabProps) {
     }
   };
 
-  const quickAiPrompts = [
-    "Analyze my productivity patterns",
-    "Suggest weekly goals",
-    "Optimize my schedule",
-    "Review progress and suggest improvements"
-  ];
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -325,7 +318,12 @@ export default function AIAssistantTab({}: AIAssistantTabProps) {
         {/* Right Sidebar - Quick Prompts and Features */}
         <div className="lg:col-span-3 space-y-6">
           <QuickPrompts
-            prompts={quickAiPrompts}
+            prompts={[
+              "Analyze my productivity patterns",
+              "Suggest weekly goals",
+              "Optimize my schedule",
+              "Review progress and suggest improvements"
+            ]}
             onPromptClick={(prompt) => {
               setAiPrompt(prompt);
               handleAiPrompt();
