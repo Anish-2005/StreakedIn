@@ -18,3 +18,6 @@ export { default as TasksTab } from './TasksTab';
 export { default as TopBar } from './TopBar';
 export { default as UserMenu } from './UserMenu';
 export { default as UserProfile } from './UserProfile';
+
+// AI Assistant components
+export * from './ai-assistant';
