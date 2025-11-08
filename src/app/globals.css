@@ -17,15 +17,15 @@
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-gray-100;
+  @apply bg-gray-800;
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-[#0A66C2] rounded-full;
+  @apply bg-purple-800 rounded-full;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  @apply bg-[#004182];
+  @apply bg-purple-900;
 }
 
 /* Professional animations */
