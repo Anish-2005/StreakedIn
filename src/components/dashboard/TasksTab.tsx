@@ -342,69 +342,69 @@ export default function TasksTab({}: TasksTabProps) {
       className="space-y-6"
     >
       {/* Header with Stats */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+      <div className="space-y-4">
         <div>
           <h1 className="text-3xl font-bold text-white mb-2">Task Manager</h1>
           <p className="text-slate-300">Organize, prioritize, and conquer your tasks</p>
         </div>
 
         {/* Task Statistics */}
-        <div className="flex items-center gap-4">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-            <div className="bg-slate-800/40 backdrop-blur-sm border border-slate-700/50 rounded-lg px-3 py-2 text-center">
-              <div className="text-lg font-semibold text-white">{taskStats.total}</div>
-              <div className="text-xs text-slate-400">Total</div>
-            </div>
-            <div className="bg-blue-500/10 border border-blue-500/20 rounded-lg px-3 py-2 text-center">
-              <div className="text-lg font-semibold text-blue-400">{taskStats.pending}</div>
-              <div className="text-xs text-slate-400">Pending</div>
-            </div>
-            <div className="bg-green-500/10 border border-green-500/20 rounded-lg px-3 py-2 text-center">
-              <div className="text-lg font-semibold text-green-400">{taskStats.completed}</div>
-              <div className="text-xs text-slate-400">Done</div>
-            </div>
-            {taskStats.overdue > 0 && (
-              <div className="bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2 text-center">
-                <div className="text-lg font-semibold text-red-400">{taskStats.overdue}</div>
-                <div className="text-xs text-slate-400">Overdue</div>
-              </div>
-            )}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <div className="bg-slate-800/40 backdrop-blur-sm border border-slate-700/50 rounded-lg px-3 py-2 text-center">
+            <div className="text-lg font-semibold text-white">{taskStats.total}</div>
+            <div className="text-xs text-slate-400">Total</div>
           </div>
+          <div className="bg-blue-500/10 border border-blue-500/20 rounded-lg px-3 py-2 text-center">
+            <div className="text-lg font-semibold text-blue-400">{taskStats.pending}</div>
+            <div className="text-xs text-slate-400">Pending</div>
+          </div>
+          <div className="bg-green-500/10 border border-green-500/20 rounded-lg px-3 py-2 text-center">
+            <div className="text-lg font-semibold text-green-400">{taskStats.completed}</div>
+            <div className="text-xs text-slate-400">Done</div>
+          </div>
+          {taskStats.overdue > 0 && (
+            <div className="bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2 text-center">
+              <div className="text-lg font-semibold text-red-400">{taskStats.overdue}</div>
+              <div className="text-xs text-slate-400">Overdue</div>
+            </div>
+          )}
         </div>
       </div>
 
       {/* Filters and Controls */}
-      <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
-        <div className="flex items-center gap-3">
-          <Filter className="w-4 h-4 text-slate-400" />
-          <div className="flex gap-2">
-            {(['all', 'pending', 'completed'] as const).map((filterType) => (
-              <button
-                key={filterType}
-                onClick={() => setFilter(filterType)}
-                className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
-                  filter === filterType
-                    ? 'bg-blue-500 text-white'
-                    : 'bg-slate-700/50 text-slate-300 hover:bg-slate-600/50'
-                }`}
-              >
-                {filterType.charAt(0).toUpperCase() + filterType.slice(1)}
-              </button>
-            ))}
+      <div className="flex flex-col gap-4">
+        <div className="flex flex-col sm:flex-row gap-3 sm:items-center justify-between">
+          <div className="flex items-center gap-3">
+            <Filter className="w-4 h-4 text-slate-400" />
+            <div className="flex flex-wrap gap-2">
+              {(['all', 'pending', 'completed'] as const).map((filterType) => (
+                <button
+                  key={filterType}
+                  onClick={() => setFilter(filterType)}
+                  className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
+                    filter === filterType
+                      ? 'bg-blue-500 text-white'
+                      : 'bg-slate-700/50 text-slate-300 hover:bg-slate-600/50'
+                  }`}
+                >
+                  {filterType.charAt(0).toUpperCase() + filterType.slice(1)}
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
 
-        <div className="flex items-center gap-3">
-          <span className="text-sm text-slate-400">Sort by:</span>
-          <Select
-            value={sortBy}
-            onChange={(value) => setSortBy(value as any)}
-            className="w-32"
-          >
-            <option value="created">Created</option>
-            <option value="priority">Priority</option>
-            <option value="dueDate">Due Date</option>
-          </Select>
+          <div className="flex items-center gap-3">
+            <span className="text-sm text-slate-400">Sort by:</span>
+            <Select
+              value={sortBy}
+              onChange={(value) => setSortBy(value as any)}
+              className="w-32"
+            >
+              <option value="created">Created</option>
+              <option value="priority">Priority</option>
+              <option value="dueDate">Due Date</option>
+            </Select>
+          </div>
         </div>
       </div>
 
@@ -469,10 +469,10 @@ export default function TasksTab({}: TasksTabProps) {
           </div>
         </div>
 
-        <div className="flex justify-end gap-3 mt-4">
+        <div className="flex flex-col sm:flex-row justify-end gap-3 mt-4">
           <Button
             onClick={() => setShowAIPrompt(true)}
-            className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-6 py-2"
+            className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-6 py-2 w-full sm:w-auto"
           >
             <div className="flex items-center gap-2">
               <Sparkles className="w-4 h-4" />
@@ -482,7 +482,7 @@ export default function TasksTab({}: TasksTabProps) {
           <Button
             onClick={addTask}
             disabled={!newTaskTitle.trim() || isAddingTask}
-            className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2"
+            className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 w-full sm:w-auto"
           >
             {isAddingTask ? (
               <div className="flex items-center gap-2">
@@ -565,13 +565,13 @@ export default function TasksTab({}: TasksTabProps) {
                     'bg-green-500'
                   }`} />
 
-                  <div className="flex items-center p-6">
+                  <div className="flex flex-col sm:flex-row sm:items-center p-4 sm:p-6">
                     {/* Checkbox */}
                     <motion.button
                       whileHover={{ scale: 1.1 }}
                       whileTap={{ scale: 0.9 }}
                       onClick={() => toggleTask(task.id)}
-                      className={`flex-shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center mr-4 transition-all ${
+                      className={`flex-shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center mb-3 sm:mb-0 sm:mr-4 transition-all ${
                         task.completed
                           ? 'bg-green-500 border-green-500 text-white'
                           : 'border-slate-500 hover:border-slate-400'
@@ -592,7 +592,7 @@ export default function TasksTab({}: TasksTabProps) {
                     </motion.button>
 
                     {/* Task Content */}
-                    <div className="flex-1 min-w-0">
+                    <div className="flex-1 min-w-0 mb-3 sm:mb-0">
                       <motion.h3
                         className={`text-lg font-medium mb-1 transition-all ${
                           task.completed
@@ -614,7 +614,7 @@ export default function TasksTab({}: TasksTabProps) {
                         </p>
                       )}
 
-                      <div className="flex items-center gap-4 text-sm">
+                      <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-sm">
                         {/* Created Date */}
                         {task.createdAt && (
                           <div className="flex items-center gap-1 text-slate-400">
@@ -642,12 +642,12 @@ export default function TasksTab({}: TasksTabProps) {
                     </div>
 
                     {/* Actions */}
-                    <div className="flex items-center gap-2 ml-4">
+                    <div className="flex items-center gap-2 self-start sm:self-center">
                       <motion.button
                         whileHover={{ scale: 1.1 }}
                         whileTap={{ scale: 0.9 }}
                         onClick={() => startEditingTask(task)}
-                        className="p-2 text-slate-400 hover:text-blue-400 hover:bg-blue-500/20 rounded-lg transition-colors opacity-0 group-hover:opacity-100"
+                        className="p-2 text-slate-400 hover:text-blue-400 hover:bg-blue-500/20 rounded-lg transition-colors"
                       >
                         <Edit className="w-4 h-4" />
                       </motion.button>
@@ -655,7 +655,7 @@ export default function TasksTab({}: TasksTabProps) {
                         whileHover={{ scale: 1.1 }}
                         whileTap={{ scale: 0.9 }}
                         onClick={() => deleteTask(task.id)}
-                        className="p-2 text-slate-400 hover:text-red-400 hover:bg-red-500/20 rounded-lg transition-colors opacity-0 group-hover:opacity-100"
+                        className="p-2 text-slate-400 hover:text-red-400 hover:bg-red-500/20 rounded-lg transition-colors"
                       >
                         <Trash2 className="w-4 h-4" />
                       </motion.button>
@@ -694,7 +694,7 @@ export default function TasksTab({}: TasksTabProps) {
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-slate-800/90 backdrop-blur-md border border-slate-600/50 rounded-xl p-6 w-full max-w-md"
+              className="bg-slate-800/90 backdrop-blur-md border border-slate-600/50 rounded-xl p-4 sm:p-6 w-full max-w-md mx-4"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex items-center justify-between mb-4">
@@ -725,18 +725,18 @@ export default function TasksTab({}: TasksTabProps) {
                 rows={3}
               />
 
-              <div className="flex justify-end gap-3">
+              <div className="flex flex-col sm:flex-row justify-end gap-3">
                 <Button
                   onClick={() => setShowAIPrompt(false)}
                   variant="secondary"
-                  className="px-4 py-2"
+                  className="px-4 py-2 w-full sm:w-auto"
                 >
                   Cancel
                 </Button>
                 <Button
                   onClick={handleAIPrompt}
                   disabled={!aiPrompt.trim() || isGeneratingAI}
-                  className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-6 py-2"
+                  className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-6 py-2 w-full sm:w-auto"
                 >
                   {isGeneratingAI ? (
                     <div className="flex items-center gap-2">
@@ -770,7 +770,7 @@ export default function TasksTab({}: TasksTabProps) {
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-slate-800/90 backdrop-blur-md border border-slate-600/50 rounded-xl p-6 w-full max-w-lg"
+              className="bg-slate-800/90 backdrop-blur-md border border-slate-600/50 rounded-xl p-4 sm:p-6 w-full max-w-lg mx-4"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex items-center justify-between mb-4">
@@ -805,20 +805,20 @@ export default function TasksTab({}: TasksTabProps) {
                 This task was generated by AI based on your description. You can add it to your task list or make changes later.
               </p>
 
-              <div className="flex justify-end gap-3">
+              <div className="flex flex-col sm:flex-row justify-end gap-3">
                 <Button
                   onClick={() => {
                     setShowAIConfirmation(false);
                     setAiGeneratedTask(null);
                   }}
                   variant="secondary"
-                  className="px-4 py-2"
+                  className="px-4 py-2 w-full sm:w-auto"
                 >
                   Cancel
                 </Button>
                 <Button
                   onClick={confirmAICreatedTask}
-                  className="bg-green-500 hover:bg-green-600 text-white px-6 py-2"
+                  className="bg-green-500 hover:bg-green-600 text-white px-6 py-2 w-full sm:w-auto"
                 >
                   <div className="flex items-center gap-2">
                     <Plus className="w-4 h-4" />
@@ -845,7 +845,7 @@ export default function TasksTab({}: TasksTabProps) {
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-slate-800/90 backdrop-blur-md border border-slate-600/50 rounded-xl p-6 w-full max-w-lg"
+              className="bg-slate-800/90 backdrop-blur-md border border-slate-600/50 rounded-xl p-4 sm:p-6 w-full max-w-lg mx-4"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex items-center justify-between mb-4">
@@ -912,18 +912,18 @@ export default function TasksTab({}: TasksTabProps) {
                 </div>
               </div>
 
-              <div className="flex justify-end gap-3 mt-6">
+              <div className="flex flex-col sm:flex-row justify-end gap-3 mt-6">
                 <Button
                   onClick={() => cancelEditingTask()}
                   variant="secondary"
-                  className="px-4 py-2"
+                  className="px-4 py-2 w-full sm:w-auto"
                 >
                   Cancel
                 </Button>
                 <Button
                   onClick={saveEditedTask}
                   disabled={!editTitle.trim()}
-                  className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2"
+                  className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 w-full sm:w-auto"
                 >
                   <div className="flex items-center gap-2">
                     <Edit className="w-4 h-4" />
