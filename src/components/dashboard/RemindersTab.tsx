@@ -2,7 +2,7 @@
 import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
-import { RemindersService, AISuggestionsService } from '../../lib/services';
+import { RemindersService } from '../../lib/services';
 import type { Reminder } from '../../lib/services';
 import {
   RemindersHeader,
@@ -123,7 +123,7 @@ export default function RemindersTab({}: RemindersTabProps) {
         // Enhanced fallback: create a better formatted reminder from the prompt
         const prompt = aiPrompt.trim();
         let title = 'New Reminder';
-        let description = `Reminder: ${prompt}`;
+        const description = `Reminder: ${prompt}`;
         let frequency = 'once';
         let type = 'browser';
 
@@ -169,7 +169,7 @@ export default function RemindersTab({}: RemindersTabProps) {
       // Enhanced fallback for errors
       const prompt = aiPrompt.trim();
       let title = 'New Reminder';
-      let description = `Reminder: ${prompt}`;
+      const description = `Reminder: ${prompt}`;
 
       if (prompt.length <= 50) {
         title = prompt.charAt(0).toUpperCase() + prompt.slice(1);
