@@ -8,7 +8,7 @@
 
   /* Default (light) */
   body {
-    @apply bg-gray-50 text-gray-900;
+    @apply bg-purple-50 text-gray-900;
   }
 
   /* Dark theme */
@@ -21,11 +21,24 @@
 /* Scrollbar */
 /* ============================= */
 
-/* Dark */
-html.dark ::-webkit-scrollbar {
+/* Default (light) */
+::-webkit-scrollbar {
   width: 6px;
 }
 
+::-webkit-scrollbar-track {
+  @apply bg-gray-200;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-purple-400 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-purple-500;
+}
+
+/* Dark overrides */
 html.dark ::-webkit-scrollbar-track {
   @apply bg-gray-800;
 }
@@ -38,37 +51,17 @@ html.dark ::-webkit-scrollbar-thumb:hover {
   @apply bg-purple-900;
 }
 
-/* Light */
-html.light ::-webkit-scrollbar {
-  width: 6px;
-}
-
-html.light ::-webkit-scrollbar-track {
-  @apply bg-gray-200;
-}
-
-html.light ::-webkit-scrollbar-thumb {
-  @apply bg-purple-400 rounded-full;
-}
-
-html.light ::-webkit-scrollbar-thumb:hover {
-  @apply bg-purple-500;
-}
-
 /* ============================= */
 /* Glassmorphism */
 /* ============================= */
 
 .glass-effect {
   backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.8);
 }
 
 html.dark .glass-effect {
   background: rgba(30, 41, 59, 0.8);
-}
-
-html.light .glass-effect {
-  background: rgba(255, 255, 255, 0.8);
 }
 
 /* ============================= */
@@ -77,14 +70,11 @@ html.light .glass-effect {
 
 .professional-card {
   @apply rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300;
+  @apply bg-white border border-gray-200;
 }
 
 html.dark .professional-card {
   @apply bg-gray-800 border border-gray-700;
-}
-
-html.light .professional-card {
-  @apply bg-white border border-gray-200;
 }
 
 /* ============================= */

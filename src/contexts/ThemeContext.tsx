@@ -14,13 +14,18 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setThemeState] = useState<Theme>(() => {
-    if (typeof window === 'undefined') return 'dark';
-    return (localStorage.getItem('theme') as Theme) || 'dark';
+    if (typeof window === 'undefined') return 'light';
+    const stored = localStorage.getItem('theme') as Theme | null;
+    return stored === 'dark' ? 'dark' : 'light';
   });
 
   useEffect(() => {
     document.documentElement.classList.remove('light', 'dark');
-    document.documentElement.classList.add(theme);
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.add('light');
+    }
     localStorage.setItem('theme', theme);
   }, [theme]);
 

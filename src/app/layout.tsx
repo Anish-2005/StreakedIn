@@ -31,8 +31,14 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{
             __html: `
               (function() {
-                const theme = localStorage.getItem('theme') || 'dark';
-                document.documentElement.classList.add(theme);
+                const stored = localStorage.getItem('theme');
+                const theme = stored === 'dark' ? 'dark' : 'light';
+                document.documentElement.classList.remove('light','dark');
+                if (theme === 'dark') {
+                  document.documentElement.classList.add('dark');
+                } else {
+                  document.documentElement.classList.add('light');
+                }
               })();
             `
           }}
