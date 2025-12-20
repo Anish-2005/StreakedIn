@@ -10,7 +10,7 @@ export default function MobileOverlay({ isVisible, onClose }: MobileOverlayProps
 
   return (
     <div
-      className="fixed inset-0 bg-black/50 z-40 md:hidden"
+      className="fixed inset-0 dark:bg-black/50 light:bg-gray-900/30 z-40 md:hidden"
       onClick={onClose}
     />
   );

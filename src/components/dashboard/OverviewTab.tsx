@@ -106,7 +106,7 @@ export default function OverviewTab({ setActiveTab }: OverviewTabProps) {
         {/* Goals Progress - Takes up 6 columns on xl screens */}
         <Card className="xl:col-span-6">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-semibold text-white">Goals Progress</h2>
+            <h2 className="text-xl font-semibold dark:text-white light:text-gray-900">Goals Progress</h2>
             <Button
               variant="primary"
               size="sm"
@@ -119,8 +119,8 @@ export default function OverviewTab({ setActiveTab }: OverviewTabProps) {
           <div className="space-y-4">
             {goals.length === 0 ? (
               <div className="text-center py-12">
-                <Target className="w-16 h-16 mx-auto mb-4 opacity-50 text-slate-400" />
-                <p className="text-slate-400 mb-4">No goals yet. Create your first goal!</p>
+                <Target className="w-16 h-16 mx-auto mb-4 opacity-50 dark:text-slate-400 light:text-gray-400" />
+                <p className="dark:text-slate-400 light:text-gray-500 mb-4">No goals yet. Create your first goal!</p>
                 <Button
                   variant="primary"
                   icon={<Plus className="w-4 h-4" />}
@@ -131,28 +131,28 @@ export default function OverviewTab({ setActiveTab }: OverviewTabProps) {
               </div>
             ) : (
               goals.slice(0, 4).map((goal) => (
-                <div key={goal.id} className="bg-slate-800/40 border border-slate-700/50 rounded-xl p-5 hover:border-slate-600/70 transition-colors">
+                <div key={goal.id} className="dark:bg-slate-800/40 light:bg-gray-50/60 dark:border light:border dark:border-slate-700/50 light:border-gray-200/50 rounded-xl p-5 dark:hover:border-slate-600/70 light:hover:border-gray-300/70 transition-colors">
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex-1 min-w-0">
-                      <h3 className="font-semibold text-white text-lg mb-1 truncate">{goal.title}</h3>
-                      <div className="flex items-center gap-4 text-sm text-slate-400">
+                      <h3 className="font-semibold dark:text-white light:text-gray-900 text-lg mb-1 truncate">{goal.title}</h3>
+                      <div className="flex items-center gap-4 text-sm dark:text-slate-400 light:text-gray-600">
                         <span className="flex items-center gap-1">
                           <Clock className="w-3 h-3" />
                           Due {goal.deadline ? new Date(goal.deadline).toLocaleDateString() : 'No deadline'}
                         </span>
-                        <span className="px-2 py-1 bg-slate-700/50 rounded-full text-xs">
+                        <span className="px-2 py-1 dark:bg-slate-700/50 light:bg-gray-200/70 rounded-full text-xs">
                           {goal.category}
                         </span>
                       </div>
                     </div>
                     <div className="text-right ml-4">
-                      <div className="text-2xl font-bold text-white">{goal.progress}%</div>
-                      <div className="text-xs text-slate-400">Complete</div>
+                      <div className="text-2xl font-bold dark:text-white light:text-gray-900">{goal.progress}%</div>
+                      <div className="text-xs dark:text-slate-400 light:text-gray-500">Complete</div>
                     </div>
                   </div>
                   <ProgressBar value={goal.progress} className="w-full h-2" />
                   {goal.description && (
-                    <p className="text-slate-300 text-sm mt-3 line-clamp-2">{goal.description}</p>
+                    <p className="dark:text-slate-300 light:text-gray-700 text-sm mt-3 line-clamp-2">{goal.description}</p>
                   )}
                 </div>
               ))
@@ -174,10 +174,10 @@ export default function OverviewTab({ setActiveTab }: OverviewTabProps) {
           {/* Goals Achieved */}
           <Card>
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-semibold text-white">Goals Achieved</h2>
+              <h2 className="text-xl font-semibold dark:text-white light:text-gray-900">Goals Achieved</h2>
               <div className="flex items-center gap-2">
-                <CheckCircle className="w-5 h-5 text-green-400" />
-                <span className="text-green-400 font-semibold">
+                <CheckCircle className="w-5 h-5 dark:text-green-400 light:text-green-600" />
+                <span className="dark:text-green-400 light:text-green-600 font-semibold">
                   {goals.filter(goal => goal.progress === 100).length}
                 </span>
               </div>
@@ -185,8 +185,8 @@ export default function OverviewTab({ setActiveTab }: OverviewTabProps) {
             <div className="space-y-4">
               {goals.filter(goal => goal.progress === 100).length === 0 ? (
                 <div className="text-center py-8">
-                  <CheckCircle className="w-12 h-12 mx-auto mb-4 opacity-50 text-slate-400" />
-                  <p className="text-slate-400">No goals achieved yet. Keep pushing!</p>
+                  <CheckCircle className="w-12 h-12 mx-auto mb-4 opacity-50 dark:text-slate-400 light:text-gray-400" />
+                  <p className="dark:text-slate-400 light:text-gray-500">No goals achieved yet. Keep pushing!</p>
                 </div>
               ) : (
                 goals
@@ -194,17 +194,17 @@ export default function OverviewTab({ setActiveTab }: OverviewTabProps) {
                   .sort((a, b) => new Date(b.updatedAt || b.createdAt).getTime() - new Date(a.updatedAt || a.createdAt).getTime())
                   .slice(0, 3)
                   .map((goal) => (
-                    <div key={goal.id} className="bg-green-500/10 border border-green-500/30 rounded-xl p-4">
+                    <div key={goal.id} className="dark:bg-green-500/10 light:bg-green-50/70 dark:border light:border dark:border-green-500/30 light:border-green-300/50 rounded-xl p-4">
                       <div className="flex items-center gap-3 mb-2">
-                        <div className="w-10 h-10 bg-green-500/20 rounded-full flex items-center justify-center">
-                          <CheckCircle className="w-5 h-5 text-green-400" />
+                        <div className="w-10 h-10 dark:bg-green-500/20 light:bg-green-200/60 rounded-full flex items-center justify-center">
+                          <CheckCircle className="w-5 h-5 dark:text-green-400 light:text-green-600" />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <h3 className="font-semibold text-white truncate">{goal.title}</h3>
-                          <p className="text-sm text-green-400">Completed!</p>
+                          <h3 className="font-semibold dark:text-white light:text-gray-900 truncate">{goal.title}</h3>
+                          <p className="text-sm dark:text-green-400 light:text-green-600">Completed!</p>
                         </div>
                       </div>
-                      <div className="text-xs text-slate-400 ml-13">
+                      <div className="text-xs dark:text-slate-400 light:text-gray-500 ml-13">
                         Achieved on {new Date(goal.updatedAt || goal.createdAt).toLocaleDateString()}
                       </div>
                     </div>
@@ -224,7 +224,7 @@ export default function OverviewTab({ setActiveTab }: OverviewTabProps) {
 
           {/* Quick Actions */}
           <Card>
-            <h2 className="text-xl font-semibold text-white mb-6">Quick Actions</h2>
+            <h2 className="text-xl font-semibold dark:text-white light:text-gray-900 mb-6">Quick Actions</h2>
             <div className="grid grid-cols-2 gap-3 mb-6">
               {[
                 { icon: <Plus className="w-5 h-5" />, label: ' Create New Goal', action: () => setActiveTab('goals'), color: 'bg-blue-500 hover:bg-blue-600' },
@@ -244,9 +244,9 @@ export default function OverviewTab({ setActiveTab }: OverviewTabProps) {
             </div>
 
             {/* AI Suggestions Preview */}
-            <div className="border-t border-slate-700/50 pt-6">
+            <div className="dark:border-t light:border-t dark:border-slate-700/50 light:border-gray-200/40 pt-6">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-white">AI Suggestions</h3>
+                <h3 className="text-lg font-semibold dark:text-white light:text-gray-900">AI Suggestions</h3>
                 <Button
                   variant="ghost"
                   size="sm"
@@ -259,21 +259,21 @@ export default function OverviewTab({ setActiveTab }: OverviewTabProps) {
               {aiSuggestions.length > 0 ? (
                 <div className="space-y-3">
                   {aiSuggestions.slice(0, 2).map((suggestion, index) => (
-                    <div key={index} className="bg-slate-800/50 border border-slate-700/50 rounded-lg p-4">
+                    <div key={index} className="dark:bg-slate-800/50 light:bg-gray-50/60 dark:border light:border dark:border-slate-700/50 light:border-gray-200/50 rounded-lg p-4">
                       <div className="flex items-start gap-3">
-                        <Brain className="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0" />
-                        <p className="text-slate-300 text-sm leading-relaxed">{suggestion}</p>
+                        <Brain className="w-5 h-5 dark:text-purple-400 light:text-purple-600 mt-0.5 flex-shrink-0" />
+                        <p className="dark:text-slate-300 light:text-gray-700 text-sm leading-relaxed">{suggestion}</p>
                       </div>
                     </div>
                   ))}
                 </div>
               ) : (
-                <div className="bg-slate-800/30 border border-slate-700/40 rounded-lg p-4">
+                <div className="dark:bg-slate-800/30 light:bg-gray-50/40 dark:border light:border dark:border-slate-700/40 light:border-gray-200/40 rounded-lg p-4">
                   <div className="flex items-center gap-3">
-                    <Brain className="w-5 h-5 text-slate-400" />
+                    <Brain className="w-5 h-5 dark:text-slate-400 light:text-gray-500" />
                     <div>
-                      <p className="text-slate-400 text-sm">AI suggestions are currently unavailable</p>
-                      <p className="text-slate-500 text-xs mt-1">Using intelligent fallback recommendations</p>
+                      <p className="dark:text-slate-400 light:text-gray-600 text-sm">AI suggestions are currently unavailable</p>
+                      <p className="dark:text-slate-500 light:text-gray-400 text-xs mt-1">Using intelligent fallback recommendations</p>
                     </div>
                   </div>
                 </div>

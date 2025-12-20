@@ -192,7 +192,7 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen dark:bg-gradient-to-br dark:from-slate-900 dark:via-purple-900 dark:to-slate-900 light:bg-white dark:text-white light:text-gray-900">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-white dark:from-slate-900 dark:via-purple-900 dark:to-slate-900 text-gray-900 dark:text-white">
       <Head>
         <title>Dashboard - StreakedIn</title>
         <meta name="description" content="Professional productivity dashboard" />

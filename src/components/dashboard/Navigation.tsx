@@ -36,7 +36,7 @@ export default function Navigation({ activeTab, onTabChange, isCollapsed }: Navi
               onClick={() => onTabChange(item.id)}
               className={`group relative w-full flex items-center justify-center ${
                 isCollapsed ? 'px-2 py-3' : 'space-x-4 px-4 py-3.5'
-              } rounded-xl transition-all duration-300 hover:scale-110 ${
+              } rounded-xl transition-all duration-300 dark:hover:scale-110 light:hover:scale-110 ${
                 isActive
                   ? 'dark:bg-gradient-to-r dark:from-white/15 dark:to-white/5 light:bg-gradient-to-r light:from-purple-100/40 light:to-blue-100/40 dark:border dark:border-white/20 light:border light:border-purple-300/40 dark:shadow-lg dark:shadow-blue-500/20 light:shadow-lg light:shadow-purple-300/20'
                   : 'dark:hover:bg-white/5 light:hover:bg-gray-100/50 dark:border dark:border-transparent light:border light:border-transparent dark:hover:border-white/10 light:hover:border-gray-300/30'
@@ -44,12 +44,12 @@ export default function Navigation({ activeTab, onTabChange, isCollapsed }: Navi
             >
               {/* Active indicator - only show when not collapsed */}
               {isActive && !isCollapsed && (
-                <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-gradient-to-b from-blue-400 to-purple-400 rounded-r-full"></div>
+                <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 dark:bg-gradient-to-b light:bg-gradient-to-b dark:from-blue-400 light:from-blue-500 dark:to-purple-400 light:to-purple-500 rounded-r-full"></div>
               )}
 
               {/* Active indicator for collapsed state */}
               {isActive && isCollapsed && (
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-xl border border-blue-400/30"></div>
+                <div className="absolute inset-0 dark:bg-gradient-to-r light:bg-gradient-to-r dark:from-blue-500/20 light:from-blue-400/30 dark:to-purple-500/20 light:to-purple-400/30 rounded-xl dark:border light:border dark:border-blue-400/30 light:border-purple-400/40"></div>
               )}
 
               {/* Icon with enhanced styling */}
@@ -62,12 +62,12 @@ export default function Navigation({ activeTab, onTabChange, isCollapsed }: Navi
 
                 {/* Icon glow effect */}
                 {isActive && (
-                  <div className="absolute -inset-1 bg-gradient-to-r from-blue-500/30 to-purple-500/30 rounded-lg blur opacity-60"></div>
+                  <div className="absolute -inset-1 dark:bg-gradient-to-r light:bg-gradient-to-r dark:from-blue-500/30 light:from-blue-400/20 dark:to-purple-500/30 light:to-purple-400/20 rounded-lg blur dark:opacity-60 light:opacity-40"></div>
                 )}
 
                 {/* Hover glow for non-active items */}
                 {!isActive && (
-                  <div className={`absolute -inset-1 bg-gradient-to-r ${item.color} rounded-lg blur opacity-0 group-hover:opacity-20 transition-opacity duration-300`}></div>
+                  <div className={`absolute -inset-1 bg-gradient-to-r ${item.color} rounded-lg blur dark:opacity-0 light:opacity-0 dark:group-hover:opacity-20 light:group-hover:opacity-10 transition-opacity duration-300`}></div>
                 )}
               </div>
 
@@ -84,7 +84,7 @@ export default function Navigation({ activeTab, onTabChange, isCollapsed }: Navi
 
                   {/* Active sparkle indicator */}
                   {isActive && (
-                    <Sparkles className="w-4 h-4 text-purple-300 animate-pulse" />
+                    <Sparkles className="w-4 h-4 dark:text-purple-300 light:text-purple-500 animate-pulse" />
                   )}
                 </div>
               )}
@@ -105,7 +105,7 @@ export default function Navigation({ activeTab, onTabChange, isCollapsed }: Navi
       {/* Decorative elements - hide when collapsed */}
       {!isCollapsed && (
         <div className="mt-8 flex justify-center">
-          <div className="w-32 h-px dark:bg-gradient-to-r dark:from-transparent dark:via-slate-600 dark:to-transparent light:bg-gradient-to-r light:from-transparent light:via-gray-300 light:to-transparent"></div>
+          <div className="w-32 h-px dark:bg-gradient-to-r light:bg-gradient-to-r dark:from-transparent light:from-transparent dark:via-slate-600 light:via-gray-300 dark:to-transparent light:to-transparent"></div>
         </div>
       )}
     </nav>

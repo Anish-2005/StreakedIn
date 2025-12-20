@@ -1,6 +1,7 @@
-// tailwind.config.js
-/** @type {import('tailwindcss').Config} */
-module.exports = {
+import type { Config } from 'tailwindcss';
+import plugin from 'tailwindcss/plugin';
+
+const config: Config = {
   darkMode: 'class',
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx}',
@@ -27,5 +28,15 @@ module.exports = {
       }
     },
   },
-  plugins: [],
-}
+  plugins: [
+    plugin(({ addVariant }) => {
+      addVariant('light', '.light &');
+      addVariant('light-hover', '.light &:hover');
+      addVariant('light-focus', '.light &:focus');
+      addVariant('light-active', '.light &:active');
+      addVariant('light-disabled', '.light &:disabled');
+    }),
+  ],
+};
+
+export default config;

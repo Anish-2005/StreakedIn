@@ -14,7 +14,7 @@ const navigationItems = ['Features', 'How It Works', 'Pricing', 'Testimonials'];
 
 export default function Navigation({ isMenuOpen, setIsMenuOpen }: NavigationProps) {
   return (
-    <nav className="fixed top-0 w-full z-50 backdrop-blur-md dark:bg-slate-900/80 light:bg-white/80 dark:border-b dark:border-slate-700/50 light:border-b light:border-gray-200">
+    <nav className="fixed top-0 w-full z-50 backdrop-blur-md bg-white/80 dark:bg-slate-900/80 border-b border-gray-200 dark:border-slate-700/50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
@@ -37,7 +37,7 @@ export default function Navigation({ isMenuOpen, setIsMenuOpen }: NavigationProp
               <motion.a
                 key={item}
                 href={`#${item.toLowerCase().replace(' ', '-')}`}
-                className="dark:text-slate-300 dark:hover:text-white light:text-gray-700 light:hover:text-gray-900 transition-colors duration-200 font-medium"
+                className="text-gray-700 hover:text-gray-900 dark:text-slate-300 dark:hover:text-white transition-colors duration-200 font-medium"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
@@ -77,7 +77,7 @@ export default function Navigation({ isMenuOpen, setIsMenuOpen }: NavigationProp
 
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden p-2 dark:text-white light:text-gray-900"
+            className="md:hidden p-2 text-gray-900 dark:text-white"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
             {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -92,20 +92,20 @@ export default function Navigation({ isMenuOpen, setIsMenuOpen }: NavigationProp
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden dark:bg-slate-800/95 light:bg-gray-50/95 backdrop-blur-md dark:border-b dark:border-slate-700/50 light:border-b light:border-gray-200"
+            className="md:hidden bg-gray-50/95 dark:bg-slate-800/95 backdrop-blur-md border-b border-gray-200 dark:border-slate-700/50"
           >
             <div className="px-4 py-6 space-y-4">
               {navigationItems.map((item) => (
                 <a
                   key={item}
                   href={`#${item.toLowerCase().replace(' ', '-')}`}
-                  className="block dark:text-slate-300 dark:hover:text-white light:text-gray-700 light:hover:text-gray-900 transition-colors duration-200 font-medium py-2"
+                  className="block text-gray-700 hover:text-gray-900 dark:text-slate-300 dark:hover:text-white transition-colors duration-200 font-medium py-2"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   {item}
                 </a>
               ))}
-              <div className="pt-4 space-y-3 dark:border-t dark:border-slate-700/50 light:border-t light:border-gray-200">
+              <div className="pt-4 space-y-3 border-t border-gray-200 dark:border-slate-700/50">
                 <div className="pb-3">
                   <ThemeToggle />
                 </div>

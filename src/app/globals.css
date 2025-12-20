@@ -6,23 +6,18 @@
     font-family: 'Inter', system-ui, sans-serif;
   }
   
-  body {
-    @apply text-gray-900;
-  }
-
-  /* Dark Theme (Default) */
+  /* Dark theme (default) */
   html.dark body {
-    @apply bg-slate-950 text-gray-100;
+    @apply bg-gray-900 text-gray-100;
   }
-
-  /* Light Theme */
+  
+  /* Light theme */
   html.light body {
-    @apply bg-white text-gray-900;
+    @apply bg-gray-50 text-gray-900;
   }
 }
 
-/* ===== CUSTOM SCROLLBAR ===== */
-/* Dark theme scrollbar */
+/* Custom scrollbar - Dark theme */
 html.dark ::-webkit-scrollbar {
   width: 6px;
 }
@@ -39,13 +34,13 @@ html.dark ::-webkit-scrollbar-thumb:hover {
   @apply bg-purple-900;
 }
 
-/* Light theme scrollbar */
+/* Custom scrollbar - Light theme */
 html.light ::-webkit-scrollbar {
   width: 6px;
 }
 
 html.light ::-webkit-scrollbar-track {
-  @apply bg-gray-100;
+  @apply bg-gray-200;
 }
 
 html.light ::-webkit-scrollbar-thumb {
@@ -56,32 +51,32 @@ html.light ::-webkit-scrollbar-thumb:hover {
   @apply bg-purple-500;
 }
 
-/* ===== PROFESSIONAL ANIMATIONS & EFFECTS ===== */
-/* Glass effect - Dark */
+/* Professional animations */
+.glass-effect {
+  backdrop-filter: blur(10px);
+}
+
 html.dark .glass-effect {
-  backdrop-filter: blur(10px);
   background: rgba(30, 41, 59, 0.8);
-  border: 1px solid rgba(148, 113, 233, 0.2);
 }
 
-/* Glass effect - Light */
 html.light .glass-effect {
-  backdrop-filter: blur(10px);
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(148, 113, 233, 0.15);
+  background: rgba(255, 255, 255, 0.8);
 }
 
-/* Professional card - Dark */
+.professional-card {
+  @apply rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300;
+}
+
 html.dark .professional-card {
-  @apply bg-slate-900 border border-purple-900 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300;
+  @apply bg-gray-800 border border-gray-700;
 }
 
-/* Professional card - Light */
 html.light .professional-card {
-  @apply bg-gray-50 border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300;
+  @apply bg-white border border-gray-200;
 }
 
-/* ===== TOGGLE SWITCH STYLES ===== */
+/* Toggle switch styles */
 .toggle-checkbox:checked {
   @apply right-0 border-green-400;
   right: 0;
