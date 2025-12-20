@@ -49,34 +49,34 @@ export default function Sidebar({ activeTab, setActiveTab, isSidebarOpen, setIsS
         : `${isSidebarOpen ? 'w-72' : 'w-20'}`
     }`}>
       {/* Enhanced Background with Multiple Layers */}
-      <div className="absolute inset-0 bg-gradient-to-b from-slate-900/98 via-purple-900/95 to-slate-900/98 backdrop-blur-2xl"></div>
-      <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 via-transparent to-purple-600/10"></div>
-      <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-white/5"></div>
+      <div className="absolute inset-0 dark:bg-gradient-to-b dark:from-slate-900/98 dark:via-purple-900/95 dark:to-slate-900/98 light:bg-gradient-to-b light:from-gray-50/98 light:via-white/95 light:to-gray-50/98 backdrop-blur-2xl"></div>
+      <div className="absolute inset-0 dark:bg-gradient-to-r dark:from-blue-600/10 dark:via-transparent dark:to-purple-600/10 light:from-blue-600/5 light:via-transparent light:to-purple-600/5"></div>
+      <div className="absolute inset-0 dark:bg-gradient-to-t dark:from-black/20 dark:via-transparent dark:to-white/5 light:from-black/5 light:via-transparent light:to-white/20"></div>
 
       {/* Animated Border */}
-      <div className="absolute right-0 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-blue-400/30 to-transparent"></div>
+      <div className="absolute right-0 top-0 bottom-0 w-px dark:bg-gradient-to-b dark:from-transparent dark:via-blue-400/30 dark:to-transparent light:bg-gradient-to-b light:from-transparent light:via-purple-300/30 light:to-transparent"></div>
 
       {/* Content Container */}
       <div className="relative h-full flex flex-col overflow-hidden">
         {/* Enhanced Logo Section */}
-        <div className={`flex flex-col items-center ${isSidebarOpen ? 'h-20 px-6 py-3' : 'h-20 px-2 py-3'} border-b border-slate-700/60 relative`}>
+        <div className={`flex flex-col items-center ${isSidebarOpen ? 'h-20 px-6 py-3' : 'h-20 px-2 py-3'} dark:border-b dark:border-slate-700/60 light:border-b light:border-gray-200/60 relative`}>
           {/* Logo and title row */}
           <div className={`flex ${isSidebarOpen ? 'items-center space-x-4 w-full justify-between' : 'justify-center'}`}>
             <div className="relative group">
-              <div className={`bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-xl flex items-center justify-center border border-white/10 group-hover:border-white/20 transition-colors ${
+              <div className={`dark:bg-gradient-to-br dark:from-blue-500/20 dark:to-purple-500/20 light:bg-gradient-to-br light:from-blue-100/30 light:to-purple-100/30 rounded-xl flex items-center justify-center dark:border dark:border-white/10 light:border light:border-purple-300/30 dark:group-hover:border-white/20 light:group-hover:border-purple-300/60 transition-colors ${
                 isSidebarOpen ? 'w-12 h-12' : 'w-12 h-12'
               }`}>
-                <TrendingUp className={`text-blue-300 ${isSidebarOpen ? 'w-6 h-6' : 'w-6 h-6'}`} />
+                <TrendingUp className={`dark:text-blue-300 light:text-blue-600 ${isSidebarOpen ? 'w-6 h-6' : 'w-6 h-6'}`} />
               </div>
               {/* Logo glow */}
               <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl blur opacity-0 group-hover:opacity-30 transition-opacity"></div>
             </div>
             {isSidebarOpen && (
               <div className="flex items-center space-x-2">
-                <span className="text-2xl font-bold bg-gradient-to-r from-white via-blue-100 to-purple-200 bg-clip-text text-transparent">
+                <span className="text-2xl font-bold dark:bg-gradient-to-r dark:from-white dark:via-blue-100 dark:to-purple-200 light:bg-gradient-to-r light:from-gray-900 light:via-blue-700 light:to-purple-700 bg-clip-text text-transparent">
                   StreakedIn
                 </span>
-                <Sparkles className="w-5 h-5 text-purple-300 animate-pulse" />
+                <Sparkles className="dark:text-purple-300 light:text-purple-500 w-5 h-5 animate-pulse" />
               </div>
             )}
           </div>
@@ -103,10 +103,10 @@ export default function Sidebar({ activeTab, setActiveTab, isSidebarOpen, setIsS
         <div className={`flex ${isSidebarOpen ? 'justify-end px-6 py-4' : 'justify-center px-2 py-3'}`}>
           <button
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-            className="group p-2 hover:bg-white/10 rounded-xl transition-all duration-300 hover:scale-110"
+            className="group p-2 dark:hover:bg-white/10 light:hover:bg-gray-900/10 rounded-xl transition-all duration-300 hover:scale-110"
             title={isSidebarOpen ? "Collapse Sidebar" : "Expand Sidebar"}
           >
-            <ChevronRight className={`w-5 h-5 text-slate-400 group-hover:text-white transition-all duration-300 ${
+            <ChevronRight className={`w-5 h-5 dark:text-slate-400 light:text-gray-600 dark:group-hover:text-white light:group-hover:text-gray-900 transition-all duration-300 ${
               isSidebarOpen ? 'rotate-180' : ''
             }`} />
           </button>

@@ -37,10 +37,10 @@ export default function HeroSection() {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.2, duration: 0.5 }}
-            className="inline-flex items-center px-4 py-2 rounded-full bg-slate-800/50 backdrop-blur-md border border-slate-700/50"
+            className="inline-flex items-center px-4 py-2 rounded-full dark:bg-slate-800/50 light:bg-gray-200/50 backdrop-blur-md dark:border dark:border-slate-700/50 light:border light:border-gray-300/50"
           >
             <Award className="w-4 h-4 text-yellow-400 mr-2" />
-            <span className="text-sm text-slate-300">Trusted by 10,000+ professionals</span>
+            <span className="text-sm dark:text-slate-300 light:text-gray-700">Trusted by 10,000+ professionals</span>
           </motion.div>
 
           {/* Main Heading */}
@@ -50,7 +50,7 @@ export default function HeroSection() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, duration: 0.8 }}
           >
-            <span className="bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent">
+            <span className="dark:bg-gradient-to-r dark:from-white dark:to-slate-300 light:bg-gradient-to-r light:from-gray-900 light:to-gray-700 bg-clip-text text-transparent">
               Master Your
             </span>
             <br />
@@ -64,7 +64,7 @@ export default function HeroSection() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5, duration: 0.8 }}
-            className="text-xl md:text-2xl text-slate-300 max-w-3xl mx-auto leading-relaxed"
+            className="text-xl md:text-2xl dark:text-slate-300 light:text-gray-700 max-w-3xl mx-auto leading-relaxed"
           >
             Set goals, track progress, and measure productivity through intelligent analytics.
             The professional's choice for achieving more.
@@ -98,7 +98,7 @@ export default function HeroSection() {
               <Button
                 variant="outline"
                 size="lg"
-                className="px-8 py-4 bg-slate-800/50 backdrop-blur-md border-slate-700/50 hover:bg-slate-700/50"
+                className="px-8 py-4 dark:bg-slate-800/50 light:bg-gray-100/50 dark:backdrop-blur-md light:backdrop-blur-sm dark:border-slate-700/50 light:border-gray-300/50 dark:hover:bg-slate-700/50 light:hover:bg-gray-200/50"
                 icon={<Play className="w-5 h-5" />}
               >
                 Watch Demo
@@ -115,8 +115,8 @@ export default function HeroSection() {
           >
             {stats.map((stat, index) => (
               <div key={index} className="text-center">
-                <div className="text-2xl md:text-3xl font-bold text-white">{stat.number}</div>
-                <div className="text-slate-400 text-sm mt-1">{stat.label}</div>
+                <div className="text-2xl md:text-3xl font-bold dark:text-white light:text-gray-900">{stat.number}</div>
+                <div className="dark:text-slate-400 light:text-gray-600 text-sm mt-1">{stat.label}</div>
               </div>
             ))}
           </motion.div>
@@ -133,7 +133,7 @@ export default function HeroSection() {
         <motion.div
           animate={{ y: [0, 10, 0] }}
           transition={{ duration: 2, repeat: Infinity }}
-          className="flex flex-col items-center space-y-2 text-slate-400"
+          className="flex flex-col items-center space-y-2 dark:text-slate-400 light:text-gray-500"
         >
           <span className="text-sm">Scroll to explore</span>
           <ChevronDown className="w-5 h-5" />

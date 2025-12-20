@@ -12,8 +12,8 @@ export default function Logo() {
           className="w-8 h-8 border-2 border-white border-t-transparent rounded-full"
         />
       </div>
-      <h1 className="text-3xl font-bold text-white mb-2">StreakedIn</h1>
-      <p className="text-slate-300">Professional Productivity Dashboard</p>
+      <h1 className="text-3xl font-bold dark:text-white light:text-gray-900 mb-2">StreakedIn</h1>
+      <p className="dark:text-slate-300 light:text-gray-700">Professional Productivity Dashboard</p>
     </div>
   );
 }

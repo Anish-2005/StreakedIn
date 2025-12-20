@@ -3,7 +3,7 @@ import { TrendingUp } from 'lucide-react';
 
 export default function Footer() {
   return (
-    <footer className="border-t border-slate-800 py-12">
+    <footer className="dark:border-t dark:border-slate-800 light:border-t light:border-gray-200 py-12 dark:bg-slate-900 light:bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row justify-between items-center">
           <div className="flex items-center space-x-2 mb-4 md:mb-0">
@@ -14,7 +14,7 @@ export default function Footer() {
               StreakedIn
             </span>
           </div>
-          <div className="text-slate-400 text-center md:text-right">
+          <div className="dark:text-slate-400 light:text-gray-600 text-center md:text-right">
             <p>&copy; 2024 StreakedIn. All rights reserved.</p>
             <p className="text-sm mt-1">Professional productivity tracking reimagined.</p>
           </div>

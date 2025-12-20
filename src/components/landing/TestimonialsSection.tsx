@@ -37,7 +37,7 @@ export default function TestimonialsSection() {
   }, []);
 
   return (
-    <section id="testimonials" className="py-20 bg-slate-800/20">
+    <section id="testimonials" className="py-20 dark:bg-slate-800/20 light:bg-gray-100/50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
@@ -45,10 +45,10 @@ export default function TestimonialsSection() {
           transition={{ duration: 0.8 }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+          <h2 className="text-4xl md:text-5xl font-bold dark:text-white light:text-gray-900 mb-4">
             Trusted by <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">Professionals</span>
           </h2>
-          <p className="text-xl text-slate-300 max-w-3xl mx-auto">
+          <p className="text-xl dark:text-slate-300 light:text-gray-700 max-w-3xl mx-auto">
             Join thousands of professionals who have transformed their productivity with StreakedIn.
           </p>
         </motion.div>
@@ -61,11 +61,11 @@ export default function TestimonialsSection() {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -50 }}
               transition={{ duration: 0.5 }}
-              className="bg-slate-800/30 backdrop-blur-md border border-slate-700/50 rounded-2xl p-8"
+              className="dark:bg-slate-800/30 light:bg-white/50 backdrop-blur-md dark:border dark:border-slate-700/50 light:border light:border-gray-300/50 rounded-2xl p-8"
             >
               <div className="flex items-start space-x-6">
                 <div className="flex-shrink-0">
-                  <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold text-lg">
+                  <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center dark:text-white light:text-white font-semibold text-lg">
                     {testimonials[activeTestimonial].name.split(' ').map(n => n[0]).join('')}
                   </div>
                 </div>
@@ -75,12 +75,12 @@ export default function TestimonialsSection() {
                       <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
                     ))}
                   </div>
-                  <p className="text-lg text-slate-200 mb-4 italic">
+                  <p className="text-lg dark:text-slate-200 light:text-gray-800 mb-4 italic">
                     "{testimonials[activeTestimonial].content}"
                   </p>
                   <div>
-                    <div className="font-semibold text-white">{testimonials[activeTestimonial].name}</div>
-                    <div className="text-slate-400">
+                    <div className="font-semibold dark:text-white light:text-gray-900">{testimonials[activeTestimonial].name}</div>
+                    <div className="dark:text-slate-400 light:text-gray-600">
                       {testimonials[activeTestimonial].role}, {testimonials[activeTestimonial].company}
                     </div>
                   </div>
@@ -98,7 +98,7 @@ export default function TestimonialsSection() {
                 className={`w-3 h-3 rounded-full transition-all duration-300 ${
                   index === activeTestimonial
                     ? 'bg-blue-500 w-8'
-                    : 'bg-slate-600 hover:bg-slate-500'
+                    : 'dark:bg-slate-600 dark:hover:bg-slate-500 light:bg-gray-400 light:hover:bg-gray-500'
                 }`}
               />
             ))}
