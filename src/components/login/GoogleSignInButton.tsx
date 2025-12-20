@@ -12,17 +12,17 @@ export default function GoogleSignInButton({ onClick, loading }: GoogleSignInBut
     <div className="mt-6">
       <div className="relative">
         <div className="absolute inset-0 flex items-center">
-          <div className="w-full dark:border-t dark:border-slate-700/50 light:border-t light:border-gray-300" />
+          <div className="w-full border-t border-gray-300 dark:border-slate-700/50" />
         </div>
         <div className="relative flex justify-center text-sm">
-          <span className="px-2 dark:bg-slate-800/30 light:bg-white/50 dark:text-slate-400 light:text-gray-600">Or continue with</span>
+          <span className="px-2 bg-white/50 dark:bg-slate-800/30 text-gray-600 dark:text-slate-400">Or continue with</span>
         </div>
       </div>
 
       <button
         onClick={onClick}
         disabled={loading}
-        className="w-full mt-4 flex items-center justify-center space-x-3 px-4 py-3 dark:border dark:border-slate-700/50 light:border light:border-gray-300 rounded-lg dark:bg-slate-900/20 light:bg-gray-100/50 dark:text-white light:text-gray-900 dark:hover:bg-slate-700/40 light:hover:bg-gray-200/50 transition-colors disabled:opacity-50"
+        className="w-full mt-4 flex items-center justify-center space-x-3 px-4 py-3 border border-gray-300 dark:border-slate-700/50 rounded-lg bg-gray-100/50 dark:bg-slate-900/20 text-gray-900 dark:text-white hover:bg-gray-200/50 dark:hover:bg-slate-700/40 transition-colors disabled:opacity-50"
       >
         <Chrome className="w-5 h-5" />
         <span>Google</span>
