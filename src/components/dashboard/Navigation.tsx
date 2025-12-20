@@ -38,8 +38,8 @@ export default function Navigation({ activeTab, onTabChange, isCollapsed }: Navi
                 isCollapsed ? 'px-2 py-3' : 'space-x-4 px-4 py-3.5'
               } rounded-xl transition-all duration-300 hover:scale-110 ${
                 isActive
-                  ? 'bg-gradient-to-r from-white/15 to-white/5 border border-white/20 shadow-lg shadow-blue-500/20'
-                  : 'hover:bg-white/5 border border-transparent hover:border-white/10'
+                  ? 'dark:bg-gradient-to-r dark:from-white/15 dark:to-white/5 light:bg-gradient-to-r light:from-purple-100/40 light:to-blue-100/40 dark:border dark:border-white/20 light:border light:border-purple-300/40 dark:shadow-lg dark:shadow-blue-500/20 light:shadow-lg light:shadow-purple-300/20'
+                  : 'dark:hover:bg-white/5 light:hover:bg-gray-100/50 dark:border dark:border-transparent light:border light:border-transparent dark:hover:border-white/10 light:hover:border-gray-300/30'
               }`}
             >
               {/* Active indicator - only show when not collapsed */}
@@ -55,8 +55,8 @@ export default function Navigation({ activeTab, onTabChange, isCollapsed }: Navi
               {/* Icon with enhanced styling */}
               <div className={`relative flex-shrink-0 transition-all duration-300 ${
                 isActive
-                  ? 'text-white scale-110'
-                  : 'text-slate-400 group-hover:text-white group-hover:scale-105'
+                  ? 'dark:text-white light:text-purple-700 scale-110'
+                  : 'dark:text-slate-400 light:text-gray-600 dark:group-hover:text-white light:group-hover:text-purple-600 group-hover:scale-105'
               }`}>
                 {item.icon}
 
@@ -76,8 +76,8 @@ export default function Navigation({ activeTab, onTabChange, isCollapsed }: Navi
                 <div className="flex-1 flex items-center justify-between min-w-0">
                   <span className={`font-medium transition-colors ${
                     isActive
-                      ? 'text-white'
-                      : 'text-slate-300 group-hover:text-white'
+                      ? 'dark:text-white light:text-purple-800'
+                      : 'dark:text-slate-300 light:text-gray-700 dark:group-hover:text-white light:group-hover:text-purple-700'
                   }`}>
                     {item.name}
                   </span>
@@ -91,10 +91,10 @@ export default function Navigation({ activeTab, onTabChange, isCollapsed }: Navi
 
               {/* Tooltip for collapsed state */}
               {isCollapsed && (
-                <div className="absolute left-full ml-2 px-3 py-2 bg-slate-800/95 backdrop-blur-md text-white text-sm rounded-lg border border-slate-600/50 opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none whitespace-nowrap z-50 shadow-xl">
+                <div className="absolute left-full ml-2 px-3 py-2 dark:bg-slate-800/95 light:bg-white/95 backdrop-blur-md dark:text-white light:text-gray-900 text-sm rounded-lg dark:border dark:border-slate-600/50 light:border light:border-gray-300/50 opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none whitespace-nowrap z-50 shadow-xl">
                   {item.name}
                   {/* Tooltip arrow */}
-                  <div className="absolute right-full top-1/2 -translate-y-1/2 w-0 h-0 border-t-4 border-b-4 border-r-4 border-transparent border-r-slate-800/95"></div>
+                  <div className="absolute right-full top-1/2 -translate-y-1/2 w-0 h-0 border-t-4 border-b-4 border-r-4 border-transparent dark:border-r-slate-800/95 light:border-r-white/95"></div>
                 </div>
               )}
             </button>
@@ -105,7 +105,7 @@ export default function Navigation({ activeTab, onTabChange, isCollapsed }: Navi
       {/* Decorative elements - hide when collapsed */}
       {!isCollapsed && (
         <div className="mt-8 flex justify-center">
-          <div className="w-32 h-px bg-gradient-to-r from-transparent via-slate-600 to-transparent"></div>
+          <div className="w-32 h-px dark:bg-gradient-to-r dark:from-transparent dark:via-slate-600 dark:to-transparent light:bg-gradient-to-r light:from-transparent light:via-gray-300 light:to-transparent"></div>
         </div>
       )}
     </nav>

@@ -22,17 +22,17 @@ interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement
 const baseClasses = 'w-full px-4 py-3 border rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500/60 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed text-base';
 
 const variantClasses = {
-  default: 'border-slate-600/60 bg-slate-800/60 text-white placeholder-slate-400 hover:border-slate-500/60',
-  filled: 'border-slate-600/80 bg-slate-700/80 text-white placeholder-slate-500 hover:border-slate-500/80'
+  default: 'dark:border-slate-600/60 light:border-gray-300 dark:bg-slate-800/60 light:bg-white dark:text-white light:text-gray-900 dark:placeholder-slate-400 light:placeholder-gray-500 dark:hover:border-slate-500/60 light:hover:border-gray-400',
+  filled: 'dark:border-slate-600/80 light:border-gray-400 dark:bg-slate-700/80 light:bg-gray-100 dark:text-white light:text-gray-900 dark:placeholder-slate-500 light:placeholder-gray-600 dark:hover:border-slate-500/80 light:hover:border-gray-500'
 };
 
 export function Input({ variant = 'default', error, className = '', ...props }: InputProps) {
-  const combinedClasses = `${baseClasses} ${variantClasses[variant]} ${error ? 'border-red-500/50 focus:ring-red-500/60' : ''} ${className}`;
+  const combinedClasses = `${baseClasses} ${variantClasses[variant]} ${error ? 'dark:border-red-500/50 light:border-red-500 dark:focus:ring-red-500/60 light:focus:ring-red-500/40' : ''} ${className}`;
 
   return (
     <div className="space-y-1">
       <input className={combinedClasses} {...props} />
-      {error && <p className="text-red-400 text-sm">{error}</p>}
+      {error && <p className="dark:text-red-400 light:text-red-600 text-sm">{error}</p>}
     </div>
   );
 }
@@ -65,7 +65,7 @@ export function Select({ variant = 'default', error, className = '', children, v
     setIsOpen(false);
   };
 
-  const combinedClasses = `w-full px-4 py-3 border rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500/60 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed text-base text-left flex items-center justify-between ${variantClasses[variant]} ${error ? 'border-red-500/50 focus:ring-red-500/60' : ''} ${className}`;
+  const combinedClasses = `w-full px-4 py-3 border rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500/60 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed text-base text-left flex items-center justify-between ${variantClasses[variant]} ${error ? 'dark:border-red-500/50 light:border-red-500 dark:focus:ring-red-500/60 light:focus:ring-red-500/40' : ''} ${className}`;
 
   return (
     <div className="space-y-1" ref={dropdownRef}>
@@ -76,14 +76,14 @@ export function Select({ variant = 'default', error, className = '', children, v
           className={combinedClasses}
           disabled={disabled}
         >
-          <span className={selectedText === 'Select...' ? 'text-slate-400' : 'text-white'}>
+          <span className={selectedText === 'Select...' ? 'dark:text-slate-400 light:text-gray-500' : 'dark:text-white light:text-gray-900'}>
             {selectedText}
           </span>
-          <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''} ${disabled ? 'opacity-50' : 'text-slate-400'}`} />
+          <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''} ${disabled ? 'opacity-50' : 'dark:text-slate-400 light:text-gray-600'}`} />
         </button>
 
         {isOpen && (
-          <div className="absolute z-50 w-full mt-1 bg-slate-800/95 backdrop-blur-md border border-slate-600/60 rounded-lg shadow-xl max-h-60 overflow-auto">
+          <div className="absolute z-50 w-full mt-1 dark:bg-slate-800/95 light:bg-white/95 backdrop-blur-md dark:border dark:border-slate-600/60 light:border light:border-gray-300 rounded-lg shadow-xl max-h-60 overflow-auto">
             {React.Children.map(children, (child) => {
               if (!React.isValidElement(child)) return null;
 
@@ -94,8 +94,8 @@ export function Select({ variant = 'default', error, className = '', children, v
                   key={childProps.value}
                   type="button"
                   onClick={() => handleSelect(childProps.value)}
-                  className={`w-full px-4 py-3 text-left transition-colors duration-150 hover:bg-slate-700/60 ${
-                    isSelected ? 'bg-blue-500/20 text-blue-300' : 'text-white'
+                  className={`w-full px-4 py-3 text-left transition-colors duration-150 dark:hover:bg-slate-700/60 light:hover:bg-gray-100 ${
+                    isSelected ? 'dark:bg-blue-500/20 dark:text-blue-300 light:bg-blue-100 light:text-blue-700' : 'dark:text-white light:text-gray-900'
                   } first:rounded-t-lg last:rounded-b-lg`}
                 >
                   {childProps.children}

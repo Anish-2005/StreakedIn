@@ -18,7 +18,7 @@ const tabNames: Record<string, string> = {
 
 export default function BreadcrumbSection({ activeTab }: BreadcrumbSectionProps) {
   return (
-    <div className="px-4 sm:px-6 py-4 border-b border-slate-700/50">
+    <div className="px-4 sm:px-6 py-4 dark:border-b dark:border-slate-700/50 light:border-b light:border-gray-200">
       <Breadcrumb
         items={[
           { label: 'Dashboard', href: '/dashboard' },

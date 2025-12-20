@@ -18,9 +18,9 @@ const paddingClasses = {
 };
 
 const variantClasses = {
-  default: 'bg-slate-800/30 backdrop-blur-md border border-slate-700/50',
-  elevated: 'bg-slate-800/50 backdrop-blur-md border border-slate-600/60 shadow-lg',
-  outlined: 'border-2 border-slate-700/50 bg-transparent'
+  default: 'dark:bg-slate-800/30 light:bg-white/40 backdrop-blur-md dark:border dark:border-slate-700/50 light:border light:border-gray-300/50',
+  elevated: 'dark:bg-slate-800/50 light:bg-white/50 backdrop-blur-md dark:border dark:border-slate-600/60 light:border light:border-gray-300/60 shadow-lg',
+  outlined: 'dark:border-2 dark:border-slate-700/50 light:border-2 light:border-gray-300 bg-transparent'
 };
 
 export default function Card({
@@ -32,7 +32,7 @@ export default function Card({
   animated = false
 }: CardProps) {
   const baseClasses = 'rounded-xl transition-all duration-200';
-  const hoverClasses = hover ? 'hover:border-slate-600/50 hover:bg-slate-800/40' : '';
+  const hoverClasses = hover ? 'dark:hover:border-slate-600/50 dark:hover:bg-slate-800/40 light:hover:border-gray-400/50 light:hover:bg-white/60' : '';
   const combinedClasses = `${baseClasses} ${variantClasses[variant]} ${paddingClasses[padding]} ${hoverClasses} ${className}`;
 
   if (animated) {
