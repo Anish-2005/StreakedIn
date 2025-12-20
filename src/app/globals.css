@@ -7,38 +7,81 @@
   }
   
   body {
-    @apply bg-gray-50 text-gray-900;
+    @apply text-gray-900;
+  }
+
+  /* Dark Theme (Default) */
+  html.dark body {
+    @apply bg-slate-950 text-gray-100;
+  }
+
+  /* Light Theme */
+  html.light body {
+    @apply bg-white text-gray-900;
   }
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
+/* ===== CUSTOM SCROLLBAR ===== */
+/* Dark theme scrollbar */
+html.dark ::-webkit-scrollbar {
   width: 6px;
 }
 
-::-webkit-scrollbar-track {
+html.dark ::-webkit-scrollbar-track {
   @apply bg-gray-800;
 }
 
-::-webkit-scrollbar-thumb {
+html.dark ::-webkit-scrollbar-thumb {
   @apply bg-purple-800 rounded-full;
 }
 
-::-webkit-scrollbar-thumb:hover {
+html.dark ::-webkit-scrollbar-thumb:hover {
   @apply bg-purple-900;
 }
 
-/* Professional animations */
-.glass-effect {
+/* Light theme scrollbar */
+html.light ::-webkit-scrollbar {
+  width: 6px;
+}
+
+html.light ::-webkit-scrollbar-track {
+  @apply bg-gray-100;
+}
+
+html.light ::-webkit-scrollbar-thumb {
+  @apply bg-purple-400 rounded-full;
+}
+
+html.light ::-webkit-scrollbar-thumb:hover {
+  @apply bg-purple-500;
+}
+
+/* ===== PROFESSIONAL ANIMATIONS & EFFECTS ===== */
+/* Glass effect - Dark */
+html.dark .glass-effect {
   backdrop-filter: blur(10px);
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid rgba(148, 113, 233, 0.2);
 }
 
-.professional-card {
-  @apply bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300;
+/* Glass effect - Light */
+html.light .glass-effect {
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(148, 113, 233, 0.15);
 }
 
-/* Toggle switch styles */
+/* Professional card - Dark */
+html.dark .professional-card {
+  @apply bg-slate-900 border border-purple-900 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300;
+}
+
+/* Professional card - Light */
+html.light .professional-card {
+  @apply bg-gray-50 border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300;
+}
+
+/* ===== TOGGLE SWITCH STYLES ===== */
 .toggle-checkbox:checked {
   @apply right-0 border-green-400;
   right: 0;
