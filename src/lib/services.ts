@@ -159,14 +159,9 @@ export class GoalsService {
 
   static async generateGoalFromPrompt(userId: string, prompt: string): Promise<Partial<Goal> | null> {
     try {
-      // Check if API key is available
-      if (!AISuggestionsService['GEMINI_API_KEY'] || AISuggestionsService['GEMINI_API_KEY'] === 'YOUR_GEMINI_API_KEY_HERE') {
-        console.warn('Gemini API key not configured, using intelligent fallback');
-        return GoalsService.generateGoalFromPromptFallback(prompt);
-      }
-
-      if (!AISuggestionsService['apiWorking']) {
-        console.warn('Gemini API not working, using intelligent fallback');
+      // Check if Puter AI is available
+      if (!AISuggestionsService['apiWorking'] || typeof window === 'undefined' || !(window as any).puter?.ai?.chat) {
+        console.warn('Puter AI not available, using intelligent fallback');
         return GoalsService.generateGoalFromPromptFallback(prompt);
       }
 
@@ -215,59 +210,40 @@ Output: {"title":"Build Professional Network","description":"Establish meaningfu
 Input: "Improve work-life balance and reduce stress"
 Output: {"title":"Achieve Work-Life Balance","description":"Develop healthy work-life balance by setting boundaries, incorporating regular exercise, and practicing stress management techniques. Aim for consistent sleep and mindful breaks throughout the workday.","category":"Health & Wellness"}`;
 
-      console.log('Making Gemini API request for goal generation...');
+      console.log('Making Puter AI request for goal generation...');
 
-      const response = await fetch(`${AISuggestionsService['GEMINI_API_URL']}?key=${AISuggestionsService['GEMINI_API_KEY']}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          contents: [{
-            parts: [{
-              text: context
-            }]
-          }],
-          generationConfig: {
-            temperature: 0.3,
-            topK: 40,
-            topP: 0.95,
-            maxOutputTokens: 512,
-          }
-        })
+      const aiResponse = await (window as any).puter.ai.chat(context, {
+        model: 'gemini-2.5-flash-lite'
       });
 
-      console.log('Gemini API response status:', response.status);
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error('Gemini API error details:', response.status, errorText);
-
-        // If it's a 404 or authentication error, the API key might be invalid
-        if (response.status === 404 || response.status === 403 || response.status === 401) {
-          console.warn('Gemini API key appears to be invalid or not properly configured');
-        }
-
-        AISuggestionsService['apiWorking'] = false; // Disable API calls if it fails
-        throw new Error(`Gemini API error: ${response.status} - ${errorText}`);
-      }
-
-      const data = await response.json();
-      console.log('Gemini API response data:', data);
-
-      const aiResponse = data.candidates?.[0]?.content?.parts?.[0]?.text;
+      console.log('Puter AI response received');
 
       if (!aiResponse) {
-        console.warn('No valid response from Gemini API for goal generation');
+        console.warn('No valid response from Puter AI for goal generation');
         return null;
       }
 
-      console.log('Raw AI response:', aiResponse);
+      // Handle different response formats from Puter AI
+      let responseText: string;
+      if (typeof aiResponse === 'string') {
+        responseText = aiResponse;
+      } else if (typeof aiResponse === 'object' && aiResponse.message?.content) {
+        responseText = aiResponse.message.content;
+      } else if (typeof aiResponse === 'object' && aiResponse.text) {
+        responseText = aiResponse.text;
+      } else if (typeof aiResponse === 'object' && aiResponse.content) {
+        responseText = aiResponse.content;
+      } else {
+        console.warn('Unexpected Puter AI response format:', aiResponse);
+        return null;
+      }
+
+      console.log('Raw AI response:', responseText);
 
       // Try to parse the JSON response
       try {
         // Clean the AI response by removing markdown code blocks and extra whitespace
-        let cleanResponse = aiResponse.trim();
+        let cleanResponse = responseText.trim();
 
         // Remove markdown code blocks if present
         if (cleanResponse.startsWith('```json')) {
@@ -296,7 +272,7 @@ Output: {"title":"Achieve Work-Life Balance","description":"Develop healthy work
 
         // Try to extract basic information from the AI response
         // Look for JSON-like content within the response
-        const jsonMatch = aiResponse.match(/\{[\s\S]*\}/);
+        const jsonMatch = responseText.match(/\{[\s\S]*\}/);
         if (jsonMatch) {
           try {
             const parsed = JSON.parse(jsonMatch[0]);
@@ -314,7 +290,7 @@ Output: {"title":"Achieve Work-Life Balance","description":"Develop healthy work
         }
 
         // Final fallback: extract from first line or use generic title
-        const firstLine = aiResponse.split('\n')[0]?.replace(/^["`\s]+|["`\s]+$/g, '') || 'New Goal';
+        const firstLine = responseText.split('\n')[0]?.replace(/^["`\s]+|["`\s]+$/g, '') || 'New Goal';
         const title = firstLine.length > 50 ? 'New Goal' : firstLine;
 
         return {
@@ -479,14 +455,9 @@ export class TasksService {
 
   static async generateTaskFromPrompt(userId: string, prompt: string): Promise<Partial<Task> | null> {
     try {
-      // Check if API key is available
-      if (!AISuggestionsService['GEMINI_API_KEY'] || AISuggestionsService['GEMINI_API_KEY'] === 'YOUR_GEMINI_API_KEY_HERE') {
-        console.warn('Gemini API key not configured, using intelligent fallback');
-        return TasksService.generateTaskFromPromptFallback(prompt);
-      }
-
-      if (!AISuggestionsService['apiWorking']) {
-        console.warn('Gemini API not working, using intelligent fallback');
+      // Check if Puter AI is available
+      if (!AISuggestionsService['apiWorking'] || typeof window === 'undefined' || !(window as any).puter?.ai?.chat) {
+        console.warn('Puter AI not available, using intelligent fallback');
         return TasksService.generateTaskFromPromptFallback(prompt);
       }
 
@@ -531,59 +502,40 @@ Output: {"title":"Review Team Documentation","description":"Conduct a comprehens
 Input: "Schedule a meeting with the design team next week"
 Output: {"title":"Schedule Design Team Meeting","description":"Coordinate and schedule a meeting with the design team for next week. Prepare agenda and ensure all necessary participants are available.","priority":"medium"}`;
 
-      console.log('Making Gemini API request for task generation...');
+      console.log('Making Puter AI request for task generation...');
 
-      const response = await fetch(`${AISuggestionsService['GEMINI_API_URL']}?key=${AISuggestionsService['GEMINI_API_KEY']}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          contents: [{
-            parts: [{
-              text: context
-            }]
-          }],
-          generationConfig: {
-            temperature: 0.3,
-            topK: 40,
-            topP: 0.95,
-            maxOutputTokens: 512,
-          }
-        })
+      const aiResponse = await (window as any).puter.ai.chat(context, {
+        model: 'gemini-2.5-flash-lite'
       });
 
-      console.log('Gemini API response status:', response.status);
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error('Gemini API error details:', response.status, errorText);
-
-        // If it's a 404 or authentication error, the API key might be invalid
-        if (response.status === 404 || response.status === 403 || response.status === 401) {
-          console.warn('Gemini API key appears to be invalid or not properly configured');
-        }
-
-        AISuggestionsService['apiWorking'] = false; // Disable API calls if it fails
-        throw new Error(`Gemini API error: ${response.status} - ${errorText}`);
-      }
-
-      const data = await response.json();
-      console.log('Gemini API response data:', data);
-
-      const aiResponse = data.candidates?.[0]?.content?.parts?.[0]?.text;
+      console.log('Puter AI response received');
 
       if (!aiResponse) {
-        console.warn('No valid response from Gemini API for task generation');
+        console.warn('No valid response from Puter AI for task generation');
         return null;
       }
 
-      console.log('Raw AI response:', aiResponse);
+      // Handle different response formats from Puter AI
+      let responseText: string;
+      if (typeof aiResponse === 'string') {
+        responseText = aiResponse;
+      } else if (typeof aiResponse === 'object' && aiResponse.message?.content) {
+        responseText = aiResponse.message.content;
+      } else if (typeof aiResponse === 'object' && aiResponse.text) {
+        responseText = aiResponse.text;
+      } else if (typeof aiResponse === 'object' && aiResponse.content) {
+        responseText = aiResponse.content;
+      } else {
+        console.warn('Unexpected Puter AI response format:', aiResponse);
+        return null;
+      }
+
+      console.log('Raw AI response:', responseText);
 
       // Try to parse the JSON response
       try {
         // Clean the AI response by removing markdown code blocks and extra whitespace
-        let cleanResponse = aiResponse.trim();
+        let cleanResponse = responseText.trim();
 
         // Remove markdown code blocks if present
         if (cleanResponse.startsWith('```json')) {
@@ -610,7 +562,7 @@ Output: {"title":"Schedule Design Team Meeting","description":"Coordinate and sc
 
         // Try to extract basic information from the AI response
         // Look for JSON-like content within the response
-        const jsonMatch = aiResponse.match(/\{[\s\S]*\}/);
+        const jsonMatch = responseText.match(/\{[\s\S]*\}/);
         if (jsonMatch) {
           try {
             const parsed = JSON.parse(jsonMatch[0]);
@@ -626,7 +578,7 @@ Output: {"title":"Schedule Design Team Meeting","description":"Coordinate and sc
         }
 
         // Final fallback: extract from first line or use generic title
-        const firstLine = aiResponse.split('\n')[0]?.replace(/^["`\s]+|["`\s]+$/g, '') || 'New Task';
+        const firstLine = responseText.split('\n')[0]?.replace(/^["`\s]+|["`\s]+$/g, '') || 'New Task';
         const title = firstLine.length > 50 ? 'New Task' : firstLine;
 
         return {
@@ -1190,14 +1142,9 @@ export class RemindersService {
 
   static async generateReminderFromPrompt(userId: string, prompt: string): Promise<Partial<Reminder> | null> {
     try {
-      // Check if API key is available
-      if (!AISuggestionsService['GEMINI_API_KEY'] || AISuggestionsService['GEMINI_API_KEY'] === 'YOUR_GEMINI_API_KEY_HERE') {
-        console.warn('Gemini API key not configured, using intelligent fallback');
-        return RemindersService.generateReminderFromPromptFallback(prompt);
-      }
-
-      if (!AISuggestionsService['apiWorking']) {
-        console.warn('Gemini API not working, using intelligent fallback');
+      // Check if Puter AI is available
+      if (!AISuggestionsService['apiWorking'] || typeof window === 'undefined' || !(window as any).puter?.ai?.chat) {
+        console.warn('Puter AI not available, using intelligent fallback');
         return RemindersService.generateReminderFromPromptFallback(prompt);
       }
 
@@ -1249,65 +1196,38 @@ Output: {"title":"Team Meeting Reminder","description":"Important team meeting s
 Input: "Remind me daily to drink water"
 Output: {"title":"Daily Hydration Reminder","description":"Stay hydrated throughout the day with regular water intake. Aim for 8 glasses of water daily for optimal health and productivity.","type":"browser","frequency":"daily"}`;
 
-      console.log('Making Gemini API request for reminder generation...');
-      console.log('API URL:', AISuggestionsService['GEMINI_API_URL']);
-      console.log('API Key available:', !!AISuggestionsService['GEMINI_API_KEY']);
-      console.log('API Key length:', AISuggestionsService['GEMINI_API_KEY']?.length);
+      console.log('Making Puter AI request for reminder generation...');
 
-      const response = await fetch(`${AISuggestionsService['GEMINI_API_URL']}?key=${AISuggestionsService['GEMINI_API_KEY']}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          contents: [{
-            parts: [{
-              text: context
-            }]
-          }],
-          generationConfig: {
-            temperature: 0.3,
-            topK: 40,
-            topP: 0.95,
-            maxOutputTokens: 512,
-          }
-        })
+      const aiResponse = await (window as any).puter.ai.chat(context, {
+        model: 'gemini-2.5-flash-lite'
       });
 
-      console.log('Gemini API response status:', response.status);
-      console.log('Gemini API response headers:', Object.fromEntries(response.headers.entries()));
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error('Gemini API error details:', response.status, errorText);
-        console.error('Full error response:', errorText);
-
-        // If it's a 404 or authentication error, the API key might be invalid
-        if (response.status === 404 || response.status === 403 || response.status === 401) {
-          console.warn('Gemini API key appears to be invalid or not properly configured');
-        }
-
-        AISuggestionsService['apiWorking'] = false; // Disable API calls if it fails
-        throw new Error(`Gemini API error: ${response.status} - ${errorText}`);
-      }
-
-      const data = await response.json();
-      console.log('Gemini API response data:', JSON.stringify(data, null, 2));
-      console.log('AI Response text:', data.candidates?.[0]?.content?.parts?.[0]?.text);
-
-      const aiResponse = data.candidates?.[0]?.content?.parts?.[0]?.text;
+      console.log('Puter AI response received');
 
       if (!aiResponse) {
-        console.warn('No valid response from Gemini API for reminder generation');
+        console.warn('No valid response from Puter AI for reminder generation');
         return null;
       }
 
-      console.log('Raw AI response:', aiResponse);
+      // Handle different response formats from Puter AI
+      let responseText: string;
+      if (typeof aiResponse === 'string') {
+        responseText = aiResponse;
+      } else if (typeof aiResponse === 'object' && aiResponse.text) {
+        responseText = aiResponse.text;
+      } else if (typeof aiResponse === 'object' && aiResponse.content) {
+        responseText = aiResponse.content;
+      } else {
+        console.warn('Unexpected Puter AI response format:', aiResponse);
+        return null;
+      }
+
+      console.log('Raw AI response:', responseText);
 
       // Try to parse the JSON response
       try {
         // Clean the AI response by removing markdown code blocks and extra whitespace
-        let cleanResponse = aiResponse.trim();
+        let cleanResponse = responseText.trim();
 
         // Remove markdown code blocks if present
         if (cleanResponse.startsWith('```json')) {
@@ -1335,7 +1255,7 @@ Output: {"title":"Daily Hydration Reminder","description":"Stay hydrated through
 
         // Try to extract basic information from the AI response
         // Look for JSON-like content within the response
-        const jsonMatch = aiResponse.match(/\{[\s\S]*\}/);
+        const jsonMatch = responseText.match(/\{[\s\S]*\}/);
         if (jsonMatch) {
           try {
             const parsed = JSON.parse(jsonMatch[0]);
@@ -1352,7 +1272,7 @@ Output: {"title":"Daily Hydration Reminder","description":"Stay hydrated through
         }
 
         // Final fallback: extract from first line or use generic title
-        const firstLine = aiResponse.split('\n')[0]?.replace(/^["`\s]+|["`\s]+$/g, '') || 'New Reminder';
+        const firstLine = responseText.split('\n')[0]?.replace(/^["`\s]+|["`\s]+$/g, '') || 'New Reminder';
         const title = firstLine.length > 50 ? 'New Reminder' : firstLine;
 
         return {
@@ -1431,10 +1351,6 @@ Output: {"title":"Daily Hydration Reminder","description":"Stay hydrated through
 
 // AI Suggestions Service
 export class AISuggestionsService {
-  private static get GEMINI_API_KEY(): string | undefined {
-    return process.env.NEXT_PUBLIC_GEMINI_API_KEY;
-  }
-  private static readonly GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
   private static apiWorking = true; // Flag to track if API is working - reset to true with working key
   private static quotaExceeded = false;
   private static quotaResetTime: number | null = null;
@@ -1445,13 +1361,13 @@ export class AISuggestionsService {
     this.apiWorking = true;
     this.quotaExceeded = false;
     this.quotaResetTime = null;
-    console.log('Gemini API status reset - will attempt API calls again');
+    console.log('Puter AI status reset - will attempt API calls again');
   }
 
   static async generateGoalSuggestions(userId: string): Promise<string[]> {
     // Check if quota is exceeded and not yet reset
     if (this.quotaExceeded && this.quotaResetTime && Date.now() < this.quotaResetTime) {
-      console.warn('Gemini API quota exceeded, using cached or fallback suggestions');
+      console.warn('Puter AI quota exceeded, using cached or fallback suggestions');
       return this.getFallbackSuggestions();
     }
 
@@ -1462,14 +1378,14 @@ export class AISuggestionsService {
       return cached.suggestions;
     }
 
-    // Check if API key is available and API is working
-    if (!this.GEMINI_API_KEY || !this.apiWorking) {
-      console.warn('Gemini API key not found or API not working, using fallback suggestions');
+    // Check if Puter AI is available and API is working
+    if (!this.apiWorking || typeof window === 'undefined' || !(window as any).puter?.ai?.chat) {
+      console.warn('Puter AI not available or not working, using fallback suggestions');
       return this.getFallbackSuggestions();
     }
 
     try {
-      console.log('Gemini API key found, length:', this.GEMINI_API_KEY.length);
+      console.log('Puter AI available, making request for goal suggestions...');
 
       // Get user's current goals and tasks to generate relevant suggestions
       const goals = await new Promise<Goal[]>((resolve) => {
@@ -1518,85 +1434,36 @@ Learning Modules
 
 Use this exact multi-line format for complex goals. For simpler goals, just provide the goal text normally. Mix both formats in your response. Return only the suggestions, one per line or in the structured format above.`;
 
-      console.log('Making Gemini API request for goal suggestions...');
+      console.log('Making Puter AI request for goal suggestions...');
 
-      const response = await fetch(`${this.GEMINI_API_URL}?key=${this.GEMINI_API_KEY}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          contents: [{
-            parts: [{
-              text: prompt
-            }]
-          }],
-          generationConfig: {
-            temperature: 0.7,
-            topK: 40,
-            topP: 0.95,
-            maxOutputTokens: 1024,
-          }
-        })
+      const aiResponse = await (window as any).puter.ai.chat(prompt, {
+        model: 'gemini-2.5-flash-lite'
       });
 
-      console.log('Gemini API response status:', response.status);
+      console.log('Puter AI response received:', aiResponse);
 
-      if (!response.ok) {
-        const errorText = await response.text();
-
-        // Handle quota exceeded error specifically
-        if (response.status === 429) {
-          console.warn('Gemini API quota exceeded');
-          this.quotaExceeded = true;
-
-          // Try to extract retry delay from error response
-          try {
-            const errorData = JSON.parse(errorText);
-            const retryDelay = errorData.error?.details?.find((d: any) => d['@type'] === 'type.googleapis.com/google.rpc.RetryInfo')?.retryDelay;
-            if (retryDelay) {
-              const delayMs = parseInt(retryDelay.seconds || '0') * 1000 + parseInt(retryDelay.nanos || '0') / 1000000;
-              this.quotaResetTime = Date.now() + delayMs;
-              console.log(`Quota will reset in ${delayMs}ms`);
-            } else {
-              // Default to 1 hour if no retry info
-              this.quotaResetTime = Date.now() + (60 * 60 * 1000);
-            }
-          } catch (parseError) {
-            // Default to 1 hour if parsing fails
-            this.quotaResetTime = Date.now() + (60 * 60 * 1000);
-          }
-
-          return this.getFallbackSuggestions();
-        }
-
-        // Handle other API errors (don't log them as errors since they're expected)
-        if (response.status === 404 || response.status === 403 || response.status === 401) {
-          console.warn('Gemini API key appears to be invalid or not properly configured');
-        } else {
-          console.warn('Gemini API error:', response.status, errorText);
-        }
-
-        this.apiWorking = false; // Disable API calls if it fails
+      if (!aiResponse) {
+        console.warn('No valid response from Puter AI, using fallback');
         return this.getFallbackSuggestions();
       }
 
-      // Reset quota exceeded flag on successful response
-      this.quotaExceeded = false;
-      this.quotaResetTime = null;
-
-      const data = await response.json();
-      console.log('Gemini API response data:', data);
-
-      const aiResponse = data.candidates?.[0]?.content?.parts?.[0]?.text;
-
-      if (!aiResponse) {
-        console.warn('No valid response from Gemini API, using fallback');
+      // Handle different response formats from Puter AI
+      let responseText: string;
+      if (typeof aiResponse === 'string') {
+        responseText = aiResponse;
+      } else if (typeof aiResponse === 'object' && aiResponse.message?.content) {
+        responseText = aiResponse.message.content;
+      } else if (typeof aiResponse === 'object' && aiResponse.text) {
+        responseText = aiResponse.text;
+      } else if (typeof aiResponse === 'object' && aiResponse.content) {
+        responseText = aiResponse.content;
+      } else {
+        console.warn('Unexpected Puter AI response format:', aiResponse);
         return this.getFallbackSuggestions();
       }
 
       // Parse the numbered list into an array
-      const suggestions = aiResponse
+      const suggestions = responseText
         .split('\n')
         .filter((line: string) => line.trim().match(/^\d+\./))
         .map((line: string) => line.replace(/^\d+\.\s*/, '').trim());
@@ -1637,14 +1504,13 @@ Learning Modules
   static async generateAIResponse(userId: string, prompt: string, conversationHistory?: Array<{role: 'user' | 'assistant', content: string}>): Promise<string> {
     // Check if quota is exceeded and not yet reset
     if (this.quotaExceeded && this.quotaResetTime && Date.now() < this.quotaResetTime) {
-      console.warn('Gemini API quota exceeded, using fallback response');
+      console.warn('Puter AI quota exceeded, using fallback response');
       return this.getFallbackResponse();
     }
 
     try {
-      // Check if API key is available and API is working
-      if (!this.GEMINI_API_KEY || !this.apiWorking) {
-        console.warn('Gemini API key not found or API not working, using fallback response');
+      // Check if Puter AI is available and API is working
+    if (!this.apiWorking || typeof window === 'undefined' || !(window as any).puter?.ai?.chat) {
         return this.getFallbackResponse();
       }
 
@@ -1684,90 +1550,36 @@ ${tasks.map(t => `- ${t.title} (${t.priority} priority): ${t.completed ? 'comple
 Stats:
 - Productivity Score: ${stats.productivityScore}/100
 - Current Streak: ${stats.streakDays} days
-- Network Growth: ${stats.networkGrowth}%
+- Network Growth: ${stats.networkGrowth}}%
 
 ${conversationContext}User's question: ${prompt}
 
 Provide a helpful, actionable response focused on productivity, goal achievement, and task management. Keep it concise but comprehensive. If appropriate, suggest specific actions they can take. Maintain context from the conversation history if relevant.`;
 
-      console.log('Making Gemini API request for AI response...');
+      console.log('Making Puter AI request for AI response...');
 
-      const response = await fetch(`${this.GEMINI_API_URL}?key=${this.GEMINI_API_KEY}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          contents: [{
-            parts: [{
-              text: context
-            }]
-          }],
-          generationConfig: {
-            temperature: 0.7,
-            topK: 40,
-            topP: 0.95,
-            maxOutputTokens: 2048,
-          }
-        })
+      const aiResponse = await (window as any).puter.ai.chat(context, {
+        model: 'gemini-2.5-flash-lite'
       });
 
-      console.log('Gemini API response status:', response.status);
-
-      if (!response.ok) {
-        const errorText = await response.text();
-
-        // Handle quota exceeded error specifically
-        if (response.status === 429) {
-          console.warn('Gemini API quota exceeded');
-          this.quotaExceeded = true;
-
-          // Try to extract retry delay from error response
-          try {
-            const errorData = JSON.parse(errorText);
-            const retryDelay = errorData.error?.details?.find((d: any) => d['@type'] === 'type.googleapis.com/google.rpc.RetryInfo')?.retryDelay;
-            if (retryDelay) {
-              const delayMs = parseInt(retryDelay.seconds || '0') * 1000 + parseInt(retryDelay.nanos || '0') / 1000000;
-              this.quotaResetTime = Date.now() + delayMs;
-              console.log(`Quota will reset in ${delayMs}ms`);
-            } else {
-              // Default to 1 hour if no retry info
-              this.quotaResetTime = Date.now() + (60 * 60 * 1000);
-            }
-          } catch (parseError) {
-            // Default to 1 hour if parsing fails
-            this.quotaResetTime = Date.now() + (60 * 60 * 1000);
-          }
-
-          return this.getFallbackResponse();
-        }
-
-        // Handle other API errors (don't log them as errors since they're expected)
-        if (response.status === 404 || response.status === 403 || response.status === 401) {
-          console.warn('Gemini API key appears to be invalid or not properly configured');
-        } else {
-          console.warn('Gemini API error:', response.status, errorText);
-        }
-
-        this.apiWorking = false; // Disable API calls if it fails
-        return this.getFallbackResponse();
-      }
-
-      // Reset quota exceeded flag on successful response
-      this.quotaExceeded = false;
-      this.quotaResetTime = null;
-
-      const data = await response.json();
-      console.log('Gemini API response data:', data);
-
-      const aiResponse = data.candidates?.[0]?.content?.parts?.[0]?.text;
+      console.log('Puter AI response received');
 
       if (!aiResponse) {
-        console.warn('No valid response from Gemini API, using fallback');
+        console.warn('No valid response from Puter AI, using fallback');
         return this.getFallbackResponse();
       }
 
-      return aiResponse;
+      // Handle different response formats from Puter AI
+      if (typeof aiResponse === 'string') {
+        return aiResponse;
+      } else if (typeof aiResponse === 'object' && aiResponse.text) {
+        return aiResponse.text;
+      } else if (typeof aiResponse === 'object' && aiResponse.content) {
+        return aiResponse.content;
+      } else {
+        console.warn('Unexpected Puter AI response format:', aiResponse);
+        return this.getFallbackResponse();
+      }
     } catch (error) {
       console.warn('Error generating AI response:', error);
       this.apiWorking = false; // Disable API calls on any error

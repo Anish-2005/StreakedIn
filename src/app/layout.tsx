@@ -27,6 +27,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        <script src="https://js.puter.com/v2/"></script>
         <script
           dangerouslySetInnerHTML={{
             __html: `
