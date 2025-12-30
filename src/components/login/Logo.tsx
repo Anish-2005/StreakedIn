@@ -1,17 +1,25 @@
 "use client";
 
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 
 export default function Logo() {
   return (
     <div className="text-center mb-8">
-      <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center mx-auto mb-4">
-        <motion.div
-          animate={{ rotate: 360 }}
-          transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-          className="w-8 h-8 border-2 border-white border-t-transparent rounded-full"
+      <motion.div
+        initial={{ scale: 0.8, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 0.5 }}
+        className="w-16 h-16 mx-auto mb-4"
+      >
+        <Image
+          src="/streakedin.png"
+          alt="StreakedIn Logo"
+          width={64}
+          height={64}
+          className="w-full h-full object-contain"
         />
-      </div>
+      </motion.div>
       <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">StreakedIn</h1>
       <p className="text-gray-700 dark:text-slate-300">Professional Productivity Dashboard</p>
     </div>

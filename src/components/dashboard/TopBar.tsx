@@ -2,7 +2,8 @@
 
 import React, { useState } from "react";
 import { User } from "firebase/auth";
-import { Menu, Search, Sparkles, Zap } from "lucide-react";
+import Image from "next/image";
+import { Menu, Search, Zap } from "lucide-react";
 import SearchBar from "./SearchBar";
 import NotificationsBell from "./NotificationsBell";
 import UserMenu from "./UserMenu";
@@ -76,16 +77,14 @@ export default function TopBar({
             )}
 
             <div className="flex items-center gap-3 min-w-0">
-              <div
-                className={`
-                  w-10 h-10 rounded-xl flex items-center justify-center border
-                  bg-gradient-to-br from-blue-100/40 to-purple-100/40
-                  border-purple-300/40
-                  dark:from-blue-500/20 dark:to-purple-500/20
-                  dark:border-white/10
-                `}
-              >
-                <Sparkles className="w-5 h-5 text-blue-600 dark:text-blue-300" />
+              <div className="w-10 h-10 relative">
+                <Image
+                  src="/streakedin.png"
+                  alt="StreakedIn Logo"
+                  width={40}
+                  height={40}
+                  className="w-full h-full object-contain"
+                />
               </div>
 
               <div className="min-w-0">

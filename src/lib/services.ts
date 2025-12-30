@@ -11,7 +11,9 @@ import {
   orderBy,
   onSnapshot,
   Timestamp,
-  writeBatch
+  writeBatch,
+  increment,
+  FieldValue
 } from 'firebase/firestore';
 import { db } from './firebase';
 
@@ -72,6 +74,13 @@ export interface ChatSession {
   updatedAt: Date;
   lastMessage?: string;
   messageCount: number;
+}
+
+export interface ChatSessionUpdate {
+  title?: string;
+  updatedAt?: Date;
+  lastMessage?: string;
+  messageCount?: number | FieldValue;
 }
 
 export interface ChatMessage {
@@ -863,7 +872,7 @@ export class ChatService {
     }
   }
 
-  static async updateChatSession(chatSessionId: string, updates: Partial<Omit<ChatSession, 'id' | 'userId' | 'createdAt'>>): Promise<void> {
+  static async updateChatSession(chatSessionId: string, updates: ChatSessionUpdate): Promise<void> {
     try {
       const chatSessionRef = doc(db, 'chatSessions', chatSessionId);
       await updateDoc(chatSessionRef, {
@@ -928,10 +937,10 @@ export class ChatService {
         createdAt: Timestamp.now(),
       });
 
-      // Update chat session metadata
+      // Update chat session metadata with atomic increment
       await this.updateChatSession(chatSessionId, {
         lastMessage: content,
-        messageCount: await this.getMessageCount(chatSessionId) + 1,
+        messageCount: increment(1),
       });
 
       return docRef.id;
@@ -1031,19 +1040,7 @@ export class ChatService {
     }
   }
 
-  private static async getMessageCount(chatSessionId: string): Promise<number> {
-    try {
-      const q = query(
-        collection(db, 'chatMessages'),
-        where('chatSessionId', '==', chatSessionId)
-      );
-      const querySnapshot = await getDocs(q);
-      return querySnapshot.size;
-    } catch (error) {
-      console.error('Error getting message count:', error);
-      return 0;
-    }
-  }
+
 
   // Legacy methods for backward compatibility (deprecated)
   static async saveMessageLegacy(userId: string, role: 'user' | 'assistant', content: string): Promise<string> {
@@ -1213,6 +1210,8 @@ Output: {"title":"Daily Hydration Reminder","description":"Stay hydrated through
       let responseText: string;
       if (typeof aiResponse === 'string') {
         responseText = aiResponse;
+      } else if (typeof aiResponse === 'object' && aiResponse.message?.content) {
+        responseText = aiResponse.message.content;
       } else if (typeof aiResponse === 'object' && aiResponse.text) {
         responseText = aiResponse.text;
       } else if (typeof aiResponse === 'object' && aiResponse.content) {
@@ -1572,6 +1571,8 @@ Provide a helpful, actionable response focused on productivity, goal achievement
       // Handle different response formats from Puter AI
       if (typeof aiResponse === 'string') {
         return aiResponse;
+      } else if (typeof aiResponse === 'object' && aiResponse.message?.content) {
+        return aiResponse.message.content;
       } else if (typeof aiResponse === 'object' && aiResponse.text) {
         return aiResponse.text;
       } else if (typeof aiResponse === 'object' && aiResponse.content) {

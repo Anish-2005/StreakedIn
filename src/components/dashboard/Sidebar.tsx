@@ -1,5 +1,6 @@
 "use client";
-import { ChevronRight, TrendingUp, Sparkles } from 'lucide-react';
+import { ChevronRight, Sparkles } from 'lucide-react';
+import Image from 'next/image';
 import { useAuth } from '../../contexts/AuthContext';
 import { db } from '../../lib/firebase';
 import { doc, onSnapshot } from 'firebase/firestore';
@@ -67,10 +68,16 @@ export default function Sidebar({ activeTab, setActiveTab, isSidebarOpen, setIsS
           {/* Logo and title row */}
           <div className={`flex ${isSidebarOpen ? 'items-center space-x-4 w-full justify-between' : 'justify-center'}`}>
             <div className="relative group">
-              <div className={`dark:bg-gradient-to-br dark:from-blue-500/20 dark:to-purple-500/20 light:bg-gradient-to-br light:from-blue-100/40 light:to-purple-100/40 rounded-xl flex items-center justify-center dark:border dark:border-white/10 light:border light:border-purple-300/40 dark:group-hover:border-white/20 light:group-hover:border-purple-400/60 transition-colors duration-300 ${
+              <div className={`flex items-center justify-center transition-colors duration-300 ${
                 isSidebarOpen ? 'w-12 h-12' : 'w-12 h-12'
               }`}>
-                <TrendingUp className={`dark:text-blue-300 light:text-blue-600 transition-colors duration-300 ${isSidebarOpen ? 'w-6 h-6' : 'w-6 h-6'}`} />
+                <Image
+                  src="/streakedin.png"
+                  alt="StreakedIn Logo"
+                  width={isSidebarOpen ? 32 : 32}
+                  height={isSidebarOpen ? 32 : 32}
+                  className="w-full h-full object-contain dark:brightness-110 light:brightness-90 transition-all duration-300"
+                />
               </div>
               {/* Logo glow */}
               <div className="absolute -inset-1 bg-gradient-to-r dark:from-blue-500 light:from-blue-400 dark:to-purple-600 light:to-purple-500 rounded-xl blur dark:opacity-0 light:opacity-0 dark:group-hover:opacity-30 light:group-hover:opacity-20 transition-opacity duration-300"></div>

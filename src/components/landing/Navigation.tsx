@@ -1,7 +1,8 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
-import { TrendingUp, Menu, X } from 'lucide-react';
+import Image from 'next/image';
+import { Menu, X } from 'lucide-react';
 import { Button } from '../common';
 import ThemeToggle from '../common/ThemeToggle';
 
@@ -21,10 +22,16 @@ export default function Navigation({ isMenuOpen, setIsMenuOpen }: NavigationProp
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="flex items-center space-x-2"
+            className="flex items-center space-x-3"
           >
-            <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-              <TrendingUp className="w-5 h-5 text-white" />
+            <div className="w-8 h-8 relative">
+              <Image
+                src="/streakedin.png"
+                alt="StreakedIn Logo"
+                width={32}
+                height={32}
+                className="w-full h-full object-contain"
+              />
             </div>
             <span className="text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
               StreakedIn
