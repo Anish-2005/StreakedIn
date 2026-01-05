@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useEffect, useLayoutEffect, ReactNode } from 'react';
 
 type Theme = 'light' | 'dark';
 
@@ -12,29 +12,29 @@ interface ThemeContextType {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
+const applyThemeClass = (theme: Theme) => {
+  const root = document.documentElement;
+  root.classList.remove('light', 'dark');
+  root.classList.add(theme);
+};
+
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>(() => {
-    if (typeof window === 'undefined') return 'light';
-    const stored = localStorage.getItem('theme') as Theme | null;
-    return stored === 'dark' ? 'dark' : 'light';
-  });
+  const theme: Theme = 'dark';
+
+  useLayoutEffect(() => {
+    applyThemeClass(theme);
+  }, []);
 
   useEffect(() => {
-    document.documentElement.classList.remove('light', 'dark');
-    if (theme === 'dark') {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.add('light');
-    }
-    localStorage.setItem('theme', theme);
-  }, [theme]);
+    applyThemeClass(theme);
+  }, []);
 
   const toggleTheme = () => {
-    setThemeState(prevTheme => prevTheme === 'dark' ? 'light' : 'dark');
+    // Light mode disabled; keep dark
   };
 
   const setTheme = (newTheme: Theme) => {
-    setThemeState(newTheme);
+    // Light mode disabled; keep dark
   };
 
   return (

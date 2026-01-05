@@ -7,8 +7,6 @@ import { Menu, Search, Zap } from "lucide-react";
 import SearchBar from "./SearchBar";
 import NotificationsBell from "./NotificationsBell";
 import UserMenu from "./UserMenu";
-import { ThemeToggle } from "../common";
-import { useTheme } from "@/contexts/ThemeContext";
 
 interface TopBarProps {
   activeTab: string;
@@ -34,7 +32,6 @@ export default function TopBar({
   onClearSearch,
 }: TopBarProps) {
   const [showMobileSearch, setShowMobileSearch] = useState(false);
-  const { theme } = useTheme(); // 🔥 forces rerender on theme toggle
 
   const formatTabName = (tab: string) =>
     tab.replace("-", " ").replace(/\b\w/g, (l) => l.toUpperCase());
@@ -118,10 +115,6 @@ export default function TopBar({
               <span className="text-sm font-medium text-green-700 dark:text-green-300">
                 Active
               </span>
-            </div>
-
-            <div className="hidden sm:block">
-              <ThemeToggle />
             </div>
 
             {isMobile && (

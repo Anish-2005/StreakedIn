@@ -4,15 +4,10 @@
   html {
     scroll-behavior: smooth;
     font-family: 'Inter', system-ui, sans-serif;
+    color-scheme: dark;
   }
 
-  /* Default (light) */
   body {
-    @apply bg-purple-50 text-gray-900;
-  }
-
-  /* Dark theme */
-  html.dark body {
     @apply bg-gray-900 text-gray-100;
   }
 }
