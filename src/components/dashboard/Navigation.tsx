@@ -34,75 +34,46 @@ export default function Navigation({ activeTab, onTabChange, isCollapsed }: Navi
             <button
               key={item.id}
               onClick={() => onTabChange(item.id)}
-              className={`group relative w-full flex items-center justify-center ${
-                isCollapsed ? 'px-2 py-3' : 'space-x-4 px-4 py-3.5'
-              } rounded-xl transition-all duration-300 dark:hover:scale-110 light:hover:scale-110 ${
-                isActive
-                  ? 'dark:bg-gradient-to-r dark:from-white/15 dark:to-white/5 light:bg-gradient-to-r light:from-purple-100/40 light:to-blue-100/40 dark:border dark:border-white/20 light:border light:border-purple-300/40 dark:shadow-lg dark:shadow-blue-500/20 light:shadow-lg light:shadow-purple-300/20'
-                  : 'dark:hover:bg-white/5 light:hover:bg-gray-100/50 dark:border dark:border-transparent light:border light:border-transparent dark:hover:border-white/10 light:hover:border-gray-300/30'
-              }`}
+              className={`group relative w-full flex items-center justify-center transition-all duration-300 ${isCollapsed ? 'px-2 py-3 mb-2 rounded-2xl' : 'space-x-4 px-6 py-4 rounded-[2rem]'
+                } ${isActive
+                  ? 'clay-pressed scale-95 shadow-lg'
+                  : 'clay-button hover:scale-105 active:scale-95'
+                }`}
             >
-              {/* Active indicator - only show when not collapsed */}
-              {isActive && !isCollapsed && (
-                <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 dark:bg-gradient-to-b light:bg-gradient-to-b dark:from-blue-400 light:from-blue-500 dark:to-purple-400 light:to-purple-500 rounded-r-full"></div>
-              )}
-
-              {/* Active indicator for collapsed state */}
-              {isActive && isCollapsed && (
-                <div className="absolute inset-0 dark:bg-gradient-to-r light:bg-gradient-to-r dark:from-blue-500/20 light:from-blue-400/30 dark:to-purple-500/20 light:to-purple-400/30 rounded-xl dark:border light:border dark:border-blue-400/30 light:border-purple-400/40"></div>
-              )}
-
               {/* Icon with enhanced styling */}
-              <div className={`relative flex-shrink-0 transition-all duration-300 ${
-                isActive
-                  ? 'dark:text-white light:text-purple-700 scale-110'
-                  : 'dark:text-slate-400 light:text-gray-600 dark:group-hover:text-white light:group-hover:text-purple-600 group-hover:scale-105'
-              }`}>
+              <div className={`relative flex-shrink-0 transition-all duration-300 ${isActive
+                  ? 'text-blue-500 scale-100'
+                  : 'text-app-text-muted group-hover:text-app-text group-hover:scale-110'
+                }`}>
                 {item.icon}
-
-                {/* Icon glow effect */}
-                {isActive && (
-                  <div className="absolute -inset-1 dark:bg-gradient-to-r light:bg-gradient-to-r dark:from-blue-500/30 light:from-blue-400/20 dark:to-purple-500/30 light:to-purple-400/20 rounded-lg blur dark:opacity-60 light:opacity-40"></div>
-                )}
-
-                {/* Hover glow for non-active items */}
-                {!isActive && (
-                  <div className={`absolute -inset-1 bg-gradient-to-r ${item.color} rounded-lg blur dark:opacity-0 light:opacity-0 dark:group-hover:opacity-20 light:group-hover:opacity-10 transition-opacity duration-300`}></div>
-                )}
               </div>
 
-              {/* Text and badge - only show when not collapsed */}
+              {/* Text - only show when not collapsed */}
               {!isCollapsed && (
                 <div className="flex-1 flex items-center justify-between min-w-0">
-                  <span className={`font-medium transition-colors ${
-                    isActive
-                      ? 'dark:text-white light:text-purple-800'
-                      : 'text-app-text-muted dark:group-hover:text-white light:group-hover:text-purple-700'
-                  }`}>
+                  <span className={`font-semibold text-lg transition-colors ${isActive
+                      ? 'text-app-text'
+                      : 'text-app-text-muted group-hover:text-app-text'
+                    }`}>
                     {item.name}
                   </span>
 
-                  {/* Active sparkle indicator */}
                   {isActive && (
-                    <Sparkles className="w-4 h-4 dark:text-purple-300 light:text-purple-500 animate-pulse" />
+                    <div className="w-1.5 h-1.5 rounded-full bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.6)] animate-pulse" />
                   )}
                 </div>
               )}
 
               {/* Tooltip for collapsed state */}
               {isCollapsed && (
-                <div className="absolute left-full ml-2 px-3 py-2 dark:bg-slate-800/95 light:bg-white/95 backdrop-blur-md text-app-text text-sm rounded-lg dark:border dark:border-slate-600/50 light:border light:border-gray-300/50 opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none whitespace-nowrap z-50 shadow-xl">
+                <div className="absolute left-full ml-4 px-3 py-2 clay-card text-app-text text-sm rounded-xl opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none whitespace-nowrap z-50">
                   {item.name}
-                  {/* Tooltip arrow */}
-                  <div className="absolute right-full top-1/2 -translate-y-1/2 w-0 h-0 border-t-4 border-b-4 border-r-4 border-transparent dark:border-r-slate-800/95 light:border-r-white/95"></div>
                 </div>
               )}
             </button>
           );
         })}
       </div>
-
-      {/* Decorative elements - hide when collapsed */}
       {!isCollapsed && (
         <div className="mt-8 flex justify-center">
           <div className="w-32 h-px dark:bg-gradient-to-r light:bg-gradient-to-r dark:from-transparent light:from-transparent dark:via-slate-600 light:via-gray-300 dark:to-transparent light:to-transparent"></div>

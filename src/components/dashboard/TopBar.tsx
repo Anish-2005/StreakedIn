@@ -39,12 +39,12 @@ export default function TopBar({
 
   return (
     <>
-      <header className="relative h-20 mb-4 px-4 pt-2">
-        {/* Clay Background */}
-        <div className="absolute inset-0 bg-app-surface/90 backdrop-blur-3xl rounded-b-[2.5rem] shadow-xl border-b border-app-border/10"></div>
+      <header className="relative h-24 mb-6 px-4 pt-4">
+        {/* Bold Clay Header Background */}
+        <div className="absolute inset-x-4 inset-y-2 bg-app-surface clay-card rounded-b-[3.5rem] shadow-2xl border-b-4 border-app-border/20 z-0"></div>
 
-        {/* Subtle Accents */}
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-pink-500/10 rounded-b-[2.5rem]" />
+        {/* Dynamic Accents */}
+        <div className="absolute inset-x-4 inset-y-2 rounded-b-[3.5rem] bg-gradient-to-r from-blue-500/15 via-purple-500/15 to-pink-500/15 z-0 transition-opacity duration-1000" />
 
         {/* Content */}
         <div className="relative h-full flex items-center justify-between px-4 sm:px-6 lg:px-8">

@@ -48,77 +48,59 @@ export default function Sidebar({ activeTab, setActiveTab, isSidebarOpen, setIsS
       ? `w-72 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`
       : `${isSidebarOpen ? 'w-72' : 'w-20'}`
       }`}>
-      {/* Semantic Theme Background */}
-      <div className="absolute inset-0 bg-app-surface/90 backdrop-blur-3xl rounded-r-[3rem] shadow-2xl border-r border-app-border/10"></div>
+      {/* Bold Clay Container */}
+      <div
+        className="absolute inset-0 bg-app-surface clay-card rounded-r-[4rem] border-r-4 border-app-border/20 z-0"
+        style={{ borderRadius: '0 4rem 4rem 0' }}
+      ></div>
 
       {/* Dynamic Overlays */}
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-transparent to-purple-500/10 opacity-30 rounded-r-[3rem]"></div>
-
-      {/* Accent Edge */}
-      <div className="absolute right-0 top-0 bottom-0 w-[1px] bg-white/5 rounded-r-[3rem]"></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-transparent to-purple-500/10 opacity-30 rounded-r-[4rem] z-0"></div>
 
       {/* Content Container */}
-      <div className="relative h-full flex flex-col overflow-hidden">
-        {/* Enhanced Logo Section - Theme responsive */}
-        <div className={`flex flex-col items-center ${isSidebarOpen ? 'h-20 px-6 py-3' : 'h-20 px-2 py-3'} dark:border-b dark:border-slate-700/60 light:border-b light:border-gray-300/40 relative transition-colors duration-300`}>
-          {/* Logo and title row */}
-          <div className={`flex ${isSidebarOpen ? 'items-center space-x-4 w-full justify-between' : 'justify-center'}`}>
-            <div className="relative group">
-              <div className={`flex items-center justify-center transition-colors duration-300 ${isSidebarOpen ? 'w-12 h-12' : 'w-12 h-12'
-                }`}>
-                <Image
-                  src="/streakedin.png"
-                  alt="StreakedIn Logo"
-                  width={isSidebarOpen ? 32 : 32}
-                  height={isSidebarOpen ? 32 : 32}
-                  className="w-full h-full object-contain dark:brightness-110 light:brightness-90 transition-all duration-300"
-                />
-              </div>
-              {/* Logo glow */}
-              <div className="absolute -inset-1 bg-gradient-to-r dark:from-blue-500 light:from-blue-400 dark:to-purple-600 light:to-purple-500 rounded-xl blur dark:opacity-0 light:opacity-0 dark:group-hover:opacity-30 light:group-hover:opacity-20 transition-opacity duration-300"></div>
+      <div className="relative h-full flex flex-col overflow-hidden z-20">
+        {/* Branding Area */}
+        <div className={`flex items-center ${isSidebarOpen ? 'px-8 py-10' : 'justify-center py-10'}`}>
+          <div className="flex items-center gap-4 group cursor-pointer">
+            <div className="w-12 h-12 clay-button rounded-2xl flex items-center justify-center bg-gradient-to-br from-blue-500 to-purple-600 shadow-blue-500/20">
+              <Image
+                src="/streakedin.png"
+                alt="Logo"
+                width={32}
+                height={32}
+                className="brightness-0 invert p-1"
+              />
             </div>
             {isSidebarOpen && (
-              <div className="flex items-center space-x-2">
-                <span className="text-2xl font-bold dark:bg-gradient-to-r dark:from-white dark:via-blue-100 dark:to-purple-200 light:bg-gradient-to-r light:from-gray-900 light:via-blue-700 light:to-purple-700 bg-clip-text text-transparent transition-colors duration-300">
-                  StreakedIn
+              <div className="flex flex-col">
+                <span className="text-2xl font-black tracking-tight text-app-text leading-tight">
+                  Streaked<span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">In</span>
                 </span>
-                <Sparkles className="dark:text-purple-300 light:text-purple-500 w-5 h-5 animate-pulse transition-colors duration-300" />
+                <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-app-text-muted">Professional</span>
               </div>
             )}
           </div>
         </div>
 
         {/* Navigation */}
-        {isSidebarOpen ? (
-          <div className="flex-1 overflow-y-auto">
-            <Navigation
-              activeTab={activeTab}
-              onTabChange={setActiveTab}
-              isCollapsed={!isSidebarOpen}
-            />
-          </div>
-        ) : (
+        <div className="flex-1 overflow-y-auto custom-scrollbar px-2">
           <Navigation
             activeTab={activeTab}
             onTabChange={setActiveTab}
             isCollapsed={!isSidebarOpen}
           />
-        )}
-
-        {/* Sidebar Toggle Button - Theme responsive */}
-        <div className={`flex ${isSidebarOpen ? 'justify-end px-6 py-4' : 'justify-center px-2 py-3'}`}>
-          <button
-            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-            className="group p-2 dark:hover:bg-white/10 light:hover:bg-gray-900/10 rounded-xl transition-all duration-300 dark:hover:scale-110 light:hover:scale-110"
-            title={isSidebarOpen ? "Collapse Sidebar" : "Expand Sidebar"}
-          >
-            <ChevronRight className={`w-5 h-5 dark:text-slate-400 light:text-gray-600 dark:group-hover:text-white light:group-hover:text-gray-900 transition-all duration-300 ${isSidebarOpen ? 'rotate-180' : ''
-              }`} />
-          </button>
         </div>
 
-        {/* User Profile - Fixed at bottom */}
-        <div className="flex-shrink-0">
+        {/* Action area */}
+        <div className={`flex flex-col gap-4 ${isSidebarOpen ? 'px-6 py-8' : 'items-center py-8'}`}>
+          <button
+            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+            className="w-10 h-10 clay-button rounded-xl flex items-center justify-center text-app-text-muted hover:text-app-text"
+            title={isSidebarOpen ? "Collapse" : "Expand"}
+          >
+            <ChevronRight className={`w-5 h-5 transition-transform duration-500 ${isSidebarOpen ? 'rotate-180' : ''}`} />
+          </button>
+
           <UserProfile
             user={user}
             userProfile={userProfile}
