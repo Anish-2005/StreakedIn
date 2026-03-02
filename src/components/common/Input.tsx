@@ -22,8 +22,8 @@ interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement
 const baseClasses = 'w-full px-4 py-3 border rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500/60 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed text-base';
 
 const variantClasses = {
-  default: 'dark:border-slate-600/60 light:border-gray-300 dark:bg-slate-800/60 light:bg-white dark:text-white light:text-gray-900 dark:placeholder-slate-400 light:placeholder-gray-500 dark:hover:border-slate-500/60 light:hover:border-gray-400',
-  filled: 'dark:border-slate-600/80 light:border-gray-400 dark:bg-slate-700/80 light:bg-gray-100 dark:text-white light:text-gray-900 dark:placeholder-slate-500 light:placeholder-gray-600 dark:hover:border-slate-500/80 light:hover:border-gray-500'
+  default: 'bg-app-surface/60 border-app-border text-app-text placeholder-app-text-muted hover:border-app-border/80 light:bg-white light:border-gray-300',
+  filled: 'bg-app-surface border-app-border text-app-text placeholder-app-text-muted hover:border-app-border/80 light:bg-gray-100'
 };
 
 export function Input({ variant = 'default', error, className = '', ...props }: InputProps) {
@@ -94,9 +94,8 @@ export function Select({ variant = 'default', error, className = '', children, v
                   key={childProps.value}
                   type="button"
                   onClick={() => handleSelect(childProps.value)}
-                  className={`w-full px-4 py-3 text-left transition-colors duration-150 dark:hover:bg-slate-700/60 light:hover:bg-gray-100 ${
-                    isSelected ? 'dark:bg-blue-500/20 dark:text-blue-300 light:bg-blue-100 light:text-blue-700' : 'dark:text-white light:text-gray-900'
-                  } first:rounded-t-lg last:rounded-b-lg`}
+                  className={`w-full px-4 py-3 text-left transition-colors duration-150 dark:hover:bg-slate-700/60 light:hover:bg-gray-100 ${isSelected ? 'dark:bg-blue-500/20 dark:text-blue-300 light:bg-blue-100 light:text-blue-700' : 'dark:text-white light:text-gray-900'
+                    } first:rounded-t-lg last:rounded-b-lg`}
                 >
                   {childProps.children}
                 </button>

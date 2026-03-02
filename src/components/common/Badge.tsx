@@ -2,19 +2,19 @@ import React from 'react';
 
 interface BadgeProps {
   children: React.ReactNode;
-  variant?: 'default' | 'success' | 'warning' | 'error' | 'info' | 'purple';
+  variant?: 'default' | 'primary' | 'success' | 'warning' | 'danger' | 'purple';
   size?: 'sm' | 'md' | 'lg';
   icon?: React.ReactNode;
   className?: string;
 }
 
 const variantClasses = {
-  default: 'bg-slate-700 light:bg-slate-100/50 text-slate-300 light:text-slate-700 border-slate-600 light:border-slate-300/50',
-  success: 'bg-green-500/20 text-green-300 border-green-500/30',
-  warning: 'bg-yellow-500/20 text-yellow-300 border-yellow-500/30',
-  error: 'bg-red-500/20 text-red-300 border-red-500/30',
-  info: 'bg-blue-500/20 text-blue-300 border-blue-500/30',
-  purple: 'bg-purple-500/20 text-purple-300 border-purple-500/30'
+  default: 'bg-app-surface border border-app-border text-app-text-muted',
+  primary: 'bg-blue-500/10 border border-blue-500/30 text-blue-400 light:text-blue-700 light:bg-blue-50',
+  success: 'bg-green-500/10 border border-green-500/30 text-green-400 light:text-green-700 light:bg-green-50',
+  warning: 'bg-yellow-500/10 border border-yellow-500/30 text-yellow-400 light:text-yellow-700 light:bg-yellow-50',
+  danger: 'bg-red-500/10 border border-red-500/30 text-red-400 light:text-red-700 light:bg-red-50',
+  purple: 'bg-purple-500/10 border border-purple-500/30 text-purple-400 light:text-purple-700 light:bg-purple-50'
 };
 
 const sizeClasses = {

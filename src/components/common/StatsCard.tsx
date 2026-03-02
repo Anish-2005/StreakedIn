@@ -22,13 +22,13 @@ export default function StatsCard({
     <Card className={className} hover>
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-slate-300 light:text-slate-700 text-sm">{title}</p>
-          <p className="text-2xl font-bold text-white light:text-slate-900 mt-1">{value}</p>
+          <p className="text-app-text-muted text-sm">{title}</p>
+          <p className="text-2xl font-bold text-app-text mt-1">{value}</p>
           {change && (
             <p className={`text-sm mt-1 ${color}`}>{change}</p>
           )}
         </div>
-        <div className={`p-3 rounded-lg bg-slate-900 light:bg-slate-50/30 ${color}`}>
+        <div className={`p-3 rounded-lg bg-app-bg ${color}`}>
           {icon}
         </div>
       </div>

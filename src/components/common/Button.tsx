@@ -12,11 +12,11 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const variantClasses = {
-  primary: 'bg-gradient-to-r from-blue-500 to-purple-600 text-white light:text-slate-900 hover:opacity-90 border-transparent',
-  secondary: 'dark:bg-slate-700/50 light:bg-gray-200/50 dark:text-slate-300 light:text-gray-800 dark:hover:bg-slate-600/50 light:hover:bg-gray-300/50 dark:border-slate-600/50 light:border-gray-400/50',
-  outline: 'dark:border dark:border-slate-700/50 light:border light:border-gray-400 dark:text-slate-300 light:text-gray-700 dark:hover:border-blue-500/60 dark:hover:text-blue-400 light:hover:border-blue-500/60 light:hover:text-blue-600 bg-transparent',
-  ghost: 'dark:text-slate-300 light:text-gray-700 dark:hover:text-white light:hover:text-gray-900 dark:hover:bg-slate-700/40 light:hover:bg-gray-200/40 border-transparent',
-  danger: 'dark:bg-red-500/20 light:bg-red-100/40 dark:text-red-300 light:text-red-700 dark:hover:bg-red-500/30 light:hover:bg-red-100/50 dark:border-red-500/30 light:border-red-400/40'
+  primary: 'bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:opacity-90 border-transparent transition-all shadow-md active:scale-95',
+  secondary: 'bg-app-surface text-app-text hover:bg-opacity-80 border-app-border light:bg-gray-200 light:text-slate-900',
+  outline: 'border border-app-border text-app-text-muted hover:border-blue-500 hover:text-blue-500 bg-transparent transition-colors',
+  ghost: 'text-app-text-muted hover:text-app-text hover:bg-app-surface border-transparent transition-colors',
+  danger: 'bg-red-500/20 text-red-400 hover:bg-red-500/30 border-red-500/30 light:bg-red-50 light:text-red-600'
 };
 
 const sizeClasses = {

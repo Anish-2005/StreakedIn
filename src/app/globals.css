@@ -1,7 +1,52 @@
 @import "tailwindcss";
 
-@custom-variant light (.light &);
-@custom-variant light-hover (.light &:hover);
+@theme {
+  /* Semantic Colors */
+  --color-app-bg: var(--app-bg);
+  --color-app-surface: var(--app-surface);
+  --color-app-text: var(--app-text);
+  --color-app-text-muted: var(--app-text-muted);
+  --color-app-border: var(--app-border);
+  --color-app-glass: var(--app-glass);
+
+  /* Animations */
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-pulse-slow: pulse 3s ease-in-out infinite;
+}
+
+@variant light (&:where(.light, .light *));
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+:root {
+  /* Default Theme: Dark */
+  --app-bg: #0f172a;
+  --app-surface: #1e293b;
+  --app-text: #f8fafc;
+  --app-text-muted: #94a3b8;
+  --app-border: rgba(51, 65, 85, 0.5);
+  --app-glass: rgba(30, 41, 59, 0.4);
+}
+
+.light {
+  /* Theme Override: Light */
+  --app-bg: #f8fafc;
+  --app-surface: #ffffff;
+  --app-text: #0f172a;
+  --app-text-muted: #475569;
+  --app-border: #cbd5e1;
+  --app-glass: rgba(255, 255, 255, 0.7);
+}
 
 @layer base {
   html {
@@ -10,12 +55,10 @@
   }
 
   body {
-    @apply bg-gray-900 text-gray-100 transition-colors duration-300;
-  }
-
-  html.light,
-  html.light body {
-    @apply bg-gray-50 text-slate-900;
+    background-color: var(--app-bg);
+    color: var(--app-text);
+    transition-property: background-color, color, border-color;
+    transition-duration: 300ms;
   }
 }
 
