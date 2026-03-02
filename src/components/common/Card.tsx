@@ -18,10 +18,10 @@ const paddingClasses = {
 };
 
 const variantClasses = {
-  default: 'clay-card rounded-[2.5rem] bg-app-surface border-app-border',
-  elevated: 'clay-card rounded-[2.5rem] bg-app-surface border-app-border shadow-2xl scale-[1.02]',
-  outlined: 'clay-card rounded-[2.5rem] bg-transparent border-2 border-app-border bg-opacity-10 backdrop-blur-sm',
-  glass: 'clay-card rounded-[2.5rem] bg-app-glass backdrop-blur-xl border-app-border'
+  default: 'clay-card rounded-[4rem] bg-app-surface border-app-border',
+  elevated: 'clay-card rounded-[4rem] bg-app-surface border-app-border shadow-2xl scale-[1.03] hover:scale-[1.05]',
+  outlined: 'clay-card rounded-[4rem] bg-transparent border-4 border-app-border bg-opacity-5 backdrop-blur-sm',
+  glass: 'clay-card rounded-[4rem] bg-app-glass backdrop-blur-3xl border-app-border'
 };
 
 export default function Card({

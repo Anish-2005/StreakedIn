@@ -131,28 +131,28 @@ export default function OverviewTab({ setActiveTab }: OverviewTabProps) {
               </div>
             ) : (
               goals.slice(0, 4).map((goal) => (
-                <div key={goal.id} className="bg-app-surface/40 dark:border light:border border-app-border rounded-xl p-5 hover:border-app-border transition-colors">
-                  <div className="flex items-start justify-between mb-3">
+                <div key={goal.id} className="clay-card rounded-[2.5rem] p-6 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer bg-opacity-40">
+                  <div className="flex items-start justify-between mb-4">
                     <div className="flex-1 min-w-0">
-                      <h3 className="font-semibold text-app-text text-lg mb-1 truncate">{goal.title}</h3>
-                      <div className="flex items-center gap-4 text-sm dark:text-slate-400 light:text-gray-600">
-                        <span className="flex items-center gap-1">
-                          <Clock className="w-3 h-3" />
-                          Due {goal.deadline ? new Date(goal.deadline).toLocaleDateString() : 'No deadline'}
+                      <h3 className="font-black text-app-text text-xl mb-1 truncate">{goal.title}</h3>
+                      <div className="flex items-center gap-4 text-xs font-bold uppercase tracking-wider text-app-text-muted">
+                        <span className="flex items-center gap-1.5">
+                          <Clock className="w-3.5 h-3.5" />
+                          {goal.deadline ? new Date(goal.deadline).toLocaleDateString() : 'Active'}
                         </span>
-                        <span className="px-2 py-1 dark:bg-slate-700/50 light:bg-gray-200/70 rounded-full text-xs">
+                        <span className="px-2.5 py-1 bg-app-bg rounded-lg shadow-inner-clay">
                           {goal.category}
                         </span>
                       </div>
                     </div>
                     <div className="text-right ml-4">
-                      <div className="text-2xl font-bold text-app-text">{goal.progress}%</div>
-                      <div className="text-xs text-app-text-muted">Complete</div>
+                      <div className="text-3xl font-black text-blue-500">{goal.progress}%</div>
+                      <div className="text-[10px] font-bold uppercase tracking-widest text-app-text-muted">Progress</div>
                     </div>
                   </div>
-                  <ProgressBar value={goal.progress} className="w-full h-2" />
+                  <ProgressBar value={goal.progress} className="w-full h-3 rounded-full overflow-hidden shadow-inner-clay" />
                   {goal.description && (
-                    <p className="text-app-text-muted text-sm mt-3 line-clamp-2">{goal.description}</p>
+                    <p className="text-app-text-muted text-sm mt-4 line-clamp-2 italic">"{goal.description}"</p>
                   )}
                 </div>
               ))
@@ -225,21 +225,21 @@ export default function OverviewTab({ setActiveTab }: OverviewTabProps) {
           {/* Quick Actions */}
           <Card>
             <h2 className="text-xl font-semibold text-app-text mb-6">Quick Actions</h2>
-            <div className="grid grid-cols-2 gap-3 mb-6">
+            <div className="grid grid-cols-2 gap-4 mb-6">
               {[
-                { icon: <Plus className="w-5 h-5" />, label: ' Create New Goal', action: () => setActiveTab('goals'), color: 'bg-blue-500 hover:bg-blue-600' },
-                { icon: <Clock className="w-5 h-5" />, label: ' Set Reminder', action: () => setActiveTab('reminders'), color: 'bg-orange-500 hover:bg-orange-600' },
-                { icon: <Brain className="w-5 h-5" />, label: ' AI Suggestions', action: () => setActiveTab('ai-assistant'), color: 'bg-purple-500 hover:bg-purple-600' },
-                { icon: <TrendingUp className="w-5 h-5" />, label: ' View Analytics', action: () => setActiveTab('analytics'), color: 'bg-green-500 hover:bg-green-600' }
+                { icon: <Plus className="w-6 h-6" />, label: 'Create Goal', action: () => setActiveTab('goals'), color: 'from-blue-500 to-blue-600' },
+                { icon: <Clock className="w-6 h-6" />, label: 'Reminder', action: () => setActiveTab('reminders'), color: 'from-orange-500 to-orange-600' },
+                { icon: <Brain className="w-6 h-6" />, label: 'AI Pilot', action: () => setActiveTab('ai-assistant'), color: 'from-purple-500 to-purple-600' },
+                { icon: <TrendingUp className="w-6 h-6" />, label: 'Analytics', action: () => setActiveTab('analytics'), color: 'from-green-500 to-green-600' }
               ].map((action, index) => (
-                <Button
+                <button
                   key={index}
-                  className={`w-full h-20 flex gap-2 items-center justify-center ${action.color} text-app-text border-0`}
+                  className={`w-full h-24 flex flex-col gap-2 items-center justify-center clay-button bg-gradient-to-br ${action.color} text-white border-0`}
                   onClick={action.action}
                 >
-                  
-                  <span className="text-sm font-medium flex gap-2">{action.icon} {action.label}</span>
-                </Button>
+                  {action.icon}
+                  <span className="text-xs font-black uppercase tracking-widest">{action.label}</span>
+                </button>
               ))}
             </div>
 
