@@ -29,7 +29,7 @@ export default function ChatArea({
       <div className="bg-slate-800 light:bg-white/30 backdrop-blur-md border border-slate-700 light:border-slate-300/50 rounded-xl h-[600px] flex flex-col">
         {/* Chat Header */}
         <div className="p-4 border-b border-slate-700 light:border-slate-300/50 flex items-center justify-between flex-shrink-0">
-          <h3 className="font-semibold text-white light:text-slate-900">Chat with AI Assistant</h3>
+          <h3 className="font-semibold text-app-text">Chat with AI Assistant</h3>
           <button
             onClick={onClearChat}
             className="flex items-center space-x-2 px-3 py-1.5 bg-red-500/20 text-red-400 hover:bg-red-500/30 rounded-lg transition-colors text-sm"

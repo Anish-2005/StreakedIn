@@ -40,25 +40,11 @@ export default function TopBar({
   return (
     <>
       <header className="relative h-20 overflow-hidden">
-        {/* Background */}
-        <div
-          className={`
-            absolute inset-0 backdrop-blur-xl border-b
-            bg-gradient-to-r from-gray-50/95 via-blue-50/90 to-gray-50/95
-            border-gray-300/40
-            dark:from-slate-900/95 dark:via-purple-900/90 dark:to-slate-900/95
-            dark:border-slate-700/60
-          `}
-        />
+        {/* Semantic Background */}
+        <div className="absolute inset-0 bg-app-surface/95 backdrop-blur-xl border-b border-app-border" />
 
-        {/* Glow overlay */}
-        <div
-          className={`
-            absolute inset-0 animate-pulse-slow
-            bg-gradient-to-r from-blue-400/5 via-purple-400/5 to-pink-400/5
-            dark:from-blue-600/10 dark:via-purple-600/10 dark:to-pink-600/10
-          `}
-        />
+        {/* Subtle Accents */}
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-purple-500/5 to-pink-500/5" />
 
         {/* Content */}
         <div className="relative h-full flex items-center justify-between px-4 sm:px-6 lg:px-8">

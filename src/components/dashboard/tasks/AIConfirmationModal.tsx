@@ -48,7 +48,7 @@ export default function AIConfirmationModal({
             <div className="p-2 bg-green-500/20 rounded-lg">
               <CheckCircle2 className="w-5 h-5 text-green-400" />
             </div>
-            <h3 className="text-lg font-semibold text-white light:text-slate-900">AI Generated Task</h3>
+            <h3 className="text-lg font-semibold text-app-text">AI Generated Task</h3>
           </div>
           <button
             onClick={onClose}
@@ -59,9 +59,9 @@ export default function AIConfirmationModal({
         </div>
 
         <div className="bg-slate-700 light:bg-slate-100/30 rounded-lg p-4 mb-6">
-          <h4 className="text-white light:text-slate-900 font-medium mb-2">{aiGeneratedTask.title}</h4>
+          <h4 className="text-app-text font-medium mb-2">{aiGeneratedTask.title}</h4>
           {aiGeneratedTask.description && aiGeneratedTask.description.trim() && (
-            <p className="text-slate-300 light:text-slate-700 text-sm mb-3">{aiGeneratedTask.description}</p>
+            <p className="text-app-text-muted text-sm mb-3">{aiGeneratedTask.description}</p>
           )}
           <div className="flex items-center gap-4 text-sm">
             <div className={`px-2 py-1 rounded-full text-xs font-medium border ${getPriorityColor(aiGeneratedTask.priority || 'medium')}`}>
@@ -85,7 +85,7 @@ export default function AIConfirmationModal({
           </Button>
           <Button
             onClick={onConfirm}
-            className="bg-green-500 hover:bg-green-600 text-white light:text-slate-900 px-6 py-2 w-full sm:w-auto"
+            className="bg-green-500 hover:bg-green-600 text-app-text px-6 py-2 w-full sm:w-auto"
           >
             <div className="flex items-center gap-2">
               <Plus className="w-4 h-4" />

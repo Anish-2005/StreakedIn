@@ -34,12 +34,12 @@ export default function SearchResults({
     <div className="px-4 sm:px-6 py-4 dark:border-b dark:border-slate-700/50 light:border-b light:border-gray-200 dark:bg-slate-800/20 light:bg-gray-100/20">
       <div className="max-w-4xl">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold dark:text-white light:text-gray-900">
+          <h2 className="text-lg font-semibold text-app-text">
             Search Results for "{searchQuery}"
           </h2>
           <button
             onClick={onClearSearch}
-            className="dark:text-slate-400 light:text-gray-500 dark:hover:text-white light:hover:text-gray-900 text-sm"
+            className="text-app-text-muted dark:hover:text-white light:hover:text-gray-900 text-sm"
           >
             Clear
           </button>
@@ -48,7 +48,7 @@ export default function SearchResults({
         {isSearching ? (
           <div className="text-center py-8">
             <div className="animate-spin rounded-full h-6 w-6 dark:border-b-2 light:border-b-2 dark:border-blue-500 light:border-blue-600 mx-auto"></div>
-            <p className="dark:text-slate-400 light:text-gray-500 mt-2">Searching...</p>
+            <p className="text-app-text-muted mt-2">Searching...</p>
           </div>
         ) : (
           <div className="space-y-6">
@@ -68,8 +68,8 @@ export default function SearchResults({
                     >
                       <div className="flex items-center justify-between">
                         <div className="flex-1 min-w-0">
-                          <h4 className="font-medium dark:text-white light:text-gray-900 truncate">{goal.title}</h4>
-                          <p className="text-sm dark:text-slate-400 light:text-gray-500 truncate">{goal.description || 'No description'}</p>
+                          <h4 className="font-medium text-app-text truncate">{goal.title}</h4>
+                          <p className="text-sm text-app-text-muted truncate">{goal.description || 'No description'}</p>
                         </div>
                         <div className="flex items-center gap-2 ml-4">
                           <span className="px-2 py-1 dark:bg-blue-500/20 light:bg-blue-100 dark:text-blue-300 light:text-blue-700 text-xs rounded-full">
@@ -102,8 +102,8 @@ export default function SearchResults({
                     >
                       <div className="flex items-center justify-between">
                         <div className="flex-1 min-w-0">
-                          <h4 className="font-medium dark:text-white light:text-gray-900 truncate">{task.title}</h4>
-                          <p className="text-sm dark:text-slate-400 light:text-gray-500 truncate">{task.description || 'No description'}</p>
+                          <h4 className="font-medium text-app-text truncate">{task.title}</h4>
+                          <p className="text-sm text-app-text-muted truncate">{task.description || 'No description'}</p>
                         </div>
                         <div className="flex items-center gap-2 ml-4">
                           <span className={`px-2 py-1 text-xs rounded-full ${
@@ -127,7 +127,7 @@ export default function SearchResults({
             {/* No Results */}
             {searchResults.goals.length === 0 && searchResults.tasks.length === 0 && !isSearching && (
               <div className="text-center py-8">
-                <p className="dark:text-slate-400 light:text-gray-500">No results found for "{searchQuery}"</p>
+                <p className="text-app-text-muted">No results found for "{searchQuery}"</p>
                 <p className="dark:text-slate-500 light:text-gray-400 text-sm mt-1">Try searching for goals, tasks, or categories</p>
               </div>
             )}

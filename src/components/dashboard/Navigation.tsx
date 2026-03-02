@@ -77,7 +77,7 @@ export default function Navigation({ activeTab, onTabChange, isCollapsed }: Navi
                   <span className={`font-medium transition-colors ${
                     isActive
                       ? 'dark:text-white light:text-purple-800'
-                      : 'dark:text-slate-300 light:text-gray-700 dark:group-hover:text-white light:group-hover:text-purple-700'
+                      : 'text-app-text-muted dark:group-hover:text-white light:group-hover:text-purple-700'
                   }`}>
                     {item.name}
                   </span>
@@ -91,7 +91,7 @@ export default function Navigation({ activeTab, onTabChange, isCollapsed }: Navi
 
               {/* Tooltip for collapsed state */}
               {isCollapsed && (
-                <div className="absolute left-full ml-2 px-3 py-2 dark:bg-slate-800/95 light:bg-white/95 backdrop-blur-md dark:text-white light:text-gray-900 text-sm rounded-lg dark:border dark:border-slate-600/50 light:border light:border-gray-300/50 opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none whitespace-nowrap z-50 shadow-xl">
+                <div className="absolute left-full ml-2 px-3 py-2 dark:bg-slate-800/95 light:bg-white/95 backdrop-blur-md text-app-text text-sm rounded-lg dark:border dark:border-slate-600/50 light:border light:border-gray-300/50 opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none whitespace-nowrap z-50 shadow-xl">
                   {item.name}
                   {/* Tooltip arrow */}
                   <div className="absolute right-full top-1/2 -translate-y-1/2 w-0 h-0 border-t-4 border-b-4 border-r-4 border-transparent dark:border-r-slate-800/95 light:border-r-white/95"></div>

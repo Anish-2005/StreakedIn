@@ -37,7 +37,7 @@ export default function ChatSessionsSidebar({
     <div className="lg:col-span-3">
       <div className="bg-slate-800 light:bg-white/30 backdrop-blur-md border border-slate-700 light:border-slate-300/50 rounded-xl p-4 h-fit">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="font-semibold text-white light:text-slate-900">Chat History</h3>
+          <h3 className="font-semibold text-app-text">Chat History</h3>
           <button
             onClick={onCreateNewChat}
             className="p-2 bg-blue-500/20 text-blue-400 hover:bg-blue-500/30 rounded-lg transition-colors"
@@ -67,7 +67,7 @@ export default function ChatSessionsSidebar({
                         value={newChatName}
                         onChange={(e) => setNewChatName(e.target.value)}
                         onKeyDown={(e) => onRenameKeyPress(session.id, e)}
-                        className="rename-input flex-1 bg-slate-800 light:bg-white border border-slate-600 rounded px-2 py-1 text-sm text-white light:text-slate-900 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                        className="rename-input flex-1 bg-slate-800 light:bg-white border border-slate-600 rounded px-2 py-1 text-sm text-app-text focus:outline-none focus:ring-1 focus:ring-blue-500"
                         autoFocus
                         onClick={(e) => e.stopPropagation()}
                       />
@@ -94,7 +94,7 @@ export default function ChatSessionsSidebar({
                     </div>
                   ) : (
                     <>
-                      <p className="text-sm font-medium text-white light:text-slate-900 truncate">
+                      <p className="text-sm font-medium text-app-text truncate">
                         {session.title}
                       </p>
                       {session.lastMessage && (

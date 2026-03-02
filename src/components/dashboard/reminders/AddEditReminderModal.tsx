@@ -35,37 +35,37 @@ export default function AddEditReminderModal({
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
       <div className="bg-slate-800 light:bg-white border border-slate-700 light:border-slate-300 rounded-xl p-4 sm:p-6 w-full max-w-md">
-        <h3 className="text-lg font-semibold text-white light:text-slate-900 mb-4">
+        <h3 className="text-lg font-semibold text-app-text mb-4">
           {editingReminder ? 'Edit Reminder' : 'Create New Reminder'}
         </h3>
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-slate-300 light:text-slate-700 mb-1">Title</label>
+            <label className="block text-sm font-medium text-app-text-muted mb-1">Title</label>
             <input
               type="text"
               value={formData.title}
               onChange={(e) => onFormChange({ ...formData, title: e.target.value })}
-              className="w-full p-3 bg-slate-700 light:bg-slate-100 border border-slate-600 rounded-lg text-white light:text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full p-3 bg-slate-700 light:bg-slate-100 border border-slate-600 rounded-lg text-app-text placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="e.g., Review weekly goals"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-300 light:text-slate-700 mb-1">Description (Optional)</label>
+            <label className="block text-sm font-medium text-app-text-muted mb-1">Description (Optional)</label>
             <textarea
               value={formData.description}
               onChange={(e) => onFormChange({ ...formData, description: e.target.value })}
-              className="w-full p-3 bg-slate-700 light:bg-slate-100 border border-slate-600 rounded-lg text-white light:text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full p-3 bg-slate-700 light:bg-slate-100 border border-slate-600 rounded-lg text-app-text placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Add any additional details or context for this reminder"
               rows={3}
             />
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-slate-300 light:text-slate-700 mb-1">Type</label>
+              <label className="block text-sm font-medium text-app-text-muted mb-1">Type</label>
               <select
                 value={formData.type}
                 onChange={(e) => onFormChange({ ...formData, type: e.target.value as 'email' | 'browser' | 'sms' })}
-                className="w-full p-3 bg-slate-700 light:bg-slate-100 border border-slate-600 rounded-lg text-white light:text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full p-3 bg-slate-700 light:bg-slate-100 border border-slate-600 rounded-lg text-app-text focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="browser">Browser</option>
                 <option value="email">Email</option>
@@ -73,11 +73,11 @@ export default function AddEditReminderModal({
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-300 light:text-slate-700 mb-1">Frequency</label>
+              <label className="block text-sm font-medium text-app-text-muted mb-1">Frequency</label>
               <select
                 value={formData.frequency}
                 onChange={(e) => onFormChange({ ...formData, frequency: e.target.value as 'daily' | 'weekly' | 'monthly' | 'once' })}
-                className="w-full p-3 bg-slate-700 light:bg-slate-100 border border-slate-600 rounded-lg text-white light:text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full p-3 bg-slate-700 light:bg-slate-100 border border-slate-600 rounded-lg text-app-text focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="once">Once</option>
                 <option value="daily">Daily</option>
@@ -94,20 +94,20 @@ export default function AddEditReminderModal({
               onChange={(e) => onFormChange({ ...formData, enabled: e.target.checked })}
               className="rounded border-slate-600 text-blue-500 focus:ring-blue-500"
             />
-            <label htmlFor="enabled" className="text-sm text-slate-300 light:text-slate-700">Enable this reminder</label>
+            <label htmlFor="enabled" className="text-sm text-app-text-muted">Enable this reminder</label>
           </div>
         </div>
         <div className="flex flex-col sm:flex-row gap-3 mt-6">
           <button
             onClick={onClose}
-            className="flex-1 px-4 py-2 bg-slate-700 light:bg-slate-100 text-slate-300 light:text-slate-700 rounded-lg hover:bg-slate-600 transition-colors"
+            className="flex-1 px-4 py-2 bg-slate-700 light:bg-slate-100 text-app-text-muted rounded-lg hover:bg-slate-600 transition-colors"
           >
             Cancel
           </button>
           <button
             onClick={onSave}
             disabled={!formData.title.trim()}
-            className="flex-1 px-4 py-2 bg-blue-500 text-white light:text-slate-900 rounded-lg hover:bg-blue-600 transition-colors disabled:opacity-50"
+            className="flex-1 px-4 py-2 bg-blue-500 text-app-text rounded-lg hover:bg-blue-600 transition-colors disabled:opacity-50"
           >
             {editingReminder ? 'Save Changes' : 'Create Reminder'}
           </button>

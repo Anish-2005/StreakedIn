@@ -24,7 +24,7 @@ export default function ReminderItem({ reminder, onEdit, onDelete, onToggle }: R
              <Bell className="w-4 h-4" />}
           </div>
           <div className="flex-1 min-w-0">
-            <h3 className="font-semibold text-white light:text-slate-900">{reminder.title}</h3>
+            <h3 className="font-semibold text-app-text">{reminder.title}</h3>
             {reminder.description && (
               <p className="text-sm text-slate-400 light:text-slate-600 mt-1">{reminder.description}</p>
             )}
@@ -51,7 +51,7 @@ export default function ReminderItem({ reminder, onEdit, onDelete, onToggle }: R
               className="p-2 hover:bg-slate-700/40 rounded-lg transition-colors"
               title="Edit"
             >
-              <Edit2 className="w-4 h-4 text-slate-300 light:text-slate-700" />
+              <Edit2 className="w-4 h-4 text-app-text-muted" />
             </button>
             <button
               onClick={() => onDelete(reminder.id)}
@@ -63,7 +63,7 @@ export default function ReminderItem({ reminder, onEdit, onDelete, onToggle }: R
           </div>
         </div>
       </div>
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-sm text-slate-300 light:text-slate-700">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-sm text-app-text-muted">
         <span>Frequency: {reminder.frequency}</span>
         <span>Type: {reminder.type}</span>
       </div>

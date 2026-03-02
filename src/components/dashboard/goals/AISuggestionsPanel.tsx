@@ -28,8 +28,8 @@ export default function AISuggestionsPanel({ aiSuggestions, currentSuggestionInd
           <Brain className="w-5 h-5 text-purple-400" />
         </div>
         <div>
-          <h3 className="text-lg font-semibold text-white light:text-slate-900">AI Goal Suggestions</h3>
-          <p className="text-slate-300 light:text-slate-700 text-sm">Smart recommendations based on your progress</p>
+          <h3 className="text-lg font-semibold text-app-text">AI Goal Suggestions</h3>
+          <p className="text-app-text-muted text-sm">Smart recommendations based on your progress</p>
         </div>
       </div>
 
@@ -41,7 +41,7 @@ export default function AISuggestionsPanel({ aiSuggestions, currentSuggestionInd
             <Button
               onClick={onGenerate}
               disabled={isGeneratingSuggestions}
-              className="mx-auto bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white light:text-slate-900 px-6 py-2"
+              className="mx-auto bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-app-text px-6 py-2"
             >
               {isGeneratingSuggestions ? (
                 <div className="flex items-center gap-2">
@@ -68,7 +68,7 @@ export default function AISuggestionsPanel({ aiSuggestions, currentSuggestionInd
             >
               <div className="flex items-start gap-4">
                 <div className="flex-1 min-w-0">
-                  <div className="text-white light:text-slate-900 text-base leading-relaxed">
+                  <div className="text-app-text text-base leading-relaxed">
                     {aiSuggestions[currentSuggestionIndex]}
                   </div>
                 </div>

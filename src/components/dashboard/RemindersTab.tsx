@@ -222,7 +222,7 @@ export default function RemindersTab({}: RemindersTabProps) {
       >
         <div className="text-center py-12">
           <div className="animate-spin rounded-full h-12 w-12 dark:border-b-2 light:border-b-2 dark:border-blue-500 light:border-blue-600 mx-auto"></div>
-          <p className="dark:text-slate-400 light:text-gray-500 mt-4">Loading reminders...</p>
+          <p className="text-app-text-muted mt-4">Loading reminders...</p>
         </div>
       </motion.div>
     );

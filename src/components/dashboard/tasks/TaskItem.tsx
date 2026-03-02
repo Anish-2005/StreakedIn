@@ -64,7 +64,7 @@ export default function TaskItem({
           onClick={() => onToggle(task.id)}
           className={`flex-shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center mb-3 sm:mb-0 sm:mr-4 transition-all ${
             task.completed
-              ? 'bg-green-500 border-green-500 text-white light:text-slate-900'
+              ? 'bg-green-500 border-green-500 text-app-text'
               : 'border-slate-500 hover:border-slate-400'
           }`}
         >
@@ -88,7 +88,7 @@ export default function TaskItem({
             className={`text-lg font-medium mb-1 transition-all ${
               task.completed
                 ? 'text-slate-400 light:text-slate-600 line-through'
-                : 'text-white light:text-slate-900 group-hover:text-blue-300'
+                : 'text-app-text group-hover:text-blue-300'
             }`}
             animate={{ opacity: task.completed ? 0.6 : 1 }}
           >
@@ -99,7 +99,7 @@ export default function TaskItem({
             <p className={`text-sm mb-2 transition-all ${
               task.completed
                 ? 'text-slate-500 line-through'
-                : 'text-slate-300 light:text-slate-700'
+                : 'text-app-text-muted'
             }`}>
               {task.description}
             </p>

@@ -13,8 +13,8 @@ export default function GoalsHeader({ showCreateForm, onToggleCreate, onOpenAIPr
   return (
     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
       <div>
-        <h1 className="text-2xl font-bold text-white light:text-slate-900">Goals & Targets</h1>
-        <p className="text-slate-300 light:text-slate-700">Set and track your professional development goals</p>
+        <h1 className="text-2xl font-bold text-app-text">Goals & Targets</h1>
+        <p className="text-app-text-muted">Set and track your professional development goals</p>
       </div>
       <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
         <Button variant="outline" icon={<Filter />} className="w-full sm:w-auto">
@@ -30,7 +30,7 @@ export default function GoalsHeader({ showCreateForm, onToggleCreate, onOpenAIPr
         </Button>
         <Button
           onClick={onOpenAIPrompt}
-          className="w-full sm:w-auto bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white light:text-slate-900 px-6 py-2"
+          className="w-full sm:w-auto bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-app-text px-6 py-2"
         >
           <div className="flex items-center gap-2">
             <Sparkles className="w-4 h-4" />

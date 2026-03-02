@@ -106,8 +106,8 @@ export default function AIAssistantTab({}: AIAssistantTabProps) {
               <div className="w-8 h-8 border-2 border-white border-t-transparent rounded-full animate-spin" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-white light:text-slate-900">AI Productivity Assistant</h1>
-              <p className="text-slate-300 light:text-slate-700">Loading...</p>
+              <h1 className="text-2xl font-bold text-app-text">AI Productivity Assistant</h1>
+              <p className="text-app-text-muted">Loading...</p>
             </div>
           </div>
         </div>

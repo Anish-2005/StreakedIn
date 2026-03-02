@@ -15,8 +15,8 @@ export default function RemindersHeader({ onOpenAIPrompt, onAddReminder }: Remin
       className="flex flex-col sm:flex-row sm:items-center justify-between gap-4"
     >
       <div>
-        <h1 className="text-2xl font-bold text-white light:text-slate-900">Reminders & Notifications</h1>
-        <p className="text-slate-300 light:text-slate-700">Set up automated reminders to stay on track with your goals and tasks</p>
+        <h1 className="text-2xl font-bold text-app-text">Reminders & Notifications</h1>
+        <p className="text-app-text-muted">Set up automated reminders to stay on track with your goals and tasks</p>
       </div>
       <div className="flex flex-col sm:flex-row gap-2 sm:gap-2">
         <button
@@ -28,7 +28,7 @@ export default function RemindersHeader({ onOpenAIPrompt, onAddReminder }: Remin
         </button>
         <button
           onClick={onAddReminder}
-          className="flex items-center justify-center space-x-2 px-4 py-2 bg-[#0A66C2] text-white light:text-slate-900 rounded-lg hover:bg-[#004182] transition-colors w-full sm:w-auto"
+          className="flex items-center justify-center space-x-2 px-4 py-2 bg-[#0A66C2] text-app-text rounded-lg hover:bg-[#004182] transition-colors w-full sm:w-auto"
         >
           <Plus className="w-4 h-4" />
           <span>Add Manual Reminder</span>

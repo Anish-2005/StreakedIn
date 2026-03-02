@@ -192,7 +192,7 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white light:text-slate-900">
+    <div className="min-h-screen bg-app-bg text-app-text transition-colors duration-300">
       <Head>
         <title>Dashboard - StreakedIn</title>
         <meta name="description" content="Professional productivity dashboard" />
@@ -207,13 +207,12 @@ export default function Dashboard() {
       />
 
       {/* Main Content */}
-      <div className={`transition-all duration-300 ${
-        isMobile
+      <div className={`transition-all duration-300 ${isMobile
           ? 'ml-0'
           : isSidebarOpen
             ? 'ml-72'
             : 'ml-20'
-      }`}>
+        }`}>
         <TopBar
           activeTab={activeTab}
           user={user}

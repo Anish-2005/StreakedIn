@@ -14,11 +14,11 @@ export default function AIAssistantHeader() {
       <div className="bg-slate-800 light:bg-white/30 backdrop-blur-md border border-slate-700 light:border-slate-300/50 rounded-xl p-6">
         <div className="flex items-center space-x-4 mb-4">
           <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl flex items-center justify-center">
-            <Brain className="w-6 h-6 text-white light:text-slate-900" />
+            <Brain className="w-6 h-6 text-app-text" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-white light:text-slate-900">AI Productivity Assistant</h1>
-            <p className="text-slate-300 light:text-slate-700">Get personalized recommendations and automate your productivity tracking</p>
+            <h1 className="text-2xl font-bold text-app-text">AI Productivity Assistant</h1>
+            <p className="text-app-text-muted">Get personalized recommendations and automate your productivity tracking</p>
           </div>
         </div>
       </div>

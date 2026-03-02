@@ -23,25 +23,25 @@ export default function AIPromptModal({
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
       <div className="bg-slate-800 light:bg-white border border-slate-700 light:border-slate-300 rounded-xl p-4 sm:p-6 w-full max-w-md">
-        <h3 className="text-lg font-semibold text-white light:text-slate-900 mb-4">Create Reminder with AI Assistant</h3>
+        <h3 className="text-lg font-semibold text-app-text mb-4">Create Reminder with AI Assistant</h3>
         <textarea
           value={aiPrompt}
           onChange={(e) => onPromptChange(e.target.value)}
           placeholder="Describe the reminder you want to create naturally... e.g., 'Remind me to review my weekly goals every Monday at 9 AM' or 'Send me a daily reminder to drink water'"
-          className="w-full p-3 bg-slate-700 light:bg-slate-100 border border-slate-600 rounded-lg text-white light:text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
+          className="w-full p-3 bg-slate-700 light:bg-slate-100 border border-slate-600 rounded-lg text-app-text placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
           rows={4}
         />
         <div className="flex flex-col sm:flex-row gap-3">
           <button
             onClick={onClose}
-            className="flex-1 px-4 py-2 bg-slate-700 light:bg-slate-100 text-slate-300 light:text-slate-700 rounded-lg hover:bg-slate-600 transition-colors"
+            className="flex-1 px-4 py-2 bg-slate-700 light:bg-slate-100 text-app-text-muted rounded-lg hover:bg-slate-600 transition-colors"
           >
             Cancel
           </button>
           <button
             onClick={onSubmit}
             disabled={aiLoading || !aiPrompt.trim()}
-            className="flex-1 px-4 py-2 bg-purple-500 text-white light:text-slate-900 rounded-lg hover:bg-purple-600 transition-colors disabled:opacity-50 flex items-center justify-center space-x-2"
+            className="flex-1 px-4 py-2 bg-purple-500 text-app-text rounded-lg hover:bg-purple-600 transition-colors disabled:opacity-50 flex items-center justify-center space-x-2"
           >
             {aiLoading ? (
               <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />

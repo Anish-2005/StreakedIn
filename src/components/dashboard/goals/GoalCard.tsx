@@ -17,7 +17,7 @@ export default function GoalCard({ goal, onEdit, onDelete, getPriorityColor }: G
       <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 mb-4">
         <div className="flex-1 min-w-0">
           <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mb-2">
-            <h3 className="font-semibold text-white light:text-slate-900 text-lg">{goal.title}</h3>
+            <h3 className="font-semibold text-app-text text-lg">{goal.title}</h3>
             <div className="flex flex-wrap gap-2">
               {goal.aiSuggested && (
                 <Badge variant="purple" size="sm" icon={<Brain className="w-3 h-3" />}>
@@ -32,9 +32,9 @@ export default function GoalCard({ goal, onEdit, onDelete, getPriorityColor }: G
             </div>
           </div>
           {goal.description && (
-            <p className="text-slate-300 light:text-slate-700 text-sm mb-2">{goal.description}</p>
+            <p className="text-app-text-muted text-sm mb-2">{goal.description}</p>
           )}
-          <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-sm text-slate-300 light:text-slate-700">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-sm text-app-text-muted">
             <span className="flex items-center space-x-1">
               <Calendar className="w-4 h-4" />
               <span>Due {goal.deadline ? new Date(goal.deadline).toLocaleDateString() : '—'}</span>
@@ -68,8 +68,8 @@ export default function GoalCard({ goal, onEdit, onDelete, getPriorityColor }: G
       {/* Progress Bar */}
       <div className="mb-4">
         <div className="flex items-center justify-between mb-2">
-          <span className="text-sm font-medium text-slate-300 light:text-slate-700">Progress</span>
-          <span className="text-sm font-semibold text-white light:text-slate-900">{goal.progress}%</span>
+          <span className="text-sm font-medium text-app-text-muted">Progress</span>
+          <span className="text-sm font-semibold text-app-text">{goal.progress}%</span>
         </div>
         <ProgressBar value={goal.progress} className="w-full" />
       </div>

@@ -39,35 +39,35 @@ export default function AddTaskForm({
         <div className="p-2 bg-blue-500/20 rounded-lg">
           <Plus className="w-5 h-5 text-blue-400" />
         </div>
-        <h3 className="text-lg font-semibold text-white light:text-slate-900">Add New Task</h3>
+        <h3 className="text-lg font-semibold text-app-text">Add New Task</h3>
       </div>
 
       <div className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-slate-300 light:text-slate-700 mb-2">Task Title</label>
+          <label className="block text-sm font-medium text-app-text-muted mb-2">Task Title</label>
           <Input
             placeholder="What needs to be done?"
             value={newTaskTitle}
             onChange={(e) => onTitleChange(e.target.value)}
             onKeyPress={(e) => e.key === 'Enter' && onAddTask()}
-            className="text-white light:text-slate-900 placeholder-slate-400"
+            className="text-app-text placeholder-slate-400"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-slate-300 light:text-slate-700 mb-2">Description (Optional)</label>
+          <label className="block text-sm font-medium text-app-text-muted mb-2">Description (Optional)</label>
           <textarea
             placeholder="Add more details about this task..."
             value={newTaskDescription}
             onChange={(e) => onDescriptionChange(e.target.value)}
-            className="w-full px-4 py-3 border border-slate-600 light:border-slate-300/60 bg-slate-800 light:bg-white/60 text-white light:text-slate-900 placeholder-slate-400 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500/60 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed resize-none text-base"
+            className="w-full px-4 py-3 border border-slate-600 light:border-slate-300/60 bg-slate-800 light:bg-white/60 text-app-text placeholder-slate-400 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500/60 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed resize-none text-base"
             rows={3}
           />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-slate-300 light:text-slate-700 mb-2">Priority</label>
+            <label className="block text-sm font-medium text-app-text-muted mb-2">Priority</label>
             <Select
               value={newTaskPriority}
               onChange={(value) => onPriorityChange(value)}
@@ -80,12 +80,12 @@ export default function AddTaskForm({
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-300 light:text-slate-700 mb-2">Due Date (Optional)</label>
+            <label className="block text-sm font-medium text-app-text-muted mb-2">Due Date (Optional)</label>
             <Input
               type="date"
               value={newTaskDueDate}
               onChange={(e) => onDueDateChange(e.target.value)}
-              className="bg-slate-700 light:bg-slate-100/50 border-slate-600 light:border-slate-300 text-white light:text-slate-900"
+              className="bg-slate-700 light:bg-slate-100/50 border-slate-600 light:border-slate-300 text-app-text"
             />
           </div>
         </div>
@@ -94,7 +94,7 @@ export default function AddTaskForm({
       <div className="flex flex-col sm:flex-row justify-end gap-3 mt-4">
         <Button
           onClick={onOpenAIPrompt}
-          className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white light:text-slate-900 px-6 py-2 w-full sm:w-auto"
+          className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-app-text px-6 py-2 w-full sm:w-auto"
         >
           <div className="flex items-center gap-2">
             <Sparkles className="w-4 h-4" />
@@ -104,7 +104,7 @@ export default function AddTaskForm({
         <Button
           onClick={onAddTask}
           disabled={!newTaskTitle.trim() || isAddingTask}
-          className="bg-blue-500 hover:bg-blue-600 text-white light:text-slate-900 px-6 py-2 w-full sm:w-auto"
+          className="bg-blue-500 hover:bg-blue-600 text-app-text px-6 py-2 w-full sm:w-auto"
         >
           {isAddingTask ? (
             <div className="flex items-center gap-2">

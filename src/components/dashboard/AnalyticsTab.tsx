@@ -135,15 +135,15 @@ export default function AnalyticsTab({}: AnalyticsTabProps) {
       {/* Analytics Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-white light:text-slate-900">Productivity Analytics</h1>
-          <p className="text-slate-300 light:text-slate-700">Detailed insights into your performance and progress</p>
+          <h1 className="text-2xl font-bold text-app-text">Productivity Analytics</h1>
+          <p className="text-app-text-muted">Detailed insights into your performance and progress</p>
         </div>
         <div className="flex space-x-3">
           <button className="flex items-center space-x-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
             <Download className="w-4 h-4" />
             <span>Export</span>
           </button>
-          <button className="flex items-center space-x-2 px-4 py-2 bg-[#0A66C2] text-white light:text-slate-900 rounded-lg hover:bg-[#004182] transition-colors">
+          <button className="flex items-center space-x-2 px-4 py-2 bg-[#0A66C2] text-app-text rounded-lg hover:bg-[#004182] transition-colors">
             <Brain className="w-4 h-4" />
             <span>AI Analysis</span>
           </button>
@@ -181,11 +181,11 @@ export default function AnalyticsTab({}: AnalyticsTabProps) {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Productivity Trends */}
         <div className="bg-slate-800 light:bg-white/30 backdrop-blur-md border border-slate-700 light:border-slate-300/50 rounded-xl p-6">
-          <h3 className="font-semibold text-white light:text-slate-900 mb-4">Weekly Progress</h3>
+          <h3 className="font-semibold text-app-text mb-4">Weekly Progress</h3>
           <div className="space-y-3">
             {getWeeklyProgress().map((day, index) => (
               <div key={day.day} className="flex items-center justify-between">
-                <span className="text-slate-300 light:text-slate-700 text-sm">{day.day}</span>
+                <span className="text-app-text-muted text-sm">{day.day}</span>
                 <div className="flex space-x-2">
                   <div className="flex items-center space-x-1">
                     <div className="w-3 h-3 bg-blue-400 rounded-full"></div>
@@ -203,11 +203,11 @@ export default function AnalyticsTab({}: AnalyticsTabProps) {
 
         {/* Goal Distribution */}
         <div className="bg-slate-800 light:bg-white/30 backdrop-blur-md border border-slate-700 light:border-slate-300/50 rounded-xl p-6">
-          <h3 className="font-semibold text-white light:text-slate-900 mb-4">Goals by Category</h3>
+          <h3 className="font-semibold text-app-text mb-4">Goals by Category</h3>
           <div className="space-y-3">
             {getGoalsByCategory().map((item, index) => (
               <div key={item.category} className="flex items-center justify-between">
-                <span className="text-slate-300 light:text-slate-700 capitalize">{item.category}</span>
+                <span className="text-app-text-muted capitalize">{item.category}</span>
                 <div className="flex items-center space-x-2">
                   <div className="w-20 bg-slate-700 light:bg-slate-100 rounded-full h-2">
                     <div
@@ -230,22 +230,22 @@ export default function AnalyticsTab({}: AnalyticsTabProps) {
 
         {/* Task Overview */}
         <div className="bg-slate-800 light:bg-white/30 backdrop-blur-md border border-slate-700 light:border-slate-300/50 rounded-xl p-6">
-          <h3 className="font-semibold text-white light:text-slate-900 mb-4">Task Overview</h3>
+          <h3 className="font-semibold text-app-text mb-4">Task Overview</h3>
           <div className="space-y-4">
             <div className="flex justify-between items-center">
-              <span className="text-slate-300 light:text-slate-700">Completed</span>
+              <span className="text-app-text-muted">Completed</span>
               <span className="text-green-400 font-semibold">{getCompletedTasks()}</span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-slate-300 light:text-slate-700">Pending</span>
+              <span className="text-app-text-muted">Pending</span>
               <span className="text-yellow-400 font-semibold">{getTotalTasks() - getCompletedTasks()}</span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-slate-300 light:text-slate-700">Due Today</span>
+              <span className="text-app-text-muted">Due Today</span>
               <span className="text-blue-400 font-semibold">{getTasksDueToday()}</span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-slate-300 light:text-slate-700">Overdue</span>
+              <span className="text-app-text-muted">Overdue</span>
               <span className="text-red-400 font-semibold">{getOverdueTasks()}</span>
             </div>
           </div>
@@ -253,15 +253,15 @@ export default function AnalyticsTab({}: AnalyticsTabProps) {
 
         {/* AI Insights */}
         <div className="bg-slate-800 light:bg-white/30 backdrop-blur-md border border-slate-700 light:border-slate-300/50 rounded-xl p-6">
-          <h3 className="font-semibold text-white light:text-slate-900 mb-4">AI Insights</h3>
+          <h3 className="font-semibold text-app-text mb-4">AI Insights</h3>
           <div className="space-y-4">
             {getInsights().map((insight, index) => (
               <div key={index} className="p-4 bg-slate-900 light:bg-slate-50/20 rounded-lg border border-slate-700 light:border-slate-300/40">
                 <div className="flex items-center space-x-2 mb-2">
                   {insight.icon}
-                  <span className="font-semibold text-white light:text-slate-900">{insight.title}</span>
+                  <span className="font-semibold text-app-text">{insight.title}</span>
                 </div>
-                <p className="text-sm text-slate-300 light:text-slate-700">{insight.message}</p>
+                <p className="text-sm text-app-text-muted">{insight.message}</p>
               </div>
             ))}
             {getInsights().length === 0 && (

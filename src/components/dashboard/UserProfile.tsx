@@ -52,11 +52,11 @@ export default function UserProfile({ user, userProfile, isCollapsed }: UserProf
         {!isCollapsed && (
           <div className="flex-1 min-w-0">
             <div className="flex items-center space-x-2 mb-1">
-              <span className="font-semibold dark:text-white light:text-gray-900 text-sm truncate transition-colors duration-300">{getDisplayName(user)}</span>
+              <span className="font-semibold text-app-text text-sm truncate transition-colors duration-300">{getDisplayName(user)}</span>
               <Crown className="w-4 h-4 dark:text-yellow-400 light:text-yellow-500 transition-colors duration-300" />
             </div>
             <div className="flex items-center space-x-2">
-              <span className="dark:text-slate-400 light:text-gray-500 text-xs transition-colors duration-300">{userProfile?.plan || 'Professional Plan'}</span>
+              <span className="text-app-text-muted text-xs transition-colors duration-300">{userProfile?.plan || 'Professional Plan'}</span>
               <div className="flex items-center space-x-1 px-2 py-0.5 dark:bg-green-500/10 light:bg-green-100/50 dark:border dark:border-green-500/20 light:border light:border-green-300/40 rounded-full transition-colors duration-300">
                 <Zap className="w-3 h-3 dark:text-green-400 light:text-green-600 transition-colors duration-300" />
                 <span className="dark:text-green-300 light:text-green-700 text-xs font-medium transition-colors duration-300">Active</span>
@@ -75,9 +75,9 @@ export default function UserProfile({ user, userProfile, isCollapsed }: UserProf
 
         {/* Tooltip for collapsed state */}
         {isCollapsed && (
-          <div className="absolute left-full ml-2 px-4 py-3 dark:bg-slate-800/95 light:bg-white/95 backdrop-blur-md dark:text-white light:text-gray-900 rounded-lg dark:border dark:border-slate-600/50 light:border light:border-gray-300/50 opacity-0 group-hover:opacity-100 transition-all duration-300 z-50 shadow-xl">
-            <div className="font-semibold text-sm mb-1 dark:text-white light:text-gray-900">{getDisplayName(user)}</div>
-            <div className="dark:text-slate-400 light:text-gray-500 text-xs mb-2">{userProfile?.plan || 'Professional Plan'}</div>
+          <div className="absolute left-full ml-2 px-4 py-3 dark:bg-slate-800/95 light:bg-white/95 backdrop-blur-md text-app-text rounded-lg dark:border dark:border-slate-600/50 light:border light:border-gray-300/50 opacity-0 group-hover:opacity-100 transition-all duration-300 z-50 shadow-xl">
+            <div className="font-semibold text-sm mb-1 text-app-text">{getDisplayName(user)}</div>
+            <div className="text-app-text-muted text-xs mb-2">{userProfile?.plan || 'Professional Plan'}</div>
             <div className="flex items-center space-x-1 mb-3">
               <div className="w-2 h-2 dark:bg-green-400 light:bg-green-500 rounded-full"></div>
               <span className="dark:text-green-300 light:text-green-700 text-xs">Active</span>
