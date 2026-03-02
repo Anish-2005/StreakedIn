@@ -56,9 +56,13 @@
   --clay-shadow-inner: inset 6px 6px 12px rgba(255, 255, 255, 0.9), inset -6px -6px 12px rgba(0, 0, 0, 0.05);
 }
 
+@utility shadow-inner-clay {
+  box-shadow: var(--clay-shadow-inner);
+}
+
 @utility clay-card {
   background-color: var(--app-surface);
-  border-radius: 2rem;
+  border-radius: 2.5rem;
   box-shadow: var(--clay-shadow-outer), var(--clay-shadow-inner);
   border: 1px solid var(--app-border);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -68,11 +72,11 @@
   border-radius: 1.25rem;
   box-shadow: var(--clay-shadow-outer), var(--clay-shadow-inner);
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-}
 
-@utility clay-button:active {
-  transform: scale(0.95);
-  box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.1);
+  &:active {
+    transform: scale(0.95);
+    box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.1);
+  }
 }
 
 @layer base {
