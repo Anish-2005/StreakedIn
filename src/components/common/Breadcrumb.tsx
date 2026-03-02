@@ -22,14 +22,14 @@ export function Breadcrumb({ items, className = '' }: BreadcrumbProps) {
             item.href ? (
               <a
                 href={item.href}
-                className="flex items-center space-x-1 px-2 py-1 rounded-md text-slate-400 hover:text-slate-300 hover:bg-slate-800/50 transition-colors text-xs sm:text-sm"
+                className="flex items-center space-x-1 px-2 py-1 rounded-md text-slate-400 light:text-slate-600 hover:text-slate-300 hover:bg-slate-800/50 transition-colors text-xs sm:text-sm"
               >
                 {item.icon || <Home className="w-3 h-3 sm:w-4 sm:h-4" />}
                 <span className="hidden sm:inline">{item.label}</span>
                 <span className="sm:hidden">Home</span>
               </a>
             ) : (
-              <span className="flex items-center space-x-1 px-2 py-1 text-slate-400 text-xs sm:text-sm">
+              <span className="flex items-center space-x-1 px-2 py-1 text-slate-400 light:text-slate-600 text-xs sm:text-sm">
                 {item.icon || <Home className="w-3 h-3 sm:w-4 sm:h-4" />}
                 <span className="hidden sm:inline">{item.label}</span>
                 <span className="sm:hidden">Home</span>
@@ -39,12 +39,12 @@ export function Breadcrumb({ items, className = '' }: BreadcrumbProps) {
             item.href ? (
               <a
                 href={item.href}
-                className="px-2 py-1 rounded-md text-slate-400 hover:text-slate-300 hover:bg-slate-800/50 transition-colors text-xs sm:text-sm"
+                className="px-2 py-1 rounded-md text-slate-400 light:text-slate-600 hover:text-slate-300 hover:bg-slate-800/50 transition-colors text-xs sm:text-sm"
               >
                 {item.label}
               </a>
             ) : (
-              <span className="px-2 py-1 text-slate-300 font-medium text-xs sm:text-sm">{item.label}</span>
+              <span className="px-2 py-1 text-slate-300 light:text-slate-700 font-medium text-xs sm:text-sm">{item.label}</span>
             )
           )}
           {index < items.length - 1 && (

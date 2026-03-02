@@ -100,14 +100,14 @@ export default function AIAssistantTab({}: AIAssistantTabProps) {
         exit={{ opacity: 0, y: -20 }}
         className="max-w-7xl mx-auto space-y-6"
       >
-        <div className="bg-slate-800/30 backdrop-blur-md border border-slate-700/50 rounded-xl p-6">
+        <div className="bg-slate-800 light:bg-white/30 backdrop-blur-md border border-slate-700 light:border-slate-300/50 rounded-xl p-6">
           <div className="flex items-center space-x-4 mb-4">
             <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl flex items-center justify-center">
               <div className="w-8 h-8 border-2 border-white border-t-transparent rounded-full animate-spin" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-white">AI Productivity Assistant</h1>
-              <p className="text-slate-300">Loading...</p>
+              <h1 className="text-2xl font-bold text-white light:text-slate-900">AI Productivity Assistant</h1>
+              <p className="text-slate-300 light:text-slate-700">Loading...</p>
             </div>
           </div>
         </div>

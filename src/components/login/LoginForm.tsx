@@ -83,7 +83,7 @@ export default function LoginForm({
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white py-3 rounded-lg font-medium hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center justify-center space-x-2"
+          className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white light:text-slate-900 py-3 rounded-lg font-medium hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center justify-center space-x-2"
         >
           {loading && (
             <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />

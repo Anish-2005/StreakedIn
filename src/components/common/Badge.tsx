@@ -9,7 +9,7 @@ interface BadgeProps {
 }
 
 const variantClasses = {
-  default: 'bg-slate-700/50 text-slate-300 border-slate-600/50',
+  default: 'bg-slate-700 light:bg-slate-100/50 text-slate-300 light:text-slate-700 border-slate-600 light:border-slate-300/50',
   success: 'bg-green-500/20 text-green-300 border-green-500/30',
   warning: 'bg-yellow-500/20 text-yellow-300 border-yellow-500/30',
   error: 'bg-red-500/20 text-red-300 border-red-500/30',

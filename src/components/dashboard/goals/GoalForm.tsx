@@ -16,7 +16,7 @@ export default function GoalForm({ formData, setFormData, categories, editingGoa
   return (
     <Card className="mb-6">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-semibold text-white">
+        <h2 className="text-lg font-semibold text-white light:text-slate-900">
           {editingGoal ? 'Edit Goal' : 'Create New Goal'}
         </h2>
         <Button variant="ghost" onClick={onCancel}>
@@ -38,7 +38,7 @@ export default function GoalForm({ formData, setFormData, categories, editingGoa
             placeholder="Goal description (optional)..."
             value={formData.description}
             onChange={(e) => setFormData((prev:any) => ({ ...prev, description: e.target.value }))}
-            className="w-full border border-slate-700/50 rounded-lg px-3 py-2 text-sm bg-slate-900/20 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/60 focus:border-transparent resize-none"
+            className="w-full border border-slate-700 light:border-slate-300/50 rounded-lg px-3 py-2 text-sm bg-slate-900 light:bg-slate-50/20 text-white light:text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/60 focus:border-transparent resize-none"
             rows={3}
           />
         </div>
@@ -59,7 +59,7 @@ export default function GoalForm({ formData, setFormData, categories, editingGoa
         />
 
         <div className="md:col-span-2">
-          <label className="block text-sm font-medium text-slate-300 mb-2">
+          <label className="block text-sm font-medium text-slate-300 light:text-slate-700 mb-2">
             Initial Progress: {formData.progress}%
           </label>
           <input

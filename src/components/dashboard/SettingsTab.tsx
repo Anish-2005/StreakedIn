@@ -29,19 +29,19 @@ export default function SettingsTab({}: SettingsTabProps) {
       className="space-y-6"
     >
       <div>
-        <h1 className="text-2xl font-bold text-white">Settings</h1>
-        <p className="text-slate-300">Manage your account and preferences</p>
+        <h1 className="text-2xl font-bold text-white light:text-slate-900">Settings</h1>
+        <p className="text-slate-300 light:text-slate-700">Manage your account and preferences</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Notification Settings */}
         <Card>
-          <h3 className="text-lg font-semibold text-white mb-4">Notification Settings</h3>
+          <h3 className="text-lg font-semibold text-white light:text-slate-900 mb-4">Notification Settings</h3>
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div>
-                <h4 className="text-white font-medium">Email Notifications</h4>
-                <p className="text-slate-400 text-sm">Receive updates via email</p>
+                <h4 className="text-white light:text-slate-900 font-medium">Email Notifications</h4>
+                <p className="text-slate-400 light:text-slate-600 text-sm">Receive updates via email</p>
               </div>
               <ToggleSwitch
                 checked={settingsState.emailNotifications}
@@ -51,8 +51,8 @@ export default function SettingsTab({}: SettingsTabProps) {
 
             <div className="flex items-center justify-between">
               <div>
-                <h4 className="text-white font-medium">Push Notifications</h4>
-                <p className="text-slate-400 text-sm">Browser and desktop alerts</p>
+                <h4 className="text-white light:text-slate-900 font-medium">Push Notifications</h4>
+                <p className="text-slate-400 light:text-slate-600 text-sm">Browser and desktop alerts</p>
               </div>
               <ToggleSwitch
                 checked={settingsState.pushNotifications}
@@ -64,12 +64,12 @@ export default function SettingsTab({}: SettingsTabProps) {
 
         {/* AI & Preferences */}
         <Card>
-          <h3 className="text-lg font-semibold text-white mb-4">AI & Preferences</h3>
+          <h3 className="text-lg font-semibold text-white light:text-slate-900 mb-4">AI & Preferences</h3>
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div>
-                <h4 className="text-white font-medium">Auto Goal Suggestions</h4>
-                <p className="text-slate-400 text-sm">AI-powered goal recommendations</p>
+                <h4 className="text-white light:text-slate-900 font-medium">Auto Goal Suggestions</h4>
+                <p className="text-slate-400 light:text-slate-600 text-sm">AI-powered goal recommendations</p>
               </div>
               <ToggleSwitch
                 checked={settingsState.autoGoalSuggestions}
@@ -79,8 +79,8 @@ export default function SettingsTab({}: SettingsTabProps) {
 
             <div className="flex items-center justify-between">
               <div>
-                <h4 className="text-white font-medium">Sound Alerts</h4>
-                <p className="text-slate-400 text-sm">Audio notifications for reminders</p>
+                <h4 className="text-white light:text-slate-900 font-medium">Sound Alerts</h4>
+                <p className="text-slate-400 light:text-slate-600 text-sm">Audio notifications for reminders</p>
               </div>
               <ToggleSwitch
                 checked={settingsState.soundAlerts}
@@ -92,7 +92,7 @@ export default function SettingsTab({}: SettingsTabProps) {
 
         {/* Account Settings */}
         <Card className="lg:col-span-2">
-          <h3 className="text-lg font-semibold text-white mb-4">Account Settings</h3>
+          <h3 className="text-lg font-semibold text-white light:text-slate-900 mb-4">Account Settings</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <FormField
               label="Display Name"
@@ -121,7 +121,7 @@ export default function SettingsTab({}: SettingsTabProps) {
               <option>System</option>
             </FormField>
           </div>
-          <div className="flex justify-end space-x-3 mt-6 pt-4 border-t border-slate-700/50">
+          <div className="flex justify-end space-x-3 mt-6 pt-4 border-t border-slate-700 light:border-slate-300/50">
             <Button variant="outline">
               Cancel
             </Button>

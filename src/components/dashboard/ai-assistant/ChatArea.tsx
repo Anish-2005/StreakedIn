@@ -26,10 +26,10 @@ export default function ChatArea({
 }: ChatAreaProps) {
   return (
     <div className="lg:col-span-6">
-      <div className="bg-slate-800/30 backdrop-blur-md border border-slate-700/50 rounded-xl h-[600px] flex flex-col">
+      <div className="bg-slate-800 light:bg-white/30 backdrop-blur-md border border-slate-700 light:border-slate-300/50 rounded-xl h-[600px] flex flex-col">
         {/* Chat Header */}
-        <div className="p-4 border-b border-slate-700/50 flex items-center justify-between flex-shrink-0">
-          <h3 className="font-semibold text-white">Chat with AI Assistant</h3>
+        <div className="p-4 border-b border-slate-700 light:border-slate-300/50 flex items-center justify-between flex-shrink-0">
+          <h3 className="font-semibold text-white light:text-slate-900">Chat with AI Assistant</h3>
           <button
             onClick={onClearChat}
             className="flex items-center space-x-2 px-3 py-1.5 bg-red-500/20 text-red-400 hover:bg-red-500/30 rounded-lg transition-colors text-sm"
@@ -43,7 +43,7 @@ export default function ChatArea({
         {/* Chat Messages */}
         <div className="flex-1 p-4 overflow-y-auto space-y-4 min-h-0" style={{ scrollbarWidth: 'thin', scrollbarColor: '#475569 #1e293b' }}>
           {conversationHistory.length === 0 ? (
-            <div className="text-center text-slate-400 py-12">
+            <div className="text-center text-slate-400 light:text-slate-600 py-12">
               <Brain className="w-12 h-12 text-slate-500 mx-auto mb-4" />
               <p>Ask me anything about your productivity, goals, or schedule!</p>
             </div>

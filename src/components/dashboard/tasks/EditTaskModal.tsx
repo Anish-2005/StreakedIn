@@ -56,7 +56,7 @@ export default function EditTaskModal({
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.9, opacity: 0 }}
-        className="bg-slate-800/90 backdrop-blur-md border border-slate-600/50 rounded-xl p-4 sm:p-6 w-full max-w-lg mx-4"
+        className="bg-slate-800 light:bg-white/90 backdrop-blur-md border border-slate-600 light:border-slate-300/50 rounded-xl p-4 sm:p-6 w-full max-w-lg mx-4"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between mb-4">
@@ -64,11 +64,11 @@ export default function EditTaskModal({
             <div className="p-2 bg-blue-500/20 rounded-lg">
               <Edit className="w-5 h-5 text-blue-400" />
             </div>
-            <h3 className="text-lg font-semibold text-white">Edit Task</h3>
+            <h3 className="text-lg font-semibold text-white light:text-slate-900">Edit Task</h3>
           </div>
           <button
             onClick={onClose}
-            className="p-1 text-slate-400 hover:text-white transition-colors"
+            className="p-1 text-slate-400 light:text-slate-600 hover:text-white transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -76,34 +76,34 @@ export default function EditTaskModal({
 
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-slate-300 mb-2">Task Title</label>
+            <label className="block text-sm font-medium text-slate-300 light:text-slate-700 mb-2">Task Title</label>
             <Input
               placeholder="What needs to be done?"
               value={editTitle}
               onChange={(e) => onTitleChange(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && onSave()}
-              className="text-white placeholder-slate-400"
+              className="text-white light:text-slate-900 placeholder-slate-400"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-300 mb-2">Description (Optional)</label>
+            <label className="block text-sm font-medium text-slate-300 light:text-slate-700 mb-2">Description (Optional)</label>
             <textarea
               placeholder="Add more details about this task..."
               value={editDescription}
               onChange={(e) => onDescriptionChange(e.target.value)}
-              className="w-full px-4 py-3 border border-slate-600/60 bg-slate-800/60 text-white placeholder-slate-400 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500/60 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed resize-none text-base"
+              className="w-full px-4 py-3 border border-slate-600 light:border-slate-300/60 bg-slate-800 light:bg-white/60 text-white light:text-slate-900 placeholder-slate-400 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500/60 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed resize-none text-base"
               rows={3}
             />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-2">Priority</label>
+              <label className="block text-sm font-medium text-slate-300 light:text-slate-700 mb-2">Priority</label>
               <Select
                 value={editPriority}
                 onChange={(value) => onPriorityChange(value as 'low' | 'medium' | 'high')}
-                className="bg-slate-700/50 border-slate-600"
+                className="bg-slate-700 light:bg-slate-100/50 border-slate-600 light:border-slate-300"
               >
                 <option value="low">🟢 Low Priority</option>
                 <option value="medium">🟡 Medium Priority</option>
@@ -112,12 +112,12 @@ export default function EditTaskModal({
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-2">Due Date</label>
+              <label className="block text-sm font-medium text-slate-300 light:text-slate-700 mb-2">Due Date</label>
               <Input
                 type="date"
                 value={editDueDate}
                 onChange={(e) => onDueDateChange(e.target.value)}
-                className="bg-slate-700/50 border-slate-600"
+                className="bg-slate-700 light:bg-slate-100/50 border-slate-600 light:border-slate-300"
               />
             </div>
           </div>
@@ -134,7 +134,7 @@ export default function EditTaskModal({
           <Button
             onClick={onSave}
             disabled={!editTitle.trim()}
-            className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 w-full sm:w-auto"
+            className="bg-blue-500 hover:bg-blue-600 text-white light:text-slate-900 px-6 py-2 w-full sm:w-auto"
           >
             <div className="flex items-center gap-2">
               <Edit className="w-4 h-4" />

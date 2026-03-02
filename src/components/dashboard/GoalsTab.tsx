@@ -236,7 +236,7 @@ export default function GoalsTab({}: GoalsTabProps) {
       case 'Personal Growth': return 'text-yellow-400 bg-yellow-500/20 border-yellow-500/30';
       case 'Financial Goals': return 'text-emerald-400 bg-emerald-500/20 border-emerald-500/30';
       case 'Creative Projects': return 'text-pink-400 bg-pink-500/20 border-pink-500/30';
-      default: return 'text-slate-400 bg-slate-500/20 border-slate-500/30';
+      default: return 'text-slate-400 light:text-slate-600 bg-slate-500/20 border-slate-500/30';
     }
   };
 

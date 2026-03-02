@@ -28,20 +28,20 @@ export default function AISuggestionsPanel({ aiSuggestions, currentSuggestionInd
           <Brain className="w-5 h-5 text-purple-400" />
         </div>
         <div>
-          <h3 className="text-lg font-semibold text-white">AI Goal Suggestions</h3>
-          <p className="text-slate-300 text-sm">Smart recommendations based on your progress</p>
+          <h3 className="text-lg font-semibold text-white light:text-slate-900">AI Goal Suggestions</h3>
+          <p className="text-slate-300 light:text-slate-700 text-sm">Smart recommendations based on your progress</p>
         </div>
       </div>
 
       <div className="space-y-4 mb-6">
         {aiSuggestions.length === 0 ? (
-          <div className="text-center py-12 bg-slate-800/30 rounded-lg border border-slate-700/40">
-            <Brain className="w-12 h-12 mx-auto mb-4 text-slate-400" />
-            <p className="text-slate-400 text-sm mb-4">Ready to get personalized goal suggestions?</p>
+          <div className="text-center py-12 bg-slate-800 light:bg-white/30 rounded-lg border border-slate-700 light:border-slate-300/40">
+            <Brain className="w-12 h-12 mx-auto mb-4 text-slate-400 light:text-slate-600" />
+            <p className="text-slate-400 light:text-slate-600 text-sm mb-4">Ready to get personalized goal suggestions?</p>
             <Button
               onClick={onGenerate}
               disabled={isGeneratingSuggestions}
-              className="mx-auto bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-6 py-2"
+              className="mx-auto bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white light:text-slate-900 px-6 py-2"
             >
               {isGeneratingSuggestions ? (
                 <div className="flex items-center gap-2">
@@ -68,7 +68,7 @@ export default function AISuggestionsPanel({ aiSuggestions, currentSuggestionInd
             >
               <div className="flex items-start gap-4">
                 <div className="flex-1 min-w-0">
-                  <div className="text-white text-base leading-relaxed">
+                  <div className="text-white light:text-slate-900 text-base leading-relaxed">
                     {aiSuggestions[currentSuggestionIndex]}
                   </div>
                 </div>
@@ -82,7 +82,7 @@ export default function AISuggestionsPanel({ aiSuggestions, currentSuggestionInd
                   onClick={onPrev}
                   variant="ghost"
                   size="sm"
-                  className="text-slate-400 hover:text-white hover:bg-slate-700/50 p-2 flex-shrink-0"
+                  className="text-slate-400 light:text-slate-600 hover:text-white hover:bg-slate-700/50 p-2 flex-shrink-0"
                 >
                   <ChevronLeft className="w-4 h-4" />
                 </Button>
@@ -105,7 +105,7 @@ export default function AISuggestionsPanel({ aiSuggestions, currentSuggestionInd
                   onClick={onNext}
                   variant="ghost"
                   size="sm"
-                  className="text-slate-400 hover:text-white hover:bg-slate-700/50 p-2 flex-shrink-0"
+                  className="text-slate-400 light:text-slate-600 hover:text-white hover:bg-slate-700/50 p-2 flex-shrink-0"
                 >
                   <ChevronRight className="w-4 h-4" />
                 </Button>

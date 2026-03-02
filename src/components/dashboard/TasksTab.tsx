@@ -319,7 +319,7 @@ export default function TasksTab({}: TasksTabProps) {
       case 'high': return 'text-red-400 bg-red-500/20 border-red-500/30';
       case 'medium': return 'text-yellow-400 bg-yellow-500/20 border-yellow-500/30';
       case 'low': return 'text-green-400 bg-green-500/20 border-green-500/30';
-      default: return 'text-slate-400 bg-slate-500/20 border-slate-500/30';
+      default: return 'text-slate-400 light:text-slate-600 bg-slate-500/20 border-slate-500/30';
     }
   };
 

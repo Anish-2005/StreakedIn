@@ -46,7 +46,7 @@ export default function TaskItem({
           ? 'bg-green-500/5 border-green-500/20'
           : isOverdue
           ? 'bg-red-500/5 border-red-500/20'
-          : 'bg-slate-800/40 border-slate-700/50 hover:border-slate-600/70'
+          : 'bg-slate-800 light:bg-white/40 border-slate-700 light:border-slate-300/50 hover:border-slate-600/70'
       }`}
     >
       {/* Priority indicator stripe */}
@@ -64,7 +64,7 @@ export default function TaskItem({
           onClick={() => onToggle(task.id)}
           className={`flex-shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center mb-3 sm:mb-0 sm:mr-4 transition-all ${
             task.completed
-              ? 'bg-green-500 border-green-500 text-white'
+              ? 'bg-green-500 border-green-500 text-white light:text-slate-900'
               : 'border-slate-500 hover:border-slate-400'
           }`}
         >
@@ -87,8 +87,8 @@ export default function TaskItem({
           <motion.h3
             className={`text-lg font-medium mb-1 transition-all ${
               task.completed
-                ? 'text-slate-400 line-through'
-                : 'text-white group-hover:text-blue-300'
+                ? 'text-slate-400 light:text-slate-600 line-through'
+                : 'text-white light:text-slate-900 group-hover:text-blue-300'
             }`}
             animate={{ opacity: task.completed ? 0.6 : 1 }}
           >
@@ -99,7 +99,7 @@ export default function TaskItem({
             <p className={`text-sm mb-2 transition-all ${
               task.completed
                 ? 'text-slate-500 line-through'
-                : 'text-slate-300'
+                : 'text-slate-300 light:text-slate-700'
             }`}>
               {task.description}
             </p>
@@ -108,7 +108,7 @@ export default function TaskItem({
           <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-sm">
             {/* Created Date */}
             {task.createdAt && (
-              <div className="flex items-center gap-1 text-slate-400">
+              <div className="flex items-center gap-1 text-slate-400 light:text-slate-600">
                 <Calendar className="w-3 h-3" />
                 <span>Added {new Date(task.createdAt).toLocaleDateString()}</span>
               </div>
@@ -117,7 +117,7 @@ export default function TaskItem({
             {/* Due Date */}
             {dueDateInfo && (
               <div className={`flex items-center gap-1 ${
-                dueDateInfo.urgent ? 'text-red-400' : 'text-slate-400'
+                dueDateInfo.urgent ? 'text-red-400' : 'text-slate-400 light:text-slate-600'
               }`}>
                 <Clock className="w-3 h-3" />
                 <span>{dueDateInfo.text}</span>
@@ -138,7 +138,7 @@ export default function TaskItem({
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             onClick={() => onEdit(task)}
-            className="p-2 text-slate-400 hover:text-blue-400 hover:bg-blue-500/20 rounded-lg transition-colors"
+            className="p-2 text-slate-400 light:text-slate-600 hover:text-blue-400 hover:bg-blue-500/20 rounded-lg transition-colors"
           >
             <Edit className="w-4 h-4" />
           </motion.button>
@@ -146,7 +146,7 @@ export default function TaskItem({
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             onClick={() => onDelete(task.id)}
-            className="p-2 text-slate-400 hover:text-red-400 hover:bg-red-500/20 rounded-lg transition-colors"
+            className="p-2 text-slate-400 light:text-slate-600 hover:text-red-400 hover:bg-red-500/20 rounded-lg transition-colors"
           >
             <Trash2 className="w-4 h-4" />
           </motion.button>

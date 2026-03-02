@@ -34,7 +34,7 @@ export default function AIPromptModal({
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.9, opacity: 0 }}
-        className="bg-slate-800/90 backdrop-blur-md border border-slate-600/50 rounded-xl p-4 sm:p-6 w-full max-w-md mx-4"
+        className="bg-slate-800 light:bg-white/90 backdrop-blur-md border border-slate-600 light:border-slate-300/50 rounded-xl p-4 sm:p-6 w-full max-w-md mx-4"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between mb-4">
@@ -42,17 +42,17 @@ export default function AIPromptModal({
             <div className="p-2 bg-purple-500/20 rounded-lg">
               <div className="w-4 h-4 bg-gradient-to-r from-purple-500 to-pink-500 rounded" />
             </div>
-            <h3 className="text-lg font-semibold text-white">AI Goal Creation</h3>
+            <h3 className="text-lg font-semibold text-white light:text-slate-900">AI Goal Creation</h3>
           </div>
           <button
             onClick={onClose}
-            className="p-1 text-slate-400 hover:text-white transition-colors"
+            className="p-1 text-slate-400 light:text-slate-600 hover:text-white transition-colors"
           >
             <span className="sr-only">Close</span>
           </button>
         </div>
 
-        <p className="text-slate-300 mb-4">
+        <p className="text-slate-300 light:text-slate-700 mb-4">
           Describe the goal you want to create. Our AI will generate a well-structured goal with appropriate category and details.
         </p>
 
@@ -61,7 +61,7 @@ export default function AIPromptModal({
           value={aiPrompt}
           onChange={(e) => onPromptChange(e.target.value)}
           onKeyPress={(e) => e.key === 'Enter' && !e.shiftKey && onSubmit()}
-          className="w-full bg-slate-700/50 border border-slate-600 rounded-lg px-4 py-3 text-white placeholder-slate-400 resize-none focus:outline-none focus:ring-2 focus:ring-purple-500/50 mb-4"
+          className="w-full bg-slate-700 light:bg-slate-100/50 border border-slate-600 light:border-slate-300 rounded-lg px-4 py-3 text-white light:text-slate-900 placeholder-slate-400 resize-none focus:outline-none focus:ring-2 focus:ring-purple-500/50 mb-4"
           rows={3}
         />
 
@@ -76,7 +76,7 @@ export default function AIPromptModal({
           <Button
             onClick={onSubmit}
             disabled={!aiPrompt.trim() || isGeneratingAI}
-            className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-6 py-2 w-full sm:w-auto"
+            className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white light:text-slate-900 px-6 py-2 w-full sm:w-auto"
           >
             {isGeneratingAI ? (
               <div className="flex items-center gap-2">

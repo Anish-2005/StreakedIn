@@ -11,7 +11,7 @@ interface ReminderItemProps {
 
 export default function ReminderItem({ reminder, onEdit, onDelete, onToggle }: ReminderItemProps) {
   return (
-    <div className="bg-slate-800/30 backdrop-blur-md border border-slate-700/50 rounded-xl p-4 sm:p-6">
+    <div className="bg-slate-800 light:bg-white/30 backdrop-blur-md border border-slate-700 light:border-slate-300/50 rounded-xl p-4 sm:p-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
         <div className="flex items-center space-x-3 flex-1 min-w-0">
           <div className={`p-2 rounded-lg flex-shrink-0 ${
@@ -24,9 +24,9 @@ export default function ReminderItem({ reminder, onEdit, onDelete, onToggle }: R
              <Bell className="w-4 h-4" />}
           </div>
           <div className="flex-1 min-w-0">
-            <h3 className="font-semibold text-white">{reminder.title}</h3>
+            <h3 className="font-semibold text-white light:text-slate-900">{reminder.title}</h3>
             {reminder.description && (
-              <p className="text-sm text-slate-400 mt-1">{reminder.description}</p>
+              <p className="text-sm text-slate-400 light:text-slate-600 mt-1">{reminder.description}</p>
             )}
             {reminder.nextTrigger && (
               <p className="text-sm text-slate-500 mt-1">
@@ -43,7 +43,7 @@ export default function ReminderItem({ reminder, onEdit, onDelete, onToggle }: R
               checked={reminder.enabled}
               onChange={() => onToggle(reminder)}
             />
-            <div className="w-11 h-6 bg-slate-700/40 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-600 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gradient-to-r peer-checked:from-blue-500 peer-checked:to-purple-600"></div>
+            <div className="w-11 h-6 bg-slate-700 light:bg-slate-100/40 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-600 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gradient-to-r peer-checked:from-blue-500 peer-checked:to-purple-600"></div>
           </label>
           <div className="flex space-x-1">
             <button
@@ -51,7 +51,7 @@ export default function ReminderItem({ reminder, onEdit, onDelete, onToggle }: R
               className="p-2 hover:bg-slate-700/40 rounded-lg transition-colors"
               title="Edit"
             >
-              <Edit2 className="w-4 h-4 text-slate-300" />
+              <Edit2 className="w-4 h-4 text-slate-300 light:text-slate-700" />
             </button>
             <button
               onClick={() => onDelete(reminder.id)}
@@ -63,7 +63,7 @@ export default function ReminderItem({ reminder, onEdit, onDelete, onToggle }: R
           </div>
         </div>
       </div>
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-sm text-slate-300">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-sm text-slate-300 light:text-slate-700">
         <span>Frequency: {reminder.frequency}</span>
         <span>Type: {reminder.type}</span>
       </div>

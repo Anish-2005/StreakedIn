@@ -30,7 +30,7 @@ export default function UserMenu({ user, userProfile, className = "" }: UserMenu
         <div className="dark:text-slate-400 light:text-gray-600 text-xs dark:group-hover:text-slate-300 light:group-hover:text-gray-700 transition-colors">{userProfile?.plan || 'Professional Plan'}</div>
       </div>
       <div className="relative">
-        <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center text-white font-semibold text-sm dark:border-2 dark:border-white/20 light:border-2 light:border-gray-300/40 dark:group-hover:border-white/40 light:group-hover:border-gray-400/60 transition-colors">
+        <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center text-white light:text-slate-900 font-semibold text-sm dark:border-2 dark:border-white/20 light:border-2 light:border-gray-300/40 dark:group-hover:border-white/40 light:group-hover:border-gray-400/60 transition-colors">
           {getInitials(user)}
         </div>
         {/* Avatar glow */}

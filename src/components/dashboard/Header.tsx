@@ -67,7 +67,7 @@ export default function Header({ activeTab }: HeaderProps) {
             <div className="font-semibold dark:text-white light:text-gray-900 text-sm">{user?.displayName || user?.email || 'User'}</div>
             <div className="dark:text-slate-400 light:text-gray-500 text-xs">{userProfile?.plan || 'Professional Plan'}</div>
           </div>
-          <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">
+          <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white light:text-slate-900 font-semibold text-sm">
             {user?.displayName ? user.displayName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) :
              user?.email ? user.email[0].toUpperCase() : 'U'}
           </div>

@@ -64,7 +64,7 @@ export default function FeaturesSection() {
                 hover
                 className="h-full transition-all duration-300 group-hover:bg-white dark:group-hover:bg-slate-800/50 group-hover:border-purple-300 dark:group-hover:border-slate-600/50"
               >
-                <div className={`w-14 h-14 bg-gradient-to-r ${feature.color} rounded-xl flex items-center justify-center text-white mb-4 group-hover:scale-110 transition-transform duration-300`}>
+                <div className={`w-14 h-14 bg-gradient-to-r ${feature.color} rounded-xl flex items-center justify-center text-white light:text-slate-900 mb-4 group-hover:scale-110 transition-transform duration-300`}>
                   {feature.icon}
                 </div>
                 <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">{feature.title}</h3>

@@ -14,7 +14,7 @@ const navigationItems = ['Features', 'How It Works', 'Pricing', 'Testimonials'];
 
 export default function Navigation({ isMenuOpen, setIsMenuOpen }: NavigationProps) {
   return (
-    <nav className="fixed top-0 w-full z-50 backdrop-blur-md bg-slate-900/90 border-b border-slate-700/50">
+    <nav className="fixed top-0 w-full z-50 backdrop-blur-md bg-slate-900 light:bg-slate-50/90 border-b border-slate-700 light:border-slate-300/50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
@@ -43,7 +43,7 @@ export default function Navigation({ isMenuOpen, setIsMenuOpen }: NavigationProp
               <motion.a
                 key={item}
                 href={`#${item.toLowerCase().replace(' ', '-')}`}
-                className="text-slate-300 hover:text-white transition-colors duration-200 font-medium"
+                className="text-slate-300 light:text-slate-700 hover:text-white transition-colors duration-200 font-medium"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
@@ -82,7 +82,7 @@ export default function Navigation({ isMenuOpen, setIsMenuOpen }: NavigationProp
 
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden p-2 text-white"
+            className="md:hidden p-2 text-white light:text-slate-900"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
             {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -97,20 +97,20 @@ export default function Navigation({ isMenuOpen, setIsMenuOpen }: NavigationProp
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-slate-800/95 backdrop-blur-md border-b border-slate-700/50"
+            className="md:hidden bg-slate-800 light:bg-white/95 backdrop-blur-md border-b border-slate-700 light:border-slate-300/50"
           >
             <div className="px-4 py-6 space-y-4">
               {navigationItems.map((item) => (
                 <a
                   key={item}
                   href={`#${item.toLowerCase().replace(' ', '-')}`}
-                  className="block text-slate-300 hover:text-white transition-colors duration-200 font-medium py-2"
+                  className="block text-slate-300 light:text-slate-700 hover:text-white transition-colors duration-200 font-medium py-2"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   {item}
                 </a>
               ))}
-              <div className="pt-4 space-y-3 border-t border-slate-700/50">
+              <div className="pt-4 space-y-3 border-t border-slate-700 light:border-slate-300/50">
                 <Link href="/login">
                   <Button variant="ghost" size="sm" className="w-full">
                     Sign In

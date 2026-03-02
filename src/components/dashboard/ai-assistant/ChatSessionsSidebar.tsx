@@ -35,9 +35,9 @@ export default function ChatSessionsSidebar({
 }: ChatSessionsSidebarProps) {
   return (
     <div className="lg:col-span-3">
-      <div className="bg-slate-800/30 backdrop-blur-md border border-slate-700/50 rounded-xl p-4 h-fit">
+      <div className="bg-slate-800 light:bg-white/30 backdrop-blur-md border border-slate-700 light:border-slate-300/50 rounded-xl p-4 h-fit">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="font-semibold text-white">Chat History</h3>
+          <h3 className="font-semibold text-white light:text-slate-900">Chat History</h3>
           <button
             onClick={onCreateNewChat}
             className="p-2 bg-blue-500/20 text-blue-400 hover:bg-blue-500/30 rounded-lg transition-colors"
@@ -55,7 +55,7 @@ export default function ChatSessionsSidebar({
               className={`p-3 rounded-lg cursor-pointer transition-all duration-200 ${
                 session.id === currentChatSessionId
                   ? 'bg-blue-500/20 border border-blue-500/50'
-                  : 'bg-slate-700/30 hover:bg-slate-700/50'
+                  : 'bg-slate-700 light:bg-slate-100/30 hover:bg-slate-700/50'
               } ${renamingChatId === session.id ? 'cursor-default' : ''}`}
             >
               <div className="flex items-center justify-between">
@@ -67,7 +67,7 @@ export default function ChatSessionsSidebar({
                         value={newChatName}
                         onChange={(e) => setNewChatName(e.target.value)}
                         onKeyDown={(e) => onRenameKeyPress(session.id, e)}
-                        className="rename-input flex-1 bg-slate-800 border border-slate-600 rounded px-2 py-1 text-sm text-white focus:outline-none focus:ring-1 focus:ring-blue-500"
+                        className="rename-input flex-1 bg-slate-800 light:bg-white border border-slate-600 rounded px-2 py-1 text-sm text-white light:text-slate-900 focus:outline-none focus:ring-1 focus:ring-blue-500"
                         autoFocus
                         onClick={(e) => e.stopPropagation()}
                       />
@@ -94,11 +94,11 @@ export default function ChatSessionsSidebar({
                     </div>
                   ) : (
                     <>
-                      <p className="text-sm font-medium text-white truncate">
+                      <p className="text-sm font-medium text-white light:text-slate-900 truncate">
                         {session.title}
                       </p>
                       {session.lastMessage && (
-                        <p className="text-xs text-slate-400 truncate mt-1">
+                        <p className="text-xs text-slate-400 light:text-slate-600 truncate mt-1">
                           {session.lastMessage}
                         </p>
                       )}
@@ -112,7 +112,7 @@ export default function ChatSessionsSidebar({
                   <div className="flex items-center space-x-1 ml-2">
                     <button
                       onClick={(e) => onStartRenaming(session.id, session.title, e)}
-                      className="p-1 text-slate-400 hover:text-blue-400 transition-colors"
+                      className="p-1 text-slate-400 light:text-slate-600 hover:text-blue-400 transition-colors"
                       title="Rename Chat"
                     >
                       <Edit2 className="w-3 h-3" />
@@ -120,7 +120,7 @@ export default function ChatSessionsSidebar({
                     {chatSessions.length > 1 && (
                       <button
                         onClick={(e) => onDeleteChat(session.id, e)}
-                        className="p-1 text-slate-400 hover:text-red-400 transition-colors"
+                        className="p-1 text-slate-400 light:text-slate-600 hover:text-red-400 transition-colors"
                         title="Delete Chat"
                       >
                         <Trash2 className="w-3 h-3" />

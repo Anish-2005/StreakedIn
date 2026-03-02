@@ -65,7 +65,7 @@ export default function TestimonialsSection() {
             >
               <div className="flex items-start space-x-6">
                 <div className="flex-shrink-0">
-                  <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold text-lg">
+                  <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white light:text-slate-900 font-semibold text-lg">
                     {testimonials[activeTestimonial].name.split(' ').map(n => n[0]).join('')}
                   </div>
                 </div>

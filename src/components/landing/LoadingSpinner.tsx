@@ -21,7 +21,7 @@ export default function LoadingSpinner({
     <div className={`min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center ${className}`}>
       <div className="text-center">
         <div className={`${sizeClasses[size]} border-2 border-white border-t-transparent rounded-full animate-spin mx-auto mb-4`} />
-        <div className="text-white text-xl">{message}</div>
+        <div className="text-white light:text-slate-900 text-xl">{message}</div>
       </div>
     </div>
   );

@@ -40,7 +40,7 @@ export default function FormField({
     <div className={`space-y-2 ${className}`}>
       <label
         htmlFor={fieldId}
-        className="text-slate-300 text-sm font-medium block"
+        className="text-slate-300 light:text-slate-700 text-sm font-medium block"
       >
         {label}
         {required && <span className="text-red-400 ml-1">*</span>}
@@ -72,7 +72,7 @@ export default function FormField({
       )}
 
       {helperText && !error && (
-        <p className="text-slate-400 text-xs">{helperText}</p>
+        <p className="text-slate-400 light:text-slate-600 text-xs">{helperText}</p>
       )}
     </div>
   );

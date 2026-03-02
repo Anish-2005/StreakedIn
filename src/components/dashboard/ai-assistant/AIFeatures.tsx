@@ -23,14 +23,14 @@ export default function AIFeatures({ features }: AIFeaturesProps) {
   const featuresToRender = features || defaultFeatures;
 
   return (
-    <div className="bg-slate-800/30 backdrop-blur-md border border-slate-700/50 rounded-xl p-6">
-      <h3 className="font-semibold text-white mb-4">AI Features</h3>
+    <div className="bg-slate-800 light:bg-white/30 backdrop-blur-md border border-slate-700 light:border-slate-300/50 rounded-xl p-6">
+      <h3 className="font-semibold text-white light:text-slate-900 mb-4">AI Features</h3>
       <div className="space-y-3">
         {featuresToRender.map((feature, index) => (
           <div key={index} className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <div className="text-blue-400">{feature.icon}</div>
-              <span className="text-sm text-slate-300">{feature.label}</span>
+              <span className="text-sm text-slate-300 light:text-slate-700">{feature.label}</span>
             </div>
             <label className="relative inline-flex items-center cursor-pointer">
               <input type="checkbox" className="sr-only peer" defaultChecked={feature.enabled} />

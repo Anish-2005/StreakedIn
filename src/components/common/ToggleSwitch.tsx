@@ -22,7 +22,7 @@ export default function ToggleSwitch({
   className = ''
 }: ToggleSwitchProps) {
   const baseClasses = 'relative inline-flex items-center cursor-pointer';
-  const switchClasses = `${sizeClasses[size]} bg-slate-700/40 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[""] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-600 after:border after:rounded-full after:transition-all peer-checked:bg-gradient-to-r peer-checked:from-blue-500 peer-checked:to-purple-600`;
+  const switchClasses = `${sizeClasses[size]} bg-slate-700 light:bg-slate-100/40 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[""] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-600 after:border after:rounded-full after:transition-all peer-checked:bg-gradient-to-r peer-checked:from-blue-500 peer-checked:to-purple-600`;
   const disabledClasses = disabled ? 'opacity-50 cursor-not-allowed' : '';
 
   return (

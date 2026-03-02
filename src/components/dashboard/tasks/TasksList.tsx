@@ -39,18 +39,18 @@ export default function TasksList({
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.95 }}
-        className="text-center py-16 bg-gradient-to-br from-slate-800/40 to-slate-700/40 backdrop-blur-md border border-slate-600/30 rounded-xl"
+        className="text-center py-16 bg-gradient-to-br from-slate-800/40 to-slate-700/40 backdrop-blur-md border border-slate-600 light:border-slate-300/30 rounded-xl"
       >
         <div className="max-w-md mx-auto">
-          <div className="w-16 h-16 bg-slate-700/50 rounded-full flex items-center justify-center mx-auto mb-4">
-            <CheckSquare className="w-8 h-8 text-slate-400" />
+          <div className="w-16 h-16 bg-slate-700 light:bg-slate-100/50 rounded-full flex items-center justify-center mx-auto mb-4">
+            <CheckSquare className="w-8 h-8 text-slate-400 light:text-slate-600" />
           </div>
-          <h3 className="text-xl font-semibold text-white mb-2">
+          <h3 className="text-xl font-semibold text-white light:text-slate-900 mb-2">
             {filter === 'all' ? 'No tasks yet' :
              filter === 'pending' ? 'No pending tasks' :
              'No completed tasks'}
           </h3>
-          <p className="text-slate-400 mb-6">
+          <p className="text-slate-400 light:text-slate-600 mb-6">
             {filter === 'all' ? 'Create your first task to get started on your productivity journey!' :
              filter === 'pending' ? 'All caught up! Great job staying on top of things.' :
              'Complete some tasks to see them here.'}
@@ -61,7 +61,7 @@ export default function TasksList({
                 const input = document.querySelector('input[placeholder="What needs to be done?"]') as HTMLInputElement;
                 input?.focus();
               }}
-              className="bg-blue-500 hover:bg-blue-600 text-white"
+              className="bg-blue-500 hover:bg-blue-600 text-white light:text-slate-900"
             >
               Create Your First Task
             </Button>

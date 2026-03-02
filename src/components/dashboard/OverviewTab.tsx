@@ -234,7 +234,7 @@ export default function OverviewTab({ setActiveTab }: OverviewTabProps) {
               ].map((action, index) => (
                 <Button
                   key={index}
-                  className={`w-full h-20 flex gap-2 items-center justify-center ${action.color} text-white border-0`}
+                  className={`w-full h-20 flex gap-2 items-center justify-center ${action.color} text-white light:text-slate-900 border-0`}
                   onClick={action.action}
                 >
                   

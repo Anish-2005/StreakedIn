@@ -125,7 +125,7 @@ export function Checkbox({ className = '', ...props }: React.InputHTMLAttributes
   return (
     <input
       type="checkbox"
-      className={`w-5 h-5 rounded border-2 border-slate-600 bg-slate-700/50 text-blue-500 focus:ring-blue-500/60 focus:ring-2 transition-all duration-200 ${className}`}
+      className={`w-5 h-5 rounded border-2 border-slate-600 light:border-slate-300 bg-slate-700 light:bg-slate-100/50 text-blue-500 focus:ring-blue-500/60 focus:ring-2 transition-all duration-200 ${className}`}
       {...props}
     />
   );
