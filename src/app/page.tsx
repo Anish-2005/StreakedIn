@@ -35,7 +35,7 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-gray-100">
+    <div className="min-h-screen bg-app-bg text-app-text transition-colors duration-300">
       <Head>
         <title>StreakedIn - Master Your Productivity</title>
         <meta name="description" content="Professional productivity tracking and goal management platform" />

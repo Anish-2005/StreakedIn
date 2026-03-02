@@ -5,7 +5,7 @@ export default function NotificationSettings() {
   return (
     <div className="space-y-6">
       {/* Notification Channels */}
-      <div className="bg-slate-800 light:bg-white/30 backdrop-blur-md border border-slate-700 light:border-slate-300/50 rounded-xl p-4 sm:p-6">
+      <div className="bg-slate-800 light:bg-white/30 backdrop-blur-md border border-app-border rounded-xl p-4 sm:p-6">
         <h3 className="font-semibold text-app-text mb-4">Notification Channels</h3>
         <div className="space-y-4">
           {[
@@ -16,7 +16,7 @@ export default function NotificationSettings() {
           ].map((channel, index) => (
             <div key={index} className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
-                <div className="text-slate-400 light:text-slate-600">{channel.icon}</div>
+                <div className="text-app-text-muted">{channel.icon}</div>
                 <span className="text-sm text-app-text-muted">{channel.label}</span>
               </div>
               <label className="relative inline-flex items-center cursor-pointer">
@@ -29,7 +29,7 @@ export default function NotificationSettings() {
       </div>
 
       {/* AI Reminder Suggestions */}
-      <div className="bg-slate-800 light:bg-white/30 backdrop-blur-md border border-slate-700 light:border-slate-300/50 rounded-xl p-4 sm:p-6">
+      <div className="bg-slate-800 light:bg-white/30 backdrop-blur-md border border-app-border rounded-xl p-4 sm:p-6">
         <h3 className="font-semibold text-app-text mb-4">AI Reminder Suggestions</h3>
         <div className="space-y-3">
           {[

@@ -36,8 +36,8 @@ export default function AISuggestionsPanel({ aiSuggestions, currentSuggestionInd
       <div className="space-y-4 mb-6">
         {aiSuggestions.length === 0 ? (
           <div className="text-center py-12 bg-slate-800 light:bg-white/30 rounded-lg border border-slate-700 light:border-slate-300/40">
-            <Brain className="w-12 h-12 mx-auto mb-4 text-slate-400 light:text-slate-600" />
-            <p className="text-slate-400 light:text-slate-600 text-sm mb-4">Ready to get personalized goal suggestions?</p>
+            <Brain className="w-12 h-12 mx-auto mb-4 text-app-text-muted" />
+            <p className="text-app-text-muted text-sm mb-4">Ready to get personalized goal suggestions?</p>
             <Button
               onClick={onGenerate}
               disabled={isGeneratingSuggestions}
@@ -82,7 +82,7 @@ export default function AISuggestionsPanel({ aiSuggestions, currentSuggestionInd
                   onClick={onPrev}
                   variant="ghost"
                   size="sm"
-                  className="text-slate-400 light:text-slate-600 hover:text-white hover:bg-slate-700/50 p-2 flex-shrink-0"
+                  className="text-app-text-muted hover:text-white hover:bg-slate-700/50 p-2 flex-shrink-0"
                 >
                   <ChevronLeft className="w-4 h-4" />
                 </Button>
@@ -105,7 +105,7 @@ export default function AISuggestionsPanel({ aiSuggestions, currentSuggestionInd
                   onClick={onNext}
                   variant="ghost"
                   size="sm"
-                  className="text-slate-400 light:text-slate-600 hover:text-white hover:bg-slate-700/50 p-2 flex-shrink-0"
+                  className="text-app-text-muted hover:text-white hover:bg-slate-700/50 p-2 flex-shrink-0"
                 >
                   <ChevronRight className="w-4 h-4" />
                 </Button>

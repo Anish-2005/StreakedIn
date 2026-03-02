@@ -28,7 +28,7 @@ export default function AIPromptModal({
           value={aiPrompt}
           onChange={(e) => onPromptChange(e.target.value)}
           placeholder="Describe the reminder you want to create naturally... e.g., 'Remind me to review my weekly goals every Monday at 9 AM' or 'Send me a daily reminder to drink water'"
-          className="w-full p-3 bg-slate-700 light:bg-slate-100 border border-slate-600 rounded-lg text-app-text placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
+          className="w-full p-3 bg-slate-700 light:bg-slate-100 border border-slate-600 rounded-lg text-app-text placeholder-app-text-muted focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
           rows={4}
         />
         <div className="flex flex-col sm:flex-row gap-3">

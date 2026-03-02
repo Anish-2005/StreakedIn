@@ -38,7 +38,7 @@ export default function GoalForm({ formData, setFormData, categories, editingGoa
             placeholder="Goal description (optional)..."
             value={formData.description}
             onChange={(e) => setFormData((prev:any) => ({ ...prev, description: e.target.value }))}
-            className="w-full border border-slate-700 light:border-slate-300/50 rounded-lg px-3 py-2 text-sm bg-slate-900 light:bg-slate-50/20 text-app-text placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/60 focus:border-transparent resize-none"
+            className="w-full border border-app-border rounded-lg px-3 py-2 text-sm bg-app-bg text-app-text placeholder-app-text-muted focus:outline-none focus:ring-2 focus:ring-blue-500/60 focus:border-transparent resize-none"
             rows={3}
           />
         </div>

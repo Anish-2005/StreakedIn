@@ -45,7 +45,7 @@ export default function AddEditReminderModal({
               type="text"
               value={formData.title}
               onChange={(e) => onFormChange({ ...formData, title: e.target.value })}
-              className="w-full p-3 bg-slate-700 light:bg-slate-100 border border-slate-600 rounded-lg text-app-text placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full p-3 bg-slate-700 light:bg-slate-100 border border-slate-600 rounded-lg text-app-text placeholder-app-text-muted focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="e.g., Review weekly goals"
             />
           </div>
@@ -54,7 +54,7 @@ export default function AddEditReminderModal({
             <textarea
               value={formData.description}
               onChange={(e) => onFormChange({ ...formData, description: e.target.value })}
-              className="w-full p-3 bg-slate-700 light:bg-slate-100 border border-slate-600 rounded-lg text-app-text placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full p-3 bg-slate-700 light:bg-slate-100 border border-slate-600 rounded-lg text-app-text placeholder-app-text-muted focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Add any additional details or context for this reminder"
               rows={3}
             />

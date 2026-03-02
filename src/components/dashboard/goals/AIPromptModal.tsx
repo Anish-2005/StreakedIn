@@ -34,7 +34,7 @@ export default function AIPromptModal({
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.9, opacity: 0 }}
-        className="bg-slate-800 light:bg-white/90 backdrop-blur-md border border-slate-600 light:border-slate-300/50 rounded-xl p-4 sm:p-6 w-full max-w-md mx-4"
+        className="bg-app-surface backdrop-blur-md border border-app-border rounded-xl p-4 sm:p-6 w-full max-w-md mx-4"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between mb-4">
@@ -46,7 +46,7 @@ export default function AIPromptModal({
           </div>
           <button
             onClick={onClose}
-            className="p-1 text-slate-400 light:text-slate-600 hover:text-white transition-colors"
+            className="p-1 text-app-text-muted hover:text-app-text transition-colors"
           >
             <span className="sr-only">Close</span>
           </button>
@@ -61,7 +61,7 @@ export default function AIPromptModal({
           value={aiPrompt}
           onChange={(e) => onPromptChange(e.target.value)}
           onKeyPress={(e) => e.key === 'Enter' && !e.shiftKey && onSubmit()}
-          className="w-full bg-slate-700 light:bg-slate-100/50 border border-slate-600 light:border-slate-300 rounded-lg px-4 py-3 text-app-text placeholder-slate-400 resize-none focus:outline-none focus:ring-2 focus:ring-purple-500/50 mb-4"
+          className="w-full bg-app-bg border border-app-border rounded-lg px-4 py-3 text-app-text placeholder-app-text-muted resize-none focus:outline-none focus:ring-2 focus:ring-purple-500/50 mb-4"
           rows={3}
         />
 

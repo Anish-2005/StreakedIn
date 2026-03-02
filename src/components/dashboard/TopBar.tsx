@@ -53,10 +53,9 @@ export default function TopBar({
             {isMobile && onMenuClick && (
               <button
                 onClick={onMenuClick}
-                className="p-2.5 rounded-xl transition hover:scale-105
-                           hover:bg-gray-900/10 dark:hover:bg-white/10"
+                className="p-2.5 rounded-xl transition hover:scale-105 hover:bg-app-surface/20"
               >
-                <Menu className="w-5 h-5 text-gray-900 dark:text-white" />
+                <Menu className="w-5 h-5 text-app-text" />
               </button>
             )}
 
@@ -72,17 +71,10 @@ export default function TopBar({
               </div>
 
               <div className="min-w-0">
-                <h1
-                  className={`
-                    text-xl sm:text-2xl font-bold truncate
-                    bg-gradient-to-r from-gray-900 via-blue-700 to-purple-700
-                    dark:from-white dark:via-blue-100 dark:to-purple-200
-                    bg-clip-text text-transparent
-                  `}
-                >
+                <h1 className="text-xl sm:text-2xl font-bold truncate text-app-text">
                   {formatTabName(activeTab)}
                 </h1>
-                <p className="text-xs text-gray-600 dark:text-slate-400 hidden sm:block">
+                <p className="text-xs text-app-text-muted hidden sm:block">
                   Professional Dashboard
                 </p>
               </div>
@@ -91,15 +83,9 @@ export default function TopBar({
 
           {/* RIGHT */}
           <div className="flex items-center gap-3 flex-shrink-0">
-            <div
-              className={`
-                hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full border
-                bg-green-100/60 border-green-400/30
-                dark:bg-green-500/10 dark:border-green-500/20
-              `}
-            >
-              <Zap className="w-4 h-4 text-green-600 dark:text-green-400" />
-              <span className="text-sm font-medium text-green-700 dark:text-green-300">
+            <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full border bg-green-500/10 border-green-500/20">
+              <Zap className="w-4 h-4 text-green-500" />
+              <span className="text-sm font-medium text-green-500">
                 Active
               </span>
             </div>
@@ -107,10 +93,9 @@ export default function TopBar({
             {isMobile && (
               <button
                 onClick={() => setShowMobileSearch((v) => !v)}
-                className="p-2.5 rounded-xl transition hover:scale-105
-                           hover:bg-gray-900/10 dark:hover:bg-white/10 sm:hidden"
+                className="p-2.5 rounded-xl transition hover:scale-105 hover:bg-app-surface/20 sm:hidden"
               >
-                <Search className="w-5 h-5 text-gray-900 dark:text-white" />
+                <Search className="w-5 h-5 text-app-text" />
               </button>
             )}
 

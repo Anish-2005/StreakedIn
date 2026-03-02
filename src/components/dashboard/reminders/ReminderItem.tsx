@@ -11,7 +11,7 @@ interface ReminderItemProps {
 
 export default function ReminderItem({ reminder, onEdit, onDelete, onToggle }: ReminderItemProps) {
   return (
-    <div className="bg-slate-800 light:bg-white/30 backdrop-blur-md border border-slate-700 light:border-slate-300/50 rounded-xl p-4 sm:p-6">
+    <div className="bg-slate-800 light:bg-white/30 backdrop-blur-md border border-app-border rounded-xl p-4 sm:p-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
         <div className="flex items-center space-x-3 flex-1 min-w-0">
           <div className={`p-2 rounded-lg flex-shrink-0 ${
@@ -26,7 +26,7 @@ export default function ReminderItem({ reminder, onEdit, onDelete, onToggle }: R
           <div className="flex-1 min-w-0">
             <h3 className="font-semibold text-app-text">{reminder.title}</h3>
             {reminder.description && (
-              <p className="text-sm text-slate-400 light:text-slate-600 mt-1">{reminder.description}</p>
+              <p className="text-sm text-app-text-muted mt-1">{reminder.description}</p>
             )}
             {reminder.nextTrigger && (
               <p className="text-sm text-slate-500 mt-1">
