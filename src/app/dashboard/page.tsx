@@ -192,62 +192,65 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-app-bg text-app-text transition-colors duration-300">
-      <Head>
-        <title>Dashboard - StreakedIn</title>
-        <meta name="description" content="Professional productivity dashboard" />
-      </Head>
+    <div className="min-h-screen bg-app-bg text-app-text transition-colors duration-500 relative overflow-hidden">
+      {/* Dynamic Clay Bubbles in Background */}
+      <div className="absolute top-[-10%] left-[-5%] w-[40%] h-[40%] bg-blue-500/10 rounded-full blur-[120px] animate-float"></div>
+      <div className="absolute bottom-[-10%] right-[-5%] w-[40%] h-[40%] bg-purple-500/10 rounded-full blur-[120px] animate-pulse-slow"></div>
 
-      <Sidebar
-        activeTab={activeTab}
-        setActiveTab={handleTabChange}
-        isSidebarOpen={isSidebarOpen}
-        setIsSidebarOpen={setIsSidebarOpen}
-        isMobile={isMobile}
-      />
-
-      {/* Main Content */}
-      <div className={`transition-all duration-300 ${isMobile
-          ? 'ml-0'
-          : isSidebarOpen
-            ? 'ml-72'
-            : 'ml-20'
-        }`}>
-        <TopBar
-          activeTab={activeTab}
-          user={user}
-          userProfile={userProfile}
-          onSearch={handleSearchInput}
-          onNotificationsClick={handleNotificationsClick}
-          onMenuClick={() => setIsSidebarOpen(!isSidebarOpen)}
-          isMobile={isMobile}
-          searchQuery={searchQuery}
-          onClearSearch={() => {
-            setSearchQuery('');
-            setSearchResults({ goals: [], tasks: [] });
-          }}
-        />
-
-        {/* Breadcrumb Navigation */}
-        <BreadcrumbSection activeTab={activeTab} />
-
-        {/* Search Results */}
-        <SearchResults
-          searchQuery={searchQuery}
-          searchResults={searchResults}
-          isSearching={isSearching}
-          onClearSearch={() => {
-            setSearchQuery('');
-            setSearchResults({ goals: [], tasks: [] });
-          }}
-          onTabChange={setActiveTab}
-        />
-
-        <TabContainer
+      <div className="relative z-10 flex flex-col md:flex-row min-h-screen">
+        <Sidebar
           activeTab={activeTab}
           setActiveTab={handleTabChange}
+          isSidebarOpen={isSidebarOpen}
+          setIsSidebarOpen={setIsSidebarOpen}
           isMobile={isMobile}
         />
+
+        {/* Main Content */}
+        <div className={`flex-1 transition-all duration-300 ${isMobile
+            ? 'ml-0'
+            : isSidebarOpen
+              ? 'ml-72'
+              : 'ml-20'
+          }`}>
+          <TopBar
+            activeTab={activeTab}
+            user={user}
+            userProfile={userProfile}
+            onSearch={handleSearchInput}
+            onNotificationsClick={handleNotificationsClick}
+            onMenuClick={() => setIsSidebarOpen(!isSidebarOpen)}
+            isMobile={isMobile}
+            searchQuery={searchQuery}
+            onClearSearch={() => {
+              setSearchQuery('');
+              setSearchResults({ goals: [], tasks: [] });
+            }}
+          />
+
+          <main className="relative z-20">
+            {/* Breadcrumb Navigation */}
+            <BreadcrumbSection activeTab={activeTab} />
+
+            {/* Search Results */}
+            <SearchResults
+              searchQuery={searchQuery}
+              searchResults={searchResults}
+              isSearching={isSearching}
+              onClearSearch={() => {
+                setSearchQuery('');
+                setSearchResults({ goals: [], tasks: [] });
+              }}
+              onTabChange={setActiveTab}
+            />
+
+            <TabContainer
+              activeTab={activeTab}
+              setActiveTab={handleTabChange}
+              isMobile={isMobile}
+            />
+          </main>
+        </div>
       </div>
 
       {/* Mobile Overlay */}

@@ -18,9 +18,10 @@ const paddingClasses = {
 };
 
 const variantClasses = {
-  default: 'bg-app-glass backdrop-blur-md border border-app-border light:bg-white/40 light:border-gray-300/50',
-  elevated: 'bg-app-surface border border-app-border shadow-lg light:bg-white/80 light:border-gray-200',
-  outlined: 'border-2 border-app-border bg-transparent'
+  default: 'clay-card rounded-[2.5rem] bg-app-surface border-app-border',
+  elevated: 'clay-card rounded-[2.5rem] bg-app-surface border-app-border shadow-2xl scale-[1.02]',
+  outlined: 'clay-card rounded-[2.5rem] bg-transparent border-2 border-app-border bg-opacity-10 backdrop-blur-sm',
+  glass: 'clay-card rounded-[2.5rem] bg-app-glass backdrop-blur-xl border-app-border'
 };
 
 export default function Card({

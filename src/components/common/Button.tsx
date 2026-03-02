@@ -12,11 +12,11 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const variantClasses = {
-  primary: 'bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:opacity-90 border-transparent transition-all shadow-md active:scale-95',
-  secondary: 'bg-app-surface text-app-text hover:bg-opacity-80 border-app-border light:bg-gray-200 light:text-slate-900',
-  outline: 'border border-app-border text-app-text-muted hover:border-blue-500 hover:text-blue-500 bg-transparent transition-colors',
-  ghost: 'text-app-text-muted hover:text-app-text hover:bg-app-surface border-transparent transition-colors',
-  danger: 'bg-red-500/20 text-red-400 hover:bg-red-500/30 border-red-500/30 light:bg-red-50 light:text-red-600'
+  primary: 'clay-button rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 text-white shadow-blue-500/20 hover:scale-105 active:scale-95 transition-all',
+  secondary: 'clay-button rounded-2xl bg-app-surface text-app-text border-app-border hover:bg-opacity-80',
+  outline: 'clay-button rounded-2xl border-2 border-app-border text-app-text-muted hover:border-blue-500 hover:text-blue-500 bg-transparent',
+  ghost: 'rounded-2xl text-app-text-muted hover:text-app-text hover:bg-app-surface/50 border-transparent transition-colors',
+  danger: 'clay-button rounded-2xl bg-gradient-to-br from-red-500 to-pink-500 text-white shadow-red-500/20'
 };
 
 const sizeClasses = {

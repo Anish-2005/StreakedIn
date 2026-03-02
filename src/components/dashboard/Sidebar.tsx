@@ -45,17 +45,17 @@ export default function Sidebar({ activeTab, setActiveTab, isSidebarOpen, setIsS
 
   return (
     <div className={`fixed inset-y-0 left-0 z-50 transition-all duration-500 ease-in-out ${isMobile
-        ? `w-72 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`
-        : `${isSidebarOpen ? 'w-72' : 'w-20'}`
+      ? `w-72 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`
+      : `${isSidebarOpen ? 'w-72' : 'w-20'}`
       }`}>
       {/* Semantic Theme Background */}
-      <div className="absolute inset-0 bg-app-surface/90 backdrop-blur-2xl"></div>
+      <div className="absolute inset-0 bg-app-surface/90 backdrop-blur-3xl rounded-r-[3rem] shadow-2xl border-r border-app-border/10"></div>
 
       {/* Dynamic Overlays */}
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-purple-500/5 opacity-50"></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-transparent to-purple-500/10 opacity-30 rounded-r-[3rem]"></div>
 
       {/* Accent Edge */}
-      <div className="absolute right-0 top-0 bottom-0 w-[1px] bg-app-border"></div>
+      <div className="absolute right-0 top-0 bottom-0 w-[1px] bg-white/5 rounded-r-[3rem]"></div>
 
       {/* Content Container */}
       <div className="relative h-full flex flex-col overflow-hidden">

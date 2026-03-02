@@ -29,23 +29,50 @@
 }
 
 :root {
-  /* Default Theme: Dark */
-  --app-bg: #0f172a;
-  --app-surface: #1e293b;
-  --app-text: #f8fafc;
+  /* Default Theme: Dark - Soft Clay */
+  --app-bg: #0b0f1a;
+  --app-surface: #1a1f2e;
+  --app-text: #f1f5f9;
   --app-text-muted: #94a3b8;
-  --app-border: rgba(51, 65, 85, 0.5);
-  --app-glass: rgba(30, 41, 59, 0.4);
+  --app-border: rgba(255, 255, 255, 0.05);
+  --app-glass: rgba(26, 31, 46, 0.6);
+
+  /* Clay Shadows - Dark */
+  --clay-shadow-outer: 8px 8px 16px rgba(0, 0, 0, 0.4);
+  --clay-shadow-inner: inset 4px 4px 8px rgba(255, 255, 255, 0.05), inset -4px -4px 8px rgba(0, 0, 0, 0.3);
 }
 
 .light {
-  /* Theme Override: Light */
-  --app-bg: #f8fafc;
+  /* Theme Override: Softened Light Clay */
+  --app-bg: #f0f4f8;
   --app-surface: #ffffff;
-  --app-text: #0f172a;
-  --app-text-muted: #475569;
-  --app-border: #cbd5e1;
-  --app-glass: rgba(255, 255, 255, 0.7);
+  --app-text: #1e293b;
+  --app-text-muted: #64748b;
+  --app-border: rgba(0, 0, 0, 0.05);
+  --app-glass: rgba(255, 255, 255, 0.8);
+
+  /* Clay Shadows - Light */
+  --clay-shadow-outer: 12px 12px 24px rgba(0, 0, 0, 0.08);
+  --clay-shadow-inner: inset 6px 6px 12px rgba(255, 255, 255, 0.9), inset -6px -6px 12px rgba(0, 0, 0, 0.05);
+}
+
+@utility clay-card {
+  background-color: var(--app-surface);
+  border-radius: 2rem;
+  box-shadow: var(--clay-shadow-outer), var(--clay-shadow-inner);
+  border: 1px solid var(--app-border);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+@utility clay-button {
+  border-radius: 1.25rem;
+  box-shadow: var(--clay-shadow-outer), var(--clay-shadow-inner);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@utility clay-button:active {
+  transform: scale(0.95);
+  box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 @layer base {

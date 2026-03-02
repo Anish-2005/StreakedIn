@@ -23,7 +23,7 @@ export default function SearchBar({
 
   // Use external query if provided, otherwise use internal state
   const query = externalQuery !== undefined ? externalQuery : internalQuery;
-  const setQuery = externalQuery !== undefined ? () => {} : setInternalQuery;
+  const setQuery = externalQuery !== undefined ? () => { } : setInternalQuery;
 
   // Debounce the search query only when not using external query
   useEffect(() => {
@@ -65,18 +65,21 @@ export default function SearchBar({
 
   return (
     <div className={`relative group ${className}`}>
-      <Search className="w-4 h-4 absolute left-4 top-1/2 transform -translate-y-1/2 text-app-text-muted dark:group-focus-within:text-blue-300 light:group-focus-within:text-blue-600 transition-colors" />
+      <Search className="w-4 h-4 absolute left-4 top-1/2 transform -translate-y-1/2 text-app-text-muted transition-colors" />
       <input
         type="text"
         placeholder={placeholder}
         value={query}
         onChange={handleInputChange}
-        className="pl-12 pr-10 py-3 w-full dark:border dark:border-slate-700/60 light:border light:border-gray-300 rounded-xl dark:bg-slate-800/40 light:bg-gray-100/40 backdrop-blur-sm text-app-text dark:placeholder-slate-400 light:placeholder-gray-500 focus:outline-none focus:ring-2 dark:focus:ring-blue-500/50 light:focus:ring-blue-500/40 dark:focus:border-blue-400/50 light:focus:border-blue-400/50 transition-all duration-300 dark:hover:bg-slate-800/60 light:hover:bg-gray-100/60"
+        className="pl-12 pr-10 py-3 w-full border border-app-border rounded-2xl bg-app-surface shadow-inner-clay text-app-text placeholder-app-text-muted focus:outline-none focus:ring-4 focus:ring-blue-500/20 transition-all duration-300 hover:scale-[1.01]"
+        style={{
+          boxShadow: 'var(--clay-shadow-outer), var(--clay-shadow-inner)'
+        }}
       />
       {query && (
         <button
           onClick={handleClear}
-          className="w-4 h-4 absolute right-4 top-1/2 transform -translate-y-1/2 dark:text-slate-400 light:text-gray-600 dark:hover:text-white light:hover:text-gray-900 transition-colors"
+          className="w-4 h-4 absolute right-4 top-1/2 transform -translate-y-1/2 text-app-text-muted hover:text-app-text transition-colors"
         >
           ×
         </button>

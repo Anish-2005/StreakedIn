@@ -39,12 +39,12 @@ export default function TopBar({
 
   return (
     <>
-      <header className="relative h-20 overflow-hidden">
-        {/* Semantic Background */}
-        <div className="absolute inset-0 bg-app-surface/95 backdrop-blur-xl border-b border-app-border" />
+      <header className="relative h-20 mb-4 px-4 pt-2">
+        {/* Clay Background */}
+        <div className="absolute inset-0 bg-app-surface/90 backdrop-blur-3xl rounded-b-[2.5rem] shadow-xl border-b border-app-border/10"></div>
 
         {/* Subtle Accents */}
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-purple-500/5 to-pink-500/5" />
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-pink-500/10 rounded-b-[2.5rem]" />
 
         {/* Content */}
         <div className="relative h-full flex items-center justify-between px-4 sm:px-6 lg:px-8">
