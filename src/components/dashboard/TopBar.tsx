@@ -8,7 +8,6 @@ import SearchBar from "./SearchBar";
 import NotificationsBell from "./NotificationsBell";
 import UserMenu from "./UserMenu";
 import ThemeToggle from "../common/ThemeToggle";
-import ThemeToggle from "../common/ThemeToggle";
 
 interface TopBarProps {
   activeTab: string;

@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+@custom-variant light (.light &);
+@custom-variant light-hover (.light &:hover);
+
 @layer base {
   html {
     scroll-behavior: smooth;
@@ -10,7 +13,8 @@
     @apply bg-gray-900 text-gray-100 transition-colors duration-300;
   }
 
-  html.light, html.light body {
+  html.light,
+  html.light body {
     @apply bg-gray-50 text-slate-900;
   }
 }
@@ -84,6 +88,6 @@ html.dark .professional-card {
   right: 0;
 }
 
-.toggle-checkbox:checked + .toggle-label {
+.toggle-checkbox:checked+.toggle-label {
   @apply bg-green-400;
 }
