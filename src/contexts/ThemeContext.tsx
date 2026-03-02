@@ -19,23 +19,35 @@ const applyThemeClass = (theme: Theme) => {
 };
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const theme: Theme = 'dark';
-
-  useLayoutEffect(() => {
-    applyThemeClass(theme);
-  }, []);
+  const [theme, setThemeState] = React.useState<Theme>('dark');
+  const [mounted, setMounted] = React.useState(false);
 
   useEffect(() => {
-    applyThemeClass(theme);
+    setMounted(true);
+    const storedTheme = localStorage.getItem('theme') as Theme | null;
+    if (storedTheme) {
+      setThemeState(storedTheme);
+      applyThemeClass(storedTheme);
+    } else {
+      applyThemeClass('dark');
+    }
   }, []);
 
-  const toggleTheme = () => {
-    // Light mode disabled; keep dark
+  const setTheme = (newTheme: Theme) => {
+    setThemeState(newTheme);
+    localStorage.setItem('theme', newTheme);
+    applyThemeClass(newTheme);
   };
 
-  const setTheme = (newTheme: Theme) => {
-    // Light mode disabled; keep dark
+  const toggleTheme = () => {
+    setTheme(theme === 'dark' ? 'light' : 'dark');
   };
+
+  // Prevent hydration mismatch by optionally rendering children only when mounted,
+  // or accepting default server render. We will let it render normally since CSS handles most flashes
+  if (!mounted) {
+    return <div style={{ visibility: 'hidden' }}>{children}</div>;
+  }
 
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme, setTheme }}>

@@ -7,6 +7,8 @@ import { Menu, Search, Zap } from "lucide-react";
 import SearchBar from "./SearchBar";
 import NotificationsBell from "./NotificationsBell";
 import UserMenu from "./UserMenu";
+import ThemeToggle from "../common/ThemeToggle";
+import ThemeToggle from "../common/ThemeToggle";
 
 interface TopBarProps {
   activeTab: string;
@@ -127,6 +129,7 @@ export default function TopBar({
               </button>
             )}
 
+
             <div className="hidden sm:block">
               <SearchBar
                 onSearch={onSearch}
@@ -135,6 +138,8 @@ export default function TopBar({
                 onClear={onClearSearch}
               />
             </div>
+
+            <ThemeToggle />
 
             <NotificationsBell onClick={onNotificationsClick} />
 
