@@ -23,8 +23,8 @@ export default function ChatMessage({ message, onSpeakText }: ChatMessageProps) 
 
       // Handle numbered lists (1. Text)
       if (/^\d+\.\s/.test(line)) {
-        return `<div class="flex items-start space-x-2 mb-2">
-          <span class="text-blue-400 font-medium text-sm flex-shrink-0 mt-1">${line.match(/^\d+/)?.[0]}.</span>
+        return `<div class="flex items-start gap-2 mb-2">
+          <span class="text-app-text-muted font-medium text-sm flex-shrink-0 mt-0.5">${line.match(/^\d+/)?.[0]}.</span>
           <span class="text-app-text-muted leading-relaxed">${line.replace(/^\d+\.\s*/, '')}</span>
         </div>`;
       }
@@ -50,7 +50,7 @@ export default function ChatMessage({ message, onSpeakText }: ChatMessageProps) 
   if (message.role === 'user') {
     return (
       <div className="flex justify-end">
-        <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-app-text rounded-2xl rounded-br-none px-4 py-2 max-w-xs lg:max-w-md">
+        <div className="bg-app-bg border border-app-border/50 text-app-text rounded-xl rounded-tr-none px-4 py-2.5 max-w-xs lg:max-w-md text-sm">
           {message.content}
         </div>
       </div>
@@ -58,33 +58,33 @@ export default function ChatMessage({ message, onSpeakText }: ChatMessageProps) 
   }
 
   return (
-    <div className="flex space-x-3">
-      <div className="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center flex-shrink-0">
+    <div className="flex gap-3">
+      <div className="w-8 h-8 bg-app-bg rounded-lg flex items-center justify-center flex-shrink-0 border border-app-border/50">
         <Bot className="w-4 h-4 text-app-text" />
       </div>
-      <div className="bg-slate-900 light:bg-slate-50/20 rounded-2xl rounded-bl-none px-4 py-3 flex-1">
+      <div className="bg-app-surface/30 border border-app-border/20 rounded-xl rounded-tl-none px-4 py-3 flex-1 space-y-3">
         <div
-          className="text-app-text-muted leading-relaxed"
+          className="text-app-text-muted leading-relaxed text-sm"
           dangerouslySetInnerHTML={{ __html: formatAIResponse(message.content) }}
         />
-        <div className="flex items-center justify-between mt-4 pt-3 border-t border-slate-700 light:border-slate-300/30">
-          <div className="flex space-x-3">
-            <button className="text-xs px-3 py-1 bg-blue-500/20 text-blue-400 hover:bg-blue-500/30 rounded-full transition-colors font-medium">
-              Create Tasks
+        <div className="flex items-center justify-between pt-3 border-t border-app-border/20">
+          <div className="flex gap-2">
+            <button className="text-xs px-3 py-1.5 bg-app-bg hover:bg-app-bg/80 text-app-text border border-app-border/30 rounded-lg transition-all font-medium">
+              Create Task
             </button>
-            <button className="text-xs px-3 py-1 bg-purple-500/20 text-purple-400 hover:bg-purple-500/30 rounded-full transition-colors font-medium">
-              Set Reminders
+            <button className="text-xs px-3 py-1.5 bg-app-bg hover:bg-app-bg/80 text-app-text border border-app-border/30 rounded-lg transition-all font-medium">
+              Set Reminder
             </button>
-            <button className="text-xs px-3 py-1 bg-green-500/20 text-green-400 hover:bg-green-500/30 rounded-full transition-colors font-medium">
-              Analyze Further
+            <button className="text-xs px-3 py-1.5 bg-app-bg hover:bg-app-bg/80 text-app-text border border-app-border/30 rounded-lg transition-all font-medium">
+              Details
             </button>
           </div>
           <button
             onClick={handleSpeakText}
-            className={`p-2 rounded-lg transition-all duration-200 ${
+            className={`p-1.5 rounded-lg transition-all duration-200 ${
               isSpeaking
-                ? 'bg-red-500/20 text-red-400 hover:bg-red-500/30'
-                : 'bg-blue-500/20 text-blue-400 hover:bg-blue-500/30'
+                ? 'bg-app-bg border border-app-border/50 text-app-text'
+                : 'bg-app-bg/60 border border-app-border/30 text-app-text-muted hover:bg-app-bg hover:border-app-border/50'
             }`}
             title={isSpeaking ? 'Stop speaking' : 'Listen to response'}
           >

@@ -26,13 +26,13 @@ export default function ChatArea({
 }: ChatAreaProps) {
   return (
     <div className="lg:col-span-6">
-      <div className="bg-slate-800 light:bg-white/30 backdrop-blur-md border border-slate-700 light:border-slate-300/50 rounded-xl h-[600px] flex flex-col">
+      <div className="bg-app-surface/50 border border-app-border/30 backdrop-blur-sm rounded-2xl h-[600px] flex flex-col overflow-hidden">
         {/* Chat Header */}
-        <div className="p-4 border-b border-slate-700 light:border-slate-300/50 flex items-center justify-between flex-shrink-0">
-          <h3 className="font-semibold text-app-text">Chat with AI Assistant</h3>
+        <div className="px-6 py-4 border-b border-app-border/20 flex items-center justify-between flex-shrink-0">
+          <h3 className="font-semibold text-app-text text-lg">Conversation</h3>
           <button
             onClick={onClearChat}
-            className="flex items-center space-x-2 px-3 py-1.5 bg-red-500/20 text-red-400 hover:bg-red-500/30 rounded-lg transition-colors text-sm"
+            className="flex items-center gap-2 px-3 py-1.5 bg-app-bg/80 hover:bg-app-bg text-app-text-muted hover:text-app-text border border-app-border/30 rounded-lg transition-all text-sm font-medium"
             title="Clear chat history"
           >
             <RotateCcw className="w-4 h-4" />
@@ -41,11 +41,12 @@ export default function ChatArea({
         </div>
 
         {/* Chat Messages */}
-        <div className="flex-1 p-4 overflow-y-auto space-y-4 min-h-0" style={{ scrollbarWidth: 'thin', scrollbarColor: '#475569 #1e293b' }}>
+        <div className="flex-1 p-6 overflow-y-auto space-y-4 min-h-0" style={{ scrollbarWidth: 'thin', scrollbarColor: '#475569 #1e293b' }}>
           {conversationHistory.length === 0 ? (
-            <div className="text-center text-slate-400 light:text-slate-600 py-12">
-              <Brain className="w-12 h-12 text-slate-500 mx-auto mb-4" />
-              <p>Ask me anything about your productivity, goals, or schedule!</p>
+            <div className="text-center text-app-text-muted py-12 flex flex-col items-center justify-center h-full">
+              <Brain className="w-12 h-12 text-app-border/50 mx-auto mb-4" />
+              <p className="text-base">Start a conversation to get personalized recommendations</p>
+              <p className="text-sm text-app-text-muted/70 mt-1">Ask about goals, tasks, or productivity insights</p>
             </div>
           ) : (
             conversationHistory.map((message, index) => (
