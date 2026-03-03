@@ -20,8 +20,8 @@ export default function Logo() {
           className="w-full h-full object-contain"
         />
       </motion.div>
-      <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">StreakedIn</h1>
-      <p className="text-gray-700 dark:text-slate-300">Professional Productivity Dashboard</p>
+      <h1 className="text-3xl font-bold text-app-text mb-2 transition-colors duration-600">StreakedIn</h1>
+      <p className="text-app-text-muted transition-colors duration-600">Professional Productivity Dashboard</p>
     </div>
   );
 }

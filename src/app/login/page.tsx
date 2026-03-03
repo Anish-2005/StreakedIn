@@ -50,7 +50,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center p-4 text-gray-100">
+    <div className="min-h-screen bg-app-bg flex items-center justify-center p-4 text-app-text transition-colors duration-600">
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}

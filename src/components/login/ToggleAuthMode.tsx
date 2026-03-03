@@ -10,7 +10,7 @@ export default function ToggleAuthMode({ isSignUp, onToggle }: ToggleAuthModePro
     <div className="mt-6 text-center">
       <button
         onClick={onToggle}
-        className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 transition-colors text-sm"
+        className="text-purple-500 hover:text-purple-400 transition-colors text-sm"
       >
         {isSignUp
           ? 'Already have an account? Sign in'
