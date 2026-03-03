@@ -41,7 +41,9 @@ export default function ChatArea({
         </div>
 
         {/* Chat Messages */}
-        <div className="flex-1 p-6 overflow-y-auto space-y-4 min-h-0" style={{ scrollbarWidth: 'thin', scrollbarColor: '#475569 #1e293b' }}>
+        <div 
+          className="chat-scrollbar flex-1 p-6 overflow-y-auto space-y-4 min-h-0"
+        >
           {conversationHistory.length === 0 ? (
             <div className="text-center text-app-text-muted py-12 flex flex-col items-center justify-center h-full">
               <Brain className="w-12 h-12 text-app-border/50 mx-auto mb-4" />

@@ -1,6 +1,7 @@
 "use client";
 import { motion } from 'framer-motion';
 import { useState } from 'react';
+import { Settings } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { Card, ToggleSwitch, Button, FormField } from '../common';
 
@@ -26,22 +27,30 @@ export default function SettingsTab({}: SettingsTabProps) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
-      className="space-y-6"
+      className="max-w-7xl mx-auto space-y-6"
     >
-      <div>
-        <h1 className="text-2xl font-bold text-app-text">Settings</h1>
-        <p className="text-app-text-muted">Manage your account and preferences</p>
+      {/* Header */}
+      <div className="bg-app-surface/50 border border-app-border/30 backdrop-blur-sm rounded-2xl p-6 sm:p-8">
+        <div className="flex items-start gap-4">
+          <div className="w-12 h-12 bg-app-bg rounded-xl flex items-center justify-center flex-shrink-0 border border-app-border/50">
+            <Settings className="w-6 h-6 text-app-text" />
+          </div>
+          <div className="flex-1">
+            <h1 className="text-3xl font-semibold text-app-text mb-1">Settings</h1>
+            <p className="text-app-text-muted text-base">Configure your preferences and account settings</p>
+          </div>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Notification Settings */}
         <Card>
-          <h3 className="text-lg font-semibold text-app-text mb-4">Notification Settings</h3>
+          <h3 className="text-lg font-semibold text-app-text mb-6">Notifications</h3>
           <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <h4 className="text-app-text font-medium">Email Notifications</h4>
-                <p className="text-slate-400 light:text-slate-600 text-sm">Receive updates via email</p>
+            <div className="flex items-center justify-between py-3 border-b border-app-border/20">
+              <div className="flex-1">
+                <h4 className="text-app-text font-medium text-sm">Email Notifications</h4>
+                <p className="text-app-text-muted text-xs mt-1">Receive updates and summaries via email</p>
               </div>
               <ToggleSwitch
                 checked={settingsState.emailNotifications}
@@ -49,10 +58,10 @@ export default function SettingsTab({}: SettingsTabProps) {
               />
             </div>
 
-            <div className="flex items-center justify-between">
-              <div>
-                <h4 className="text-app-text font-medium">Push Notifications</h4>
-                <p className="text-slate-400 light:text-slate-600 text-sm">Browser and desktop alerts</p>
+            <div className="flex items-center justify-between py-3">
+              <div className="flex-1">
+                <h4 className="text-app-text font-medium text-sm">Push Notifications</h4>
+                <p className="text-app-text-muted text-xs mt-1">Browser and mobile alerts</p>
               </div>
               <ToggleSwitch
                 checked={settingsState.pushNotifications}
@@ -64,12 +73,12 @@ export default function SettingsTab({}: SettingsTabProps) {
 
         {/* AI & Preferences */}
         <Card>
-          <h3 className="text-lg font-semibold text-app-text mb-4">AI & Preferences</h3>
+          <h3 className="text-lg font-semibold text-app-text mb-6">AI & Automation</h3>
           <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <h4 className="text-app-text font-medium">Auto Goal Suggestions</h4>
-                <p className="text-slate-400 light:text-slate-600 text-sm">AI-powered goal recommendations</p>
+            <div className="flex items-center justify-between py-3 border-b border-app-border/20">
+              <div className="flex-1">
+                <h4 className="text-app-text font-medium text-sm">Auto Goal Suggestions</h4>
+                <p className="text-app-text-muted text-xs mt-1">Personalized goal recommendations</p>
               </div>
               <ToggleSwitch
                 checked={settingsState.autoGoalSuggestions}
@@ -77,10 +86,10 @@ export default function SettingsTab({}: SettingsTabProps) {
               />
             </div>
 
-            <div className="flex items-center justify-between">
-              <div>
-                <h4 className="text-app-text font-medium">Sound Alerts</h4>
-                <p className="text-slate-400 light:text-slate-600 text-sm">Audio notifications for reminders</p>
+            <div className="flex items-center justify-between py-3">
+              <div className="flex-1">
+                <h4 className="text-app-text font-medium text-sm">Sound Alerts</h4>
+                <p className="text-app-text-muted text-xs mt-1">Audio notifications for reminders</p>
               </div>
               <ToggleSwitch
                 checked={settingsState.soundAlerts}
@@ -92,15 +101,15 @@ export default function SettingsTab({}: SettingsTabProps) {
 
         {/* Account Settings */}
         <Card className="lg:col-span-2">
-          <h3 className="text-lg font-semibold text-app-text mb-4">Account Settings</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <h3 className="text-lg font-semibold text-app-text mb-6">Account & Preferences</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <FormField
               label="Display Name"
               type="input"
               defaultValue={user?.displayName || ''}
             />
             <FormField
-              label="Email"
+              label="Email Address"
               type="input"
               defaultValue={user?.email || ''}
             />
@@ -113,7 +122,7 @@ export default function SettingsTab({}: SettingsTabProps) {
               <option>UTC+0 (GMT)</option>
             </FormField>
             <FormField
-              label="Theme"
+              label="Theme Preference"
               type="select"
             >
               <option>Dark</option>
@@ -121,7 +130,7 @@ export default function SettingsTab({}: SettingsTabProps) {
               <option>System</option>
             </FormField>
           </div>
-          <div className="flex justify-end space-x-3 mt-6 pt-4 border-t border-slate-700 light:border-slate-300/50">
+          <div className="flex justify-end gap-3 mt-8 pt-6 border-t border-app-border/20">
             <Button variant="outline">
               Cancel
             </Button>

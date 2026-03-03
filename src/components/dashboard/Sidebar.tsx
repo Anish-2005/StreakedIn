@@ -7,6 +7,7 @@ import { doc, onSnapshot } from 'firebase/firestore';
 import { useState, useEffect } from 'react';
 import Navigation from './Navigation';
 import UserProfile from './UserProfile';
+import ThemeToggle from '../common/ThemeToggle';
 
 interface SidebarProps {
   activeTab: string;
@@ -89,14 +90,18 @@ export default function Sidebar({ activeTab, setActiveTab, isSidebarOpen, setIsS
           />
         </div>
 
-        <div className={`flex flex-col gap-4 border-t border-app-border/30 ${isSidebarOpen ? 'px-4 py-4' : 'items-center py-4'}`}>
-          <button
-            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-            className="w-9 h-9 rounded-xl flex items-center justify-center text-app-text-muted hover:text-app-text hover:bg-app-bg/60 transition-colors"
-            title={isSidebarOpen ? "Collapse" : "Expand"}
-          >
-            <ChevronRight className={`w-5 h-5 transition-transform duration-500 ${isSidebarOpen ? 'rotate-180' : ''}`} />
-          </button>
+        <div className={`flex flex-col gap-3 border-t border-app-border/30 ${isSidebarOpen ? 'px-4 py-4' : 'items-center py-4'}`}>
+          <div className="flex items-center gap-2" style={isSidebarOpen ? {} : { flexDirection: 'column' }}>
+            <button
+              onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+              className="w-9 h-9 rounded-xl flex items-center justify-center text-app-text-muted hover:text-app-text hover:bg-app-bg/60 transition-colors"
+              title={isSidebarOpen ? "Collapse" : "Expand"}
+            >
+              <ChevronRight className={`w-5 h-5 transition-transform duration-500 ${isSidebarOpen ? 'rotate-180' : ''}`} />
+            </button>
+
+            <ThemeToggle />
+          </div>
 
           <UserProfile
             user={user}
