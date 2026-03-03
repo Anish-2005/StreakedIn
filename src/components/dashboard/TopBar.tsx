@@ -2,8 +2,8 @@
 
 import React, { useState } from "react";
 import { User } from "firebase/auth";
-import Image from "next/image";
 import { Menu, Search, Zap } from "lucide-react";
+import { AppLogo } from "../common";
 import SearchBar from "./SearchBar";
 import NotificationsBell from "./NotificationsBell";
 import UserMenu from "./UserMenu";
@@ -54,15 +54,7 @@ export default function TopBar({
             )}
 
             <div className="flex items-center gap-3 min-w-0">
-              <div className="w-10 h-10 relative">
-                <Image
-                  src="/streakedin.png"
-                  alt="StreakedIn Logo"
-                  width={40}
-                  height={40}
-                  className="w-full h-full object-contain"
-                />
-              </div>
+              <AppLogo size="md" />
 
               <div className="min-w-0">
                 <h1 className="text-base sm:text-lg font-semibold truncate text-app-text">

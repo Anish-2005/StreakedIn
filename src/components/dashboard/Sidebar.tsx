@@ -1,6 +1,6 @@
 "use client";
 import { ChevronRight, Sparkles } from 'lucide-react';
-import Image from 'next/image';
+import { AppLogo } from '../common';
 import { useAuth } from '../../contexts/AuthContext';
 import { db } from '../../lib/firebase';
 import { doc, onSnapshot } from 'firebase/firestore';
@@ -59,16 +59,8 @@ export default function Sidebar({ activeTab, setActiveTab, isSidebarOpen, setIsS
 
       <div className="relative h-full flex flex-col overflow-hidden z-20">
         <div className={`flex items-center ${isSidebarOpen ? 'px-5 pt-6 pb-4' : 'justify-center pt-6 pb-4'}`}>
-          <div className="flex items-center gap-4 group cursor-pointer">
-            <div className="w-10 h-10 rounded-2xl flex items-center justify-center bg-app-bg border border-app-border/60">
-              <Image
-                src="/streakedin.png"
-                alt="Logo"
-                width={24}
-                height={24}
-                className="brightness-0 invert p-1.5"
-              />
-            </div>
+          <div className="flex items-center gap-3 group cursor-pointer">
+            <AppLogo size="md" />
             {isSidebarOpen && (
               <div className="flex flex-col">
                 <span className="text-lg font-semibold tracking-tight text-app-text leading-tight">

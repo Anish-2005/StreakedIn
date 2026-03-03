@@ -17,6 +17,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "StreakedIn - Professional Productivity Dashboard",
   description: "Track your goals, manage tasks, and boost your productivity",
+  icons: {
+    icon: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({
