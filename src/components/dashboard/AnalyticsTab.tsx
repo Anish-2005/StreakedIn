@@ -135,18 +135,25 @@ export default function AnalyticsTab({}: AnalyticsTabProps) {
       {/* Analytics Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-app-text">Productivity Analytics</h1>
+          <h1 className="text-2xl font-semibold text-app-text">Productivity Analytics</h1>
           <p className="text-app-text-muted">Detailed insights into your performance and progress</p>
         </div>
         <div className="flex space-x-2">
-          <button className="flex items-center space-x-2 px-3 py-1.5 border border-app-border rounded-lg hover:bg-app-surface/60 transition-colors text-sm">
+          <Button
+            variant="outline"
+            size="sm"
+            className="flex items-center gap-2"
+          >
             <Download className="w-4 h-4" />
             <span>Export</span>
-          </button>
-          <button className="flex items-center space-x-2 px-3 py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-500 transition-colors text-sm">
+          </Button>
+          <Button
+            size="sm"
+            className="flex items-center gap-2"
+          >
             <Brain className="w-4 h-4" />
             <span>AI Analysis</span>
-          </button>
+          </Button>
         </div>
       </div>
 

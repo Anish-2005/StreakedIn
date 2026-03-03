@@ -39,7 +39,7 @@ export default function TasksList({
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.95 }}
-        className="text-center py-16 bg-gradient-to-br from-slate-800/40 to-slate-700/40 backdrop-blur-md border border-slate-600 light:border-slate-300/30 rounded-xl"
+        className="text-center py-14 border border-app-border rounded-xl bg-app-surface/80"
       >
         <div className="max-w-md mx-auto">
           <div className="w-16 h-16 bg-slate-700 light:bg-slate-100/50 rounded-full flex items-center justify-center mx-auto mb-4">

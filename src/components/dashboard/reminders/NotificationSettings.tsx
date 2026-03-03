@@ -5,7 +5,7 @@ export default function NotificationSettings() {
   return (
     <div className="space-y-6">
       {/* Notification Channels */}
-      <div className="bg-slate-800 light:bg-white/30 backdrop-blur-md border border-app-border rounded-xl p-4 sm:p-6">
+      <div className="border border-app-border rounded-xl p-4 sm:p-5 bg-app-surface/80">
         <h3 className="font-semibold text-app-text mb-4">Notification Channels</h3>
         <div className="space-y-4">
           {[
@@ -29,7 +29,7 @@ export default function NotificationSettings() {
       </div>
 
       {/* AI Reminder Suggestions */}
-      <div className="bg-slate-800 light:bg-white/30 backdrop-blur-md border border-app-border rounded-xl p-4 sm:p-6">
+      <div className="border border-app-border rounded-xl p-4 sm:p-5 bg-app-surface/80">
         <h3 className="font-semibold text-app-text mb-4">AI Reminder Suggestions</h3>
         <div className="space-y-3">
           {[
@@ -38,9 +38,9 @@ export default function NotificationSettings() {
             'Monthly productivity analysis',
             'Networking follow-up reminders'
           ].map((suggestion, index) => (
-            <div key={index} className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 rounded-lg border border-slate-600/50">
+            <div key={index} className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 rounded-lg border border-app-border/60">
               <span className="text-sm text-app-text-muted">{suggestion}</span>
-              <button className="text-[#0A66C2] hover:text-[#004182] transition-colors text-sm px-3 py-1 rounded hover:bg-[#0A66C2]/10 w-full sm:w-auto text-center">
+              <button className="text-blue-500 hover:text-blue-400 transition-colors text-sm px-3 py-1 rounded hover:bg-blue-500/10 w-full sm:w-auto text-center">
                 Enable
               </button>
             </div>

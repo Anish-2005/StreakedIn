@@ -33,11 +33,11 @@ export default function AddTaskForm({
   return (
     <motion.div
       layout
-      className="bg-gradient-to-r from-slate-800/60 to-slate-700/60 backdrop-blur-md border border-slate-600 light:border-slate-300/50 rounded-xl p-6"
+      className="border border-app-border rounded-xl p-5 bg-app-surface/80"
     >
       <div className="flex items-center gap-3 mb-4">
-        <div className="p-2 bg-blue-500/20 rounded-lg">
-          <Plus className="w-5 h-5 text-blue-400" />
+        <div className="p-2 rounded-lg bg-app-bg/70 border border-app-border/60">
+          <Plus className="w-5 h-5 text-app-text" />
         </div>
         <h3 className="text-lg font-semibold text-app-text">Add New Task</h3>
       </div>
@@ -60,7 +60,7 @@ export default function AddTaskForm({
             placeholder="Add more details about this task..."
             value={newTaskDescription}
             onChange={(e) => onDescriptionChange(e.target.value)}
-            className="w-full px-4 py-3 border border-slate-600 light:border-slate-300/60 bg-slate-800 light:bg-white/60 text-app-text placeholder-slate-400 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500/60 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed resize-none text-base"
+            className="w-full px-4 py-3 border border-app-border bg-app-bg text-app-text placeholder-app-text-muted rounded-lg transition-colors duration-200 focus:outline-none focus:ring-1 focus:ring-blue-500/40 disabled:opacity-50 disabled:cursor-not-allowed resize-none text-sm"
             rows={3}
           />
         </div>
@@ -68,14 +68,14 @@ export default function AddTaskForm({
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium text-app-text-muted mb-2">Priority</label>
-            <Select
+              <Select
               value={newTaskPriority}
               onChange={(value) => onPriorityChange(value)}
               className="bg-slate-700 light:bg-slate-100/50 border-slate-600 light:border-slate-300"
             >
-              <option value="low">🟢 Low Priority</option>
-              <option value="medium">🟡 Medium Priority</option>
-              <option value="high">🔴 High Priority</option>
+              <option value="low">Low priority</option>
+              <option value="medium">Medium priority</option>
+              <option value="high">High priority</option>
             </Select>
           </div>
 
@@ -94,7 +94,8 @@ export default function AddTaskForm({
       <div className="flex flex-col sm:flex-row justify-end gap-3 mt-4">
         <Button
           onClick={onOpenAIPrompt}
-          className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-app-text px-6 py-2 w-full sm:w-auto"
+          variant="secondary"
+          className="w-full sm:w-auto"
         >
           <div className="flex items-center gap-2">
             <Sparkles className="w-4 h-4" />
@@ -104,7 +105,7 @@ export default function AddTaskForm({
         <Button
           onClick={onAddTask}
           disabled={!newTaskTitle.trim() || isAddingTask}
-          className="bg-blue-500 hover:bg-blue-600 text-app-text px-6 py-2 w-full sm:w-auto"
+          className="w-full sm:w-auto"
         >
           {isAddingTask ? (
             <div className="flex items-center gap-2">

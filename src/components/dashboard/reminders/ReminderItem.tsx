@@ -11,14 +11,10 @@ interface ReminderItemProps {
 
 export default function ReminderItem({ reminder, onEdit, onDelete, onToggle }: ReminderItemProps) {
   return (
-    <div className="bg-slate-800 light:bg-white/30 backdrop-blur-md border border-app-border rounded-xl p-4 sm:p-6">
+    <div className="border border-app-border rounded-xl p-4 sm:p-5 bg-app-surface/80">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
         <div className="flex items-center space-x-3 flex-1 min-w-0">
-          <div className={`p-2 rounded-lg flex-shrink-0 ${
-            reminder.type === 'email' ? 'bg-blue-900/30 text-blue-300' :
-            reminder.type === 'browser' ? 'bg-green-900/30 text-green-300' :
-            'bg-purple-900/30 text-purple-300'
-          }`}>
+          <div className="p-2 rounded-lg flex-shrink-0 bg-app-bg/70 border border-app-border/60 text-app-text">
             {reminder.type === 'email' ? <Mail className="w-4 h-4" /> :
              reminder.type === 'browser' ? <Smartphone className="w-4 h-4" /> :
              <Bell className="w-4 h-4" />}
@@ -29,7 +25,7 @@ export default function ReminderItem({ reminder, onEdit, onDelete, onToggle }: R
               <p className="text-sm text-app-text-muted mt-1">{reminder.description}</p>
             )}
             {reminder.nextTrigger && (
-              <p className="text-sm text-slate-500 mt-1">
+              <p className="text-xs text-app-text-muted mt-1">
                 Next: {reminder.nextTrigger.toLocaleString()}
               </p>
             )}
@@ -43,7 +39,7 @@ export default function ReminderItem({ reminder, onEdit, onDelete, onToggle }: R
               checked={reminder.enabled}
               onChange={() => onToggle(reminder)}
             />
-            <div className="w-11 h-6 bg-slate-700 light:bg-slate-100/40 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-600 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gradient-to-r peer-checked:from-blue-500 peer-checked:to-purple-600"></div>
+            <div className="w-11 h-6 bg-app-bg rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
           </label>
           <div className="flex space-x-1">
             <button
@@ -63,7 +59,7 @@ export default function ReminderItem({ reminder, onEdit, onDelete, onToggle }: R
           </div>
         </div>
       </div>
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-sm text-app-text-muted">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-app-text-muted">
         <span>Frequency: {reminder.frequency}</span>
         <span>Type: {reminder.type}</span>
       </div>

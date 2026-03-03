@@ -27,8 +27,8 @@ export default function TasksFilters({
                 onClick={() => onFilterChange(filterType)}
                 className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
                   filter === filterType
-                    ? 'bg-blue-500 text-app-text'
-                    : 'bg-slate-700 light:bg-slate-100/50 text-app-text-muted hover:bg-slate-600/50'
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-app-surface/70 text-app-text-muted hover:bg-app-surface'
                 }`}
               >
                 {filterType.charAt(0).toUpperCase() + filterType.slice(1)}

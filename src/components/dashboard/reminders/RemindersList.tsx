@@ -13,10 +13,12 @@ interface RemindersListProps {
 export default function RemindersList({ reminders, onEdit, onDelete, onToggle }: RemindersListProps) {
   if (reminders.length === 0) {
     return (
-      <div className="text-center py-12 bg-slate-800 light:bg-white/30 backdrop-blur-md border border-app-border rounded-xl">
-        <Bell className="w-12 h-12 text-slate-500 mx-auto mb-4" />
+      <div className="text-center py-12 border border-app-border rounded-xl bg-app-surface/80">
+        <Bell className="w-10 h-10 text-app-text-muted mx-auto mb-4" />
         <p className="text-app-text-muted">No reminders set up yet</p>
-        <p className="text-slate-500 text-sm mt-2">Get started by creating your first reminder to stay organized and productive!</p>
+        <p className="text-app-text-muted text-sm mt-2">
+          Get started by creating your first reminder to stay organized and productive.
+        </p>
       </div>
     );
   }

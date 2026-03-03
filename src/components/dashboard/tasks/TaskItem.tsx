@@ -41,15 +41,14 @@ export default function TaskItem({
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
       transition={{ delay: index * 0.05 }}
-      className={`group relative overflow-hidden rounded-xl border transition-all duration-300 ${
+      className={`group relative overflow-hidden rounded-xl border transition-all duration-200 ${
         task.completed
-          ? 'bg-green-500/5 border-green-500/20'
+          ? 'bg-app-surface/70 border-app-border/60'
           : isOverdue
-          ? 'bg-red-500/5 border-red-500/20'
-          : 'bg-slate-800 light:bg-white/40 border-slate-700 light:border-slate-300/50 hover:border-slate-600/70'
+          ? 'bg-red-500/5 border-red-500/30'
+          : 'bg-app-surface/80 border-app-border/60 hover:border-app-border'
       }`}
     >
-      {/* Priority indicator stripe */}
       <div className={`absolute left-0 top-0 bottom-0 w-1 ${
         task.priority === 'high' ? 'bg-red-500' :
         task.priority === 'medium' ? 'bg-yellow-500' :
