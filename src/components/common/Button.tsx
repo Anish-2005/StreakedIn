@@ -37,7 +37,8 @@ export default function Button({
   disabled,
   ...props
 }: ButtonProps) {
-  const baseClasses = 'rounded-lg font-medium transition-all duration-200 flex items-center justify-center space-x-2 border focus:outline-none focus:ring-2 focus:ring-blue-500/60 disabled:opacity-50 disabled:cursor-not-allowed';
+  const baseClasses =
+    'rounded-2xl font-semibold tracking-wide transition-all duration-200 flex items-center justify-center gap-2 border focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400/70 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent disabled:opacity-50 disabled:cursor-not-allowed';
   const widthClass = fullWidth ? 'w-full' : '';
   const combinedClasses = `${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${widthClass} ${className}`;
 

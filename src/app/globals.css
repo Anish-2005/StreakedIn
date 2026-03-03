@@ -88,6 +88,13 @@
   box-shadow: var(--clay-shadow-outer), var(--clay-shadow-inner);
   border: 2px solid var(--app-border);
   transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  backdrop-filter: blur(22px);
+  transform: translateY(0);
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--clay-shadow-outer);
+  }
 }
 
 @utility clay-button {
@@ -96,10 +103,19 @@
   background-image: var(--clay-surface-gradient);
   transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
   border: 1px solid var(--app-border);
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  backdrop-filter: blur(18px);
+  transform: translateY(0);
 
   &:active {
-    transform: scale(0.92);
+    transform: translateY(1px) scale(0.96);
     box-shadow: var(--clay-shadow-inner);
+  }
+
+  &:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: var(--clay-shadow-outer);
   }
 }
 
@@ -117,6 +133,11 @@
 
   body {
     background-color: var(--app-bg);
+    background-image:
+      radial-gradient(circle at 0% -10%, rgba(56, 189, 248, 0.28), transparent 55%),
+      radial-gradient(circle at 100% 110%, rgba(129, 140, 248, 0.28), transparent 55%),
+      radial-gradient(circle at 50% 50%, rgba(15, 23, 42, 0.9), transparent 70%);
+    background-attachment: fixed;
     color: var(--app-text);
     transition-property: background-color, color, border-color, box-shadow;
     transition-duration: 500ms;

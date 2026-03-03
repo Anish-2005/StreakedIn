@@ -193,12 +193,6 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-app-bg text-app-text transition-colors duration-500 relative overflow-hidden">
-      {/* Dynamic Clay Blobs in Background */}
-      <div className="fixed top-[-10%] left-[-10%] w-[50%] h-[50%] bg-blue-600/10 rounded-full blur-[120px] animate-blob"></div>
-      <div className="fixed bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-purple-600/10 rounded-full blur-[120px] animate-float animation-delay-2000"></div>
-      <div className="fixed top-[20%] right-[20%] w-[30%] h-[30%] bg-indigo-500/5 rounded-full blur-[100px] animate-pulse-slow"></div>
-      <div className="fixed bottom-[20%] left-[20%] w-[35%] h-[35%] bg-pink-500/5 rounded-full blur-[110px] animate-blob animation-delay-4000"></div>
-
       <div className="relative z-10 flex flex-col md:flex-row min-h-screen">
         <Sidebar
           activeTab={activeTab}
@@ -209,12 +203,9 @@ export default function Dashboard() {
         />
 
         {/* Main Content */}
-        <div className={`flex-1 transition-all duration-300 ${isMobile
-          ? 'ml-0'
-          : isSidebarOpen
-            ? 'ml-72'
-            : 'ml-20'
-          }`}>
+        <div className={`flex-1 transition-all duration-300 ${
+          isMobile ? 'ml-0' : isSidebarOpen ? 'ml-72' : 'ml-20'
+        } flex flex-col`}>
           <TopBar
             activeTab={activeTab}
             user={user}
@@ -230,11 +221,9 @@ export default function Dashboard() {
             }}
           />
 
-          <main className="relative z-20">
-            {/* Breadcrumb Navigation */}
+          <main className="relative z-20 flex-1 flex flex-col gap-3 sm:gap-4 pb-6 px-3 sm:px-4 lg:px-6">
             <BreadcrumbSection activeTab={activeTab} />
 
-            {/* Search Results */}
             <SearchResults
               searchQuery={searchQuery}
               searchResults={searchResults}
@@ -246,11 +235,13 @@ export default function Dashboard() {
               onTabChange={setActiveTab}
             />
 
-            <TabContainer
-              activeTab={activeTab}
-              setActiveTab={handleTabChange}
-              isMobile={isMobile}
-            />
+            <div className="clay-card rounded-[2.5rem] border-app-border/40 flex-1">
+              <TabContainer
+                activeTab={activeTab}
+                setActiveTab={handleTabChange}
+                isMobile={isMobile}
+              />
+            </div>
           </main>
         </div>
       </div>

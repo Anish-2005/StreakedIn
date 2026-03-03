@@ -26,32 +26,32 @@ const navigationItems: NavigationItem[] = [
 
 export default function Navigation({ activeTab, onTabChange, isCollapsed }: NavigationProps) {
   return (
-    <nav className={`flex-1 ${isCollapsed ? 'px-2 py-6' : 'px-6 py-8'}`}>
-      <div className={`space-y-${isCollapsed ? '2' : '3'}`}>
+    <nav className={`flex-1 ${isCollapsed ? 'px-2 py-4' : 'px-4 py-6'}`}>
+      <div className="space-y-2">
         {navigationItems.map((item) => {
           const isActive = activeTab === item.id;
           return (
             <button
               key={item.id}
               onClick={() => onTabChange(item.id)}
-              className={`group relative w-full flex items-center justify-center transition-all duration-300 ${isCollapsed ? 'px-2 py-3 mb-2 rounded-2xl' : 'space-x-4 px-6 py-4 rounded-[2rem]'
-                } ${isActive
-                  ? 'clay-pressed scale-95 shadow-lg'
-                  : 'clay-button hover:scale-105 active:scale-95'
-                }`}
+              className={`group relative w-full flex items-center justify-center transition-colors duration-200 ${
+                isCollapsed ? 'px-2 py-2.5 rounded-2xl' : 'space-x-3 px-4 py-3 rounded-2xl'
+              } ${
+                isActive
+                  ? 'bg-app-surface/90 border border-app-border text-app-text shadow-sm'
+                  : 'bg-transparent border border-transparent text-app-text-muted hover:bg-app-surface/60 hover:text-app-text'
+              }`}
             >
-              {/* Icon with enhanced styling */}
               <div className={`relative flex-shrink-0 transition-all duration-300 ${isActive
-                  ? 'text-blue-500 scale-100'
-                  : 'text-app-text-muted group-hover:text-app-text group-hover:scale-110'
+                  ? 'text-blue-400'
+                  : 'text-app-text-muted group-hover:text-app-text'
                 }`}>
                 {item.icon}
               </div>
 
-              {/* Text - only show when not collapsed */}
               {!isCollapsed && (
                 <div className="flex-1 flex items-center justify-between min-w-0">
-                  <span className={`font-semibold text-lg transition-colors ${isActive
+                  <span className={`font-medium text-sm transition-colors ${isActive
                       ? 'text-app-text'
                       : 'text-app-text-muted group-hover:text-app-text'
                     }`}>
@@ -64,9 +64,8 @@ export default function Navigation({ activeTab, onTabChange, isCollapsed }: Navi
                 </div>
               )}
 
-              {/* Tooltip for collapsed state */}
               {isCollapsed && (
-                <div className="absolute left-full ml-4 px-3 py-2 clay-card text-app-text text-sm rounded-xl opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none whitespace-nowrap z-50">
+                <div className="absolute left-full ml-3 px-3 py-1.5 rounded-xl bg-app-surface/95 border border-app-border text-app-text text-xs opacity-0 group-hover:opacity-100 transition-opacity duration-150 pointer-events-none whitespace-nowrap z-50">
                   {item.name}
                 </div>
               )}
@@ -76,7 +75,7 @@ export default function Navigation({ activeTab, onTabChange, isCollapsed }: Navi
       </div>
       {!isCollapsed && (
         <div className="mt-8 flex justify-center">
-          <div className="w-32 h-px dark:bg-gradient-to-r light:bg-gradient-to-r dark:from-transparent light:from-transparent dark:via-slate-600 light:via-gray-300 dark:to-transparent light:to-transparent"></div>
+          <div className="w-24 h-px bg-app-border/60" />
         </div>
       )}
     </nav>

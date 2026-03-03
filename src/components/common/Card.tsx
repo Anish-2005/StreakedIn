@@ -32,8 +32,10 @@ export default function Card({
   variant = 'default',
   animated = false
 }: CardProps) {
-  const baseClasses = 'rounded-xl transition-all duration-200';
-  const hoverClasses = hover ? 'dark:hover:border-slate-600/50 dark:hover:bg-slate-800/40 light:hover:border-gray-400/50 light:hover:bg-white/60' : '';
+  const baseClasses = 'rounded-[3rem] transition-all duration-300 will-change-transform';
+  const hoverClasses = hover
+    ? 'hover:-translate-y-1 hover:shadow-xl'
+    : '';
   const combinedClasses = `${baseClasses} ${variantClasses[variant]} ${paddingClasses[padding]} ${hoverClasses} ${className}`;
 
   if (animated) {

@@ -39,21 +39,16 @@ export default function TopBar({
 
   return (
     <>
-      <header className="relative h-24 mb-6 px-4 pt-4">
-        {/* Bold Clay Header Background */}
-        <div className="absolute inset-x-4 inset-y-2 bg-app-surface clay-card rounded-b-[3.5rem] shadow-2xl border-b-4 border-app-border/20 z-0"></div>
+      <header className="relative h-16 sm:h-18 mb-4">
+        <div className="absolute inset-0 border-b border-app-border/40 bg-app-bg/80 backdrop-blur-xl" />
 
-        {/* Dynamic Accents */}
-        <div className="absolute inset-x-4 inset-y-2 rounded-b-[3.5rem] bg-gradient-to-r from-blue-500/15 via-purple-500/15 to-pink-500/15 z-0 transition-opacity duration-1000" />
-
-        {/* Content */}
-        <div className="relative h-full flex items-center justify-between px-4 sm:px-6 lg:px-8">
+        <div className="relative h-full flex items-center justify-between px-3 sm:px-4 lg:px-6">
           {/* LEFT */}
           <div className="flex items-center gap-4 min-w-0 flex-1">
             {isMobile && onMenuClick && (
               <button
                 onClick={onMenuClick}
-                className="p-2.5 rounded-xl transition hover:scale-105 hover:bg-app-surface/20"
+                className="p-2.5 rounded-xl transition hover:bg-app-surface/30"
               >
                 <Menu className="w-5 h-5 text-app-text" />
               </button>
@@ -71,29 +66,21 @@ export default function TopBar({
               </div>
 
               <div className="min-w-0">
-                <h1 className="text-xl sm:text-2xl font-bold truncate text-app-text">
+                <h1 className="text-base sm:text-lg font-semibold truncate text-app-text">
                   {formatTabName(activeTab)}
                 </h1>
-                <p className="text-xs text-app-text-muted hidden sm:block">
+                <p className="text-[11px] text-app-text-muted hidden sm:block">
                   Professional Dashboard
                 </p>
               </div>
             </div>
           </div>
 
-          {/* RIGHT */}
           <div className="flex items-center gap-3 flex-shrink-0">
-            <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full border bg-green-500/10 border-green-500/20">
-              <Zap className="w-4 h-4 text-green-500" />
-              <span className="text-sm font-medium text-green-500">
-                Active
-              </span>
-            </div>
-
             {isMobile && (
               <button
                 onClick={() => setShowMobileSearch((v) => !v)}
-                className="p-2.5 rounded-xl transition hover:scale-105 hover:bg-app-surface/20 sm:hidden"
+                className="p-2.5 rounded-xl transition hover:bg-app-surface/30 sm:hidden"
               >
                 <Search className="w-5 h-5 text-app-text" />
               </button>
@@ -126,11 +113,8 @@ export default function TopBar({
       {isMobile && showMobileSearch && (
         <div
           className={`
-            relative px-4 py-4 border-b backdrop-blur-xl
-            bg-gradient-to-r from-gray-50/95 to-white/95
-            border-gray-300/40
-            dark:from-slate-900/95 dark:to-slate-800/95
-            dark:border-slate-700/60
+            relative px-4 py-3 border-b backdrop-blur-xl
+            bg-app-bg/90 border-app-border/40
           `}
         >
           <SearchBar
