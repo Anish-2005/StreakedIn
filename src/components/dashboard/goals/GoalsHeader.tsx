@@ -13,7 +13,7 @@ export default function GoalsHeader({ showCreateForm, onToggleCreate, onOpenAIPr
   return (
     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
       <div>
-        <h1 className="text-2xl font-bold text-app-text">Goals & Targets</h1>
+        <h1 className="text-2xl font-semibold text-app-text">Goals & Targets</h1>
         <p className="text-app-text-muted">Set and track your professional development goals</p>
       </div>
       <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
@@ -29,13 +29,12 @@ export default function GoalsHeader({ showCreateForm, onToggleCreate, onOpenAIPr
           New Goal
         </Button>
         <Button
+          variant="secondary"
+          icon={<Sparkles className="w-4 h-4" />}
           onClick={onOpenAIPrompt}
-          className="w-full sm:w-auto bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-app-text px-6 py-2"
+          className="w-full sm:w-auto"
         >
-          <div className="flex items-center gap-2">
-            <Sparkles className="w-4 h-4" />
-            AI Create
-          </div>
+          AI Create
         </Button>
       </div>
     </div>

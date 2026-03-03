@@ -48,7 +48,7 @@ export default function Sidebar({ activeTab, setActiveTab, isSidebarOpen, setIsS
       className={`fixed inset-y-0 left-0 z-40 transition-all duration-400 ease-in-out ${
         isMobile
           ? `w-72 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`
-          : `${isSidebarOpen ? 'w-64' : 'w-18'}`
+          : `${isSidebarOpen ? 'w-64' : 'w-20'}`
       }`}
     >
       <div
@@ -81,7 +81,7 @@ export default function Sidebar({ activeTab, setActiveTab, isSidebarOpen, setIsS
           </div>
         </div>
 
-        <div className="flex-1 overflow-y-auto px-2">
+        <div className="flex-1 overflow-y-auto overflow-x-hidden px-2">
           <Navigation
             activeTab={activeTab}
             onTabChange={setActiveTab}

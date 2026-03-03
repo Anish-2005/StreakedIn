@@ -65,13 +65,21 @@ export default function OverviewTab({ setActiveTab }: OverviewTabProps) {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 6 }}
+      initial={{ opacity: 0, y: 4 }}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -4 }}
-      className="space-y-5"
+      exit={{ opacity: 0, y: -2 }}
+      className="space-y-6"
     >
-      {/* Stats Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+      <div className="flex items-baseline justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-semibold text-app-text">Today at a glance</h1>
+          <p className="text-sm text-app-text-muted">
+            Key productivity metrics, active goals, and quick actions.
+          </p>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
         <StatsCard
           title="Productivity Score"
           value={loading ? "..." : `${userStats?.productivityScore || 0}%`}
@@ -103,7 +111,6 @@ export default function OverviewTab({ setActiveTab }: OverviewTabProps) {
       </div>
 
       <div className="grid grid-cols-1 xl:grid-cols-12 gap-6">
-        {/* Goals Progress - Takes up 6 columns on xl screens */}
         <Card className="xl:col-span-6">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-semibold text-app-text">Goals Progress</h2>
@@ -116,7 +123,7 @@ export default function OverviewTab({ setActiveTab }: OverviewTabProps) {
               Add Goal
             </Button>
           </div>
-          <div className="space-y-4">
+          <div className="space-y-3">
             {goals.length === 0 ? (
               <div className="text-center py-12">
                 <Target className="w-16 h-16 mx-auto mb-4 opacity-50 dark:text-slate-400 light:text-gray-400" />
@@ -133,14 +140,14 @@ export default function OverviewTab({ setActiveTab }: OverviewTabProps) {
               goals.slice(0, 4).map((goal) => (
                 <div
                   key={goal.id}
-                  className="rounded-2xl border border-app-border/50 bg-app-surface/70 p-5 hover:bg-app-surface/80 transition-colors cursor-pointer"
+                  className="rounded-lg border border-app-border/60 bg-app-surface/70 p-4 hover:bg-app-surface/80 transition-colors"
                 >
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex-1 min-w-0">
-                      <h3 className="font-semibold text-app-text text-base mb-1 truncate">
+                      <h3 className="font-medium text-app-text text-sm mb-1 truncate">
                         {goal.title}
                       </h3>
-                      <div className="flex items-center gap-3 text-[11px] font-medium text-app-text-muted">
+                      <div className="flex items-center gap-3 text-[11px] text-app-text-muted">
                         <span className="flex items-center gap-1.5">
                           <Clock className="w-3.5 h-3.5" />
                           {goal.deadline ? new Date(goal.deadline).toLocaleDateString() : 'Active'}
@@ -151,18 +158,15 @@ export default function OverviewTab({ setActiveTab }: OverviewTabProps) {
                       </div>
                     </div>
                     <div className="text-right ml-4">
-                      <div className="text-xl font-semibold text-blue-400">
+                      <div className="text-lg font-semibold text-blue-400">
                         {goal.progress}%
                       </div>
-                      <div className="text-[11px] font-medium text-app-text-muted">
+                      <div className="text-[11px] text-app-text-muted">
                         Progress
                       </div>
                     </div>
                   </div>
-                  <ProgressBar
-                    value={goal.progress}
-                    className="w-full h-2 rounded-full overflow-hidden"
-                  />
+                  <ProgressBar value={goal.progress} size="sm" />
                   {goal.description && (
                     <p className="text-app-text-muted text-sm mt-3 line-clamp-2">
                       {goal.description}

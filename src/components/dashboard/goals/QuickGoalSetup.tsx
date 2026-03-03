@@ -10,15 +10,15 @@ interface QuickGoalSetupProps {
 
 export default function QuickGoalSetup({ onCreate }: QuickGoalSetupProps) {
   return (
-    <div className="bg-slate-800 light:bg-white/30 backdrop-blur-md border border-app-border rounded-xl p-4 sm:p-6">
+    <div className="border border-app-border rounded-xl p-4 sm:p-5 bg-app-surface/80">
       <h3 className="font-semibold text-app-text mb-4">Quick Goal Setup</h3>
       <div className="space-y-3">
         <input
           type="text"
           placeholder="Goal title..."
-          className="w-full border border-app-border rounded-lg px-3 py-2 text-sm bg-app-bg text-app-text placeholder-app-text-muted focus:outline-none focus:ring-2 focus:ring-blue-500/60 focus:border-transparent"
+          className="w-full border border-app-border rounded-lg px-3 py-2 text-sm bg-app-bg text-app-text placeholder-app-text-muted focus:outline-none focus:ring-1 focus:ring-blue-500/40"
         />
-        <select className="w-full border border-app-border rounded-lg px-3 py-2 text-sm bg-app-bg text-app-text placeholder-app-text-muted focus:outline-none focus:ring-2 focus:ring-blue-500/60 focus:border-transparent">
+        <select className="w-full border border-app-border rounded-lg px-3 py-2 text-sm bg-app-bg text-app-text placeholder-app-text-muted focus:outline-none focus:ring-1 focus:ring-blue-500/40">
           <option>Select category</option>
           <option>Career Development</option>
           <option>Skill Learning</option>
@@ -27,9 +27,9 @@ export default function QuickGoalSetup({ onCreate }: QuickGoalSetupProps) {
         </select>
         <input
           type="date"
-          className="w-full border border-app-border rounded-lg px-3 py-2 text-sm bg-app-bg text-app-text focus:outline-none focus:ring-2 focus:ring-blue-500/60 focus:border-transparent"
+          className="w-full border border-app-border rounded-lg px-3 py-2 text-sm bg-app-bg text-app-text focus:outline-none focus:ring-1 focus:ring-blue-500/40"
         />
-        <Button className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-app-text rounded-lg py-2 text-sm hover:opacity-95 transition-colors">
+        <Button className="w-full text-sm" size="sm">
           Create Goal
         </Button>
       </div>

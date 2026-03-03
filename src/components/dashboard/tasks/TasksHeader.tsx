@@ -19,7 +19,7 @@ export default function TasksHeader({ taskStats }: TasksHeaderProps) {
         <motion.h1
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
-          className="text-3xl font-bold text-app-text mb-2"
+          className="text-2xl font-semibold text-app-text mb-1"
         >
           Task Manager
         </motion.h1>
@@ -33,29 +33,28 @@ export default function TasksHeader({ taskStats }: TasksHeaderProps) {
         </motion.p>
       </div>
 
-      {/* Task Statistics */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
         className="grid grid-cols-2 sm:grid-cols-4 gap-3"
       >
-        <div className="bg-slate-800 light:bg-white/40 backdrop-blur-sm border border-slate-700 light:border-slate-300/50 rounded-lg px-3 py-2 text-center">
-          <div className="text-lg font-semibold text-app-text">{taskStats.total}</div>
-          <div className="text-xs text-slate-400 light:text-slate-600">Total</div>
+        <div className="border border-app-border rounded-lg px-3 py-2 text-center bg-app-surface/80">
+          <div className="text-base font-semibold text-app-text">{taskStats.total}</div>
+          <div className="text-xs text-app-text-muted">Total</div>
         </div>
-        <div className="bg-blue-500/10 border border-blue-500/20 rounded-lg px-3 py-2 text-center">
-          <div className="text-lg font-semibold text-blue-400">{taskStats.pending}</div>
-          <div className="text-xs text-slate-400 light:text-slate-600">Pending</div>
+        <div className="border border-app-border rounded-lg px-3 py-2 text-center bg-app-surface/80">
+          <div className="text-base font-semibold text-app-text">{taskStats.pending}</div>
+          <div className="text-xs text-app-text-muted">Pending</div>
         </div>
-        <div className="bg-green-500/10 border border-green-500/20 rounded-lg px-3 py-2 text-center">
-          <div className="text-lg font-semibold text-green-400">{taskStats.completed}</div>
-          <div className="text-xs text-slate-400 light:text-slate-600">Done</div>
+        <div className="border border-app-border rounded-lg px-3 py-2 text-center bg-app-surface/80">
+          <div className="text-base font-semibold text-app-text">{taskStats.completed}</div>
+          <div className="text-xs text-app-text-muted">Done</div>
         </div>
         {taskStats.overdue > 0 && (
-          <div className="bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2 text-center">
-            <div className="text-lg font-semibold text-red-400">{taskStats.overdue}</div>
-            <div className="text-xs text-slate-400 light:text-slate-600">Overdue</div>
+          <div className="border border-app-border rounded-lg px-3 py-2 text-center bg-app-surface/80">
+            <div className="text-base font-semibold text-red-400">{taskStats.overdue}</div>
+            <div className="text-xs text-app-text-muted">Overdue</div>
           </div>
         )}
       </motion.div>

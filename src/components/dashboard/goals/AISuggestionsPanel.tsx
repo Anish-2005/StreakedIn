@@ -21,11 +21,11 @@ export default function AISuggestionsPanel({ aiSuggestions, currentSuggestionInd
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.2 }}
-      className="bg-gradient-to-br from-slate-800/60 to-slate-700/60 backdrop-blur-md border border-slate-600/50 rounded-xl p-4 sm:p-6"
+      className="border border-app-border rounded-xl p-4 sm:p-6 bg-app-surface/80"
     >
       <div className="flex items-center gap-3 mb-6">
-        <div className="p-2 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-lg">
-          <Brain className="w-5 h-5 text-purple-400" />
+        <div className="p-2 rounded-lg bg-app-bg/70 border border-app-border/60">
+          <Brain className="w-5 h-5 text-app-text" />
         </div>
         <div>
           <h3 className="text-lg font-semibold text-app-text">AI Goal Suggestions</h3>
@@ -35,13 +35,13 @@ export default function AISuggestionsPanel({ aiSuggestions, currentSuggestionInd
 
       <div className="space-y-4 mb-6">
         {aiSuggestions.length === 0 ? (
-          <div className="text-center py-12 bg-slate-800 light:bg-white/30 rounded-lg border border-slate-700 light:border-slate-300/40">
-            <Brain className="w-12 h-12 mx-auto mb-4 text-app-text-muted" />
+          <div className="text-center py-10 rounded-lg border border-app-border/70 bg-app-bg/70">
+            <Brain className="w-10 h-10 mx-auto mb-4 text-app-text-muted" />
             <p className="text-app-text-muted text-sm mb-4">Ready to get personalized goal suggestions?</p>
             <Button
               onClick={onGenerate}
               disabled={isGeneratingSuggestions}
-              className="mx-auto bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-app-text px-6 py-2"
+              className="mx-auto px-6 py-2"
             >
               {isGeneratingSuggestions ? (
                 <div className="flex items-center gap-2">
@@ -64,7 +64,7 @@ export default function AISuggestionsPanel({ aiSuggestions, currentSuggestionInd
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -20 }}
               transition={{ duration: 0.3 }}
-              className="bg-gradient-to-r from-slate-800/50 to-slate-700/50 border border-slate-600/50 rounded-xl p-6 hover:border-slate-500/60 transition-all duration-300"
+              className="border border-app-border/70 rounded-lg p-4 bg-app-bg/80"
             >
               <div className="flex items-start gap-4">
                 <div className="flex-1 min-w-0">
@@ -95,7 +95,7 @@ export default function AISuggestionsPanel({ aiSuggestions, currentSuggestionInd
                       className={`flex-shrink-0 w-2 h-2 rounded-full transition-all duration-200 ${
                         index === currentSuggestionIndex
                           ? 'bg-blue-500 w-4 sm:w-6'
-                          : 'bg-slate-600 hover:bg-slate-500'
+                          : 'bg-app-border hover:bg-blue-500/80'
                       }`}
                     />
                   ))}
@@ -119,7 +119,7 @@ export default function AISuggestionsPanel({ aiSuggestions, currentSuggestionInd
         <Button
           onClick={onGenerate}
           disabled={isGeneratingSuggestions}
-          className="w-full bg-gradient-to-r from-purple-500/10 to-pink-500/10 hover:from-purple-500/20 hover:to-pink-500/20 border border-purple-500/30 hover:border-purple-500/50 text-purple-300 hover:text-purple-200 transition-all duration-200"
+          className="w-full mt-2"
         >
           {isGeneratingSuggestions ? (
             <div className="flex items-center justify-center gap-2">

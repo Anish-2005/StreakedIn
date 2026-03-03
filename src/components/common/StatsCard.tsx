@@ -19,18 +19,29 @@ export default function StatsCard({
   className = ''
 }: StatsCardProps) {
   return (
-    <Card className={`clay-card rounded-[3.5rem] p-8 hover:scale-[1.05] active:scale-95 group cursor-pointer transition-all duration-300 ${className}`} variant="default">
-      <div className="flex items-center justify-between">
+    <Card
+      className={`p-4 sm:p-5 lg:p-6 cursor-default ${className}`}
+      variant="default"
+    >
+      <div className="flex items-start justify-between gap-4">
         <div className="flex-1 min-w-0">
-          <p className="text-app-text-muted text-[10px] font-black uppercase tracking-[0.2em] mb-1">{title}</p>
-          <p className="text-4xl font-black text-app-text tracking-tight">{value}</p>
+          <p className="text-xs font-medium text-app-text-muted mb-1">
+            {title}
+          </p>
+          <p className="text-2xl sm:text-3xl font-semibold text-app-text tracking-tight">
+            {value}
+          </p>
           {change && (
-            <div className={`mt-3 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest inline-flex items-center clay-pressed bg-opacity-20 ${color}`}>
+            <span
+              className={`inline-flex items-center mt-2 px-2.5 py-0.5 rounded-full text-[11px] font-medium border border-app-border/70 bg-app-surface/60 ${color}`}
+            >
               {change}
-            </div>
+            </span>
           )}
         </div>
-        <div className={`w-16 h-16 clay-button rounded-[1.5rem] flex items-center justify-center bg-app-surface shadow-inner-clay group-hover:scale-110 transition-transform ${color}`}>
+        <div
+          className={`flex-shrink-0 w-10 h-10 rounded-full border border-app-border/60 bg-app-surface/70 flex items-center justify-center ${color}`}
+        >
           {icon}
         </div>
       </div>
