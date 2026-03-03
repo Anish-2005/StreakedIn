@@ -10,7 +10,7 @@ export default function CTASection() {
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="bg-gradient-to-br from-blue-100/30 to-purple-100/30 dark:from-blue-500/10 dark:to-purple-600/10 backdrop-blur-md border border-purple-300/50 dark:border-slate-700/50 rounded-3xl p-12"
+          className="bg-app-surface/80 border border-app-border rounded-3xl p-10 sm:p-12"
         >
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
             Ready to Transform Your <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">Productivity</span>?
@@ -21,7 +21,7 @@ export default function CTASection() {
           <Button
             size="lg"
             animated
-            className="px-12 py-4 text-lg"
+            className="px-10 py-4 text-lg"
           >
             Start Free Trial
           </Button>

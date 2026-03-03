@@ -235,7 +235,7 @@ export default function Dashboard() {
               onTabChange={setActiveTab}
             />
 
-            <div className="clay-card rounded-[2.5rem] border-app-border/40 flex-1">
+            <div className="clay-card rounded-xl border-app-border/40 flex-1">
               <TabContainer
                 activeTab={activeTab}
                 setActiveTab={handleTabChange}

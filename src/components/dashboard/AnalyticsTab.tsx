@@ -127,10 +127,10 @@ export default function AnalyticsTab({}: AnalyticsTabProps) {
   };
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 6 }}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
-      className="space-y-6"
+      exit={{ opacity: 0, y: -4 }}
+      className="space-y-5"
     >
       {/* Analytics Header */}
       <div className="flex items-center justify-between">
@@ -138,12 +138,12 @@ export default function AnalyticsTab({}: AnalyticsTabProps) {
           <h1 className="text-2xl font-bold text-app-text">Productivity Analytics</h1>
           <p className="text-app-text-muted">Detailed insights into your performance and progress</p>
         </div>
-        <div className="flex space-x-3">
-          <button className="flex items-center space-x-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+        <div className="flex space-x-2">
+          <button className="flex items-center space-x-2 px-3 py-1.5 border border-app-border rounded-lg hover:bg-app-surface/60 transition-colors text-sm">
             <Download className="w-4 h-4" />
             <span>Export</span>
           </button>
-          <button className="flex items-center space-x-2 px-4 py-2 bg-[#0A66C2] text-app-text rounded-lg hover:bg-[#004182] transition-colors">
+          <button className="flex items-center space-x-2 px-3 py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-500 transition-colors text-sm">
             <Brain className="w-4 h-4" />
             <span>AI Analysis</span>
           </button>
@@ -180,7 +180,7 @@ export default function AnalyticsTab({}: AnalyticsTabProps) {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Productivity Trends */}
-        <div className="bg-slate-800 light:bg-white/30 backdrop-blur-md border border-slate-700 light:border-slate-300/50 rounded-xl p-6">
+        <div className="border border-app-border rounded-xl p-5 bg-app-surface/70">
           <h3 className="font-semibold text-app-text mb-4">Weekly Progress</h3>
           <div className="space-y-3">
             {getWeeklyProgress().map((day, index) => (
@@ -202,7 +202,7 @@ export default function AnalyticsTab({}: AnalyticsTabProps) {
         </div>
 
         {/* Goal Distribution */}
-        <div className="bg-slate-800 light:bg-white/30 backdrop-blur-md border border-slate-700 light:border-slate-300/50 rounded-xl p-6">
+        <div className="border border-app-border rounded-xl p-5 bg-app-surface/70">
           <h3 className="font-semibold text-app-text mb-4">Goals by Category</h3>
           <div className="space-y-3">
             {getGoalsByCategory().map((item, index) => (
@@ -229,7 +229,7 @@ export default function AnalyticsTab({}: AnalyticsTabProps) {
         </div>
 
         {/* Task Overview */}
-        <div className="bg-slate-800 light:bg-white/30 backdrop-blur-md border border-slate-700 light:border-slate-300/50 rounded-xl p-6">
+        <div className="border border-app-border rounded-xl p-5 bg-app-surface/70">
           <h3 className="font-semibold text-app-text mb-4">Task Overview</h3>
           <div className="space-y-4">
             <div className="flex justify-between items-center">
@@ -252,7 +252,7 @@ export default function AnalyticsTab({}: AnalyticsTabProps) {
         </div>
 
         {/* AI Insights */}
-        <div className="bg-slate-800 light:bg-white/30 backdrop-blur-md border border-slate-700 light:border-slate-300/50 rounded-xl p-6">
+        <div className="border border-app-border rounded-xl p-5 bg-app-surface/70">
           <h3 className="font-semibold text-app-text mb-4">AI Insights</h3>
           <div className="space-y-4">
             {getInsights().map((insight, index) => (

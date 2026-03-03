@@ -18,10 +18,10 @@ const paddingClasses = {
 };
 
 const variantClasses = {
-  default: 'clay-card rounded-[4rem] bg-app-surface border-app-border',
-  elevated: 'clay-card rounded-[4rem] bg-app-surface border-app-border shadow-2xl scale-[1.03] hover:scale-[1.05]',
-  outlined: 'clay-card rounded-[4rem] bg-transparent border-4 border-app-border bg-opacity-5 backdrop-blur-sm',
-  glass: 'clay-card rounded-[4rem] bg-app-glass backdrop-blur-3xl border-app-border'
+  default: 'clay-card rounded-xl bg-app-surface border-app-border',
+  elevated: 'clay-card rounded-xl bg-app-surface border-app-border',
+  outlined: 'clay-card rounded-xl bg-transparent border border-app-border bg-opacity-60 backdrop-blur-sm',
+  glass: 'clay-card rounded-xl bg-app-glass backdrop-blur-xl border-app-border'
 };
 
 export default function Card({
@@ -32,9 +32,9 @@ export default function Card({
   variant = 'default',
   animated = false
 }: CardProps) {
-  const baseClasses = 'rounded-[3rem] transition-all duration-300 will-change-transform';
+  const baseClasses = 'rounded-xl transition-all duration-200';
   const hoverClasses = hover
-    ? 'hover:-translate-y-1 hover:shadow-xl'
+    ? 'hover:shadow-lg'
     : '';
   const combinedClasses = `${baseClasses} ${variantClasses[variant]} ${paddingClasses[padding]} ${hoverClasses} ${className}`;
 

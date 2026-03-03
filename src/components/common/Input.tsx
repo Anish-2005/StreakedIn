@@ -19,11 +19,12 @@ interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement
   error?: string;
 }
 
-const baseClasses = "w-full px-5 py-4 clay-pressed rounded-2xl bg-app-surface text-app-text placeholder-app-text-muted focus:outline-none focus:ring-4 focus:ring-blue-500/20 transition-all duration-300 border-2 border-app-border/40 hover:border-app-border disabled:opacity-50 disabled:cursor-not-allowed";
+const baseClasses =
+  "w-full px-4 py-3 rounded-xl bg-app-surface/70 text-app-text placeholder-app-text-muted border border-app-border focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500/40 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed";
 
 const variantClasses: Record<'default' | 'filled' | 'error', string> = {
-  default: "shadow-inner-clay",
-  filled: "bg-app-surface/40 border-transparent",
+  default: "",
+  filled: "bg-app-surface/80 border-transparent",
   error: "border-red-500/50 focus:ring-red-500/20 shadow-[inset_0_0_10px_rgba(239,68,68,0.1)]",
 };
 

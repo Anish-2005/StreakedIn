@@ -65,10 +65,10 @@ export default function OverviewTab({ setActiveTab }: OverviewTabProps) {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 6 }}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
-      className="space-y-6"
+      exit={{ opacity: 0, y: -4 }}
+      className="space-y-5"
     >
       {/* Stats Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
@@ -131,28 +131,42 @@ export default function OverviewTab({ setActiveTab }: OverviewTabProps) {
               </div>
             ) : (
               goals.slice(0, 4).map((goal) => (
-                <div key={goal.id} className="clay-card rounded-[2.5rem] p-6 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer bg-opacity-40">
+                <div
+                  key={goal.id}
+                  className="rounded-2xl border border-app-border/50 bg-app-surface/70 p-5 hover:bg-app-surface/80 transition-colors cursor-pointer"
+                >
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex-1 min-w-0">
-                      <h3 className="font-black text-app-text text-xl mb-1 truncate">{goal.title}</h3>
-                      <div className="flex items-center gap-4 text-xs font-bold uppercase tracking-wider text-app-text-muted">
+                      <h3 className="font-semibold text-app-text text-base mb-1 truncate">
+                        {goal.title}
+                      </h3>
+                      <div className="flex items-center gap-3 text-[11px] font-medium text-app-text-muted">
                         <span className="flex items-center gap-1.5">
                           <Clock className="w-3.5 h-3.5" />
                           {goal.deadline ? new Date(goal.deadline).toLocaleDateString() : 'Active'}
                         </span>
-                        <span className="px-2.5 py-1 bg-app-bg rounded-lg shadow-inner-clay">
+                        <span className="px-2 py-0.5 rounded-full border border-app-border/60 text-xs">
                           {goal.category}
                         </span>
                       </div>
                     </div>
                     <div className="text-right ml-4">
-                      <div className="text-3xl font-black text-blue-500">{goal.progress}%</div>
-                      <div className="text-[10px] font-bold uppercase tracking-widest text-app-text-muted">Progress</div>
+                      <div className="text-xl font-semibold text-blue-400">
+                        {goal.progress}%
+                      </div>
+                      <div className="text-[11px] font-medium text-app-text-muted">
+                        Progress
+                      </div>
                     </div>
                   </div>
-                  <ProgressBar value={goal.progress} className="w-full h-3 rounded-full overflow-hidden shadow-inner-clay" />
+                  <ProgressBar
+                    value={goal.progress}
+                    className="w-full h-2 rounded-full overflow-hidden"
+                  />
                   {goal.description && (
-                    <p className="text-app-text-muted text-sm mt-4 line-clamp-2 italic">"{goal.description}"</p>
+                    <p className="text-app-text-muted text-sm mt-3 line-clamp-2">
+                      {goal.description}
+                    </p>
                   )}
                 </div>
               ))
@@ -194,10 +208,13 @@ export default function OverviewTab({ setActiveTab }: OverviewTabProps) {
                   .sort((a, b) => new Date(b.updatedAt || b.createdAt).getTime() - new Date(a.updatedAt || a.createdAt).getTime())
                   .slice(0, 3)
                   .map((goal) => (
-                    <div key={goal.id} className="dark:bg-green-500/10 light:bg-green-50/70 dark:border light:border dark:border-green-500/30 light:border-green-300/50 rounded-xl p-4">
+                    <div
+                      key={goal.id}
+                      className="rounded-xl border border-app-border/60 bg-app-surface/70 p-4"
+                    >
                       <div className="flex items-center gap-3 mb-2">
-                        <div className="w-10 h-10 dark:bg-green-500/20 light:bg-green-200/60 rounded-full flex items-center justify-center">
-                          <CheckCircle className="w-5 h-5 dark:text-green-400 light:text-green-600" />
+                        <div className="w-9 h-9 bg-green-500/10 rounded-full flex items-center justify-center">
+                          <CheckCircle className="w-4 h-4 text-green-400" />
                         </div>
                         <div className="flex-1 min-w-0">
                           <h3 className="font-semibold text-app-text truncate">{goal.title}</h3>
@@ -225,20 +242,22 @@ export default function OverviewTab({ setActiveTab }: OverviewTabProps) {
           {/* Quick Actions */}
           <Card>
             <h2 className="text-xl font-semibold text-app-text mb-6">Quick Actions</h2>
-            <div className="grid grid-cols-2 gap-4 mb-6">
-              {[
-                { icon: <Plus className="w-6 h-6" />, label: 'Create Goal', action: () => setActiveTab('goals'), color: 'from-blue-500 to-blue-600' },
-                { icon: <Clock className="w-6 h-6" />, label: 'Reminder', action: () => setActiveTab('reminders'), color: 'from-orange-500 to-orange-600' },
-                { icon: <Brain className="w-6 h-6" />, label: 'AI Pilot', action: () => setActiveTab('ai-assistant'), color: 'from-purple-500 to-purple-600' },
-                { icon: <TrendingUp className="w-6 h-6" />, label: 'Analytics', action: () => setActiveTab('analytics'), color: 'from-green-500 to-green-600' }
-              ].map((action, index) => (
+            <div className="grid grid-cols-2 gap-3 mb-4">
+                {[
+                  { icon: <Plus className="w-5 h-5" />, label: 'Create Goal', action: () => setActiveTab('goals') },
+                  { icon: <Clock className="w-5 h-5" />, label: 'Reminder', action: () => setActiveTab('reminders') },
+                  { icon: <Brain className="w-5 h-5" />, label: 'AI Pilot', action: () => setActiveTab('ai-assistant') },
+                  { icon: <TrendingUp className="w-5 h-5" />, label: 'Analytics', action: () => setActiveTab('analytics') }
+                ].map((action, index) => (
                 <button
                   key={index}
-                  className={`w-full h-24 flex flex-col gap-2 items-center justify-center clay-button bg-gradient-to-br ${action.color} text-white border-0`}
+                    className="w-full h-20 flex flex-col gap-2 items-center justify-center rounded-xl border border-app-border/60 bg-app-surface/60 hover:bg-app-surface/80 transition-colors"
                   onClick={action.action}
                 >
                   {action.icon}
-                  <span className="text-xs font-black uppercase tracking-widest">{action.label}</span>
+                  <span className="text-xs font-medium text-app-text">
+                      {action.label}
+                    </span>
                 </button>
               ))}
             </div>

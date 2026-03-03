@@ -77,33 +77,25 @@ export default function HeroSection() {
             transition={{ delay: 0.7, duration: 0.8 }}
             className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-8"
           >
-            <motion.div
-              whileHover={{ scale: 1.05, boxShadow: "0 20px 40px -10px rgba(59, 130, 246, 0.4)" }}
-              whileTap={{ scale: 0.95 }}
+            <Button
+              variant="primary"
+              size="lg"
+              className="px-8 py-4"
+              icon={<ArrowRight className="w-5 h-5" />}
+              animated
             >
-              <Button
-                variant="primary"
-                size="lg"
-                className="px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-600 hover:shadow-2xl hover:shadow-blue-500/25"
-                icon={<ArrowRight className="w-5 h-5" />}
-              >
-                Start Your Journey
-              </Button>
-            </motion.div>
+              Start Your Journey
+            </Button>
 
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+            <Button
+              variant="outline"
+              size="lg"
+              className="px-8 py-4"
+              icon={<Play className="w-5 h-5" />}
+              animated
             >
-              <Button
-                variant="outline"
-                size="lg"
-                className="px-8 py-4 bg-gray-100/50 dark:bg-slate-800/50 backdrop-blur-sm dark:backdrop-blur-md border-gray-300/50 dark:border-slate-700/50 hover:bg-gray-200/50 dark:hover:bg-slate-700/50"
-                icon={<Play className="w-5 h-5" />}
-              >
-                Watch Demo
-              </Button>
-            </motion.div>
+              Watch Demo
+            </Button>
           </motion.div>
 
           {/* Stats */}

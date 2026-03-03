@@ -12,11 +12,16 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const variantClasses = {
-  primary: 'clay-button rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 text-white shadow-blue-500/20 hover:scale-105 active:scale-95 transition-all',
-  secondary: 'clay-button rounded-2xl bg-app-surface text-app-text border-app-border hover:bg-opacity-80',
-  outline: 'clay-button rounded-2xl border-2 border-app-border text-app-text-muted hover:border-blue-500 hover:text-blue-500 bg-transparent',
-  ghost: 'rounded-2xl text-app-text-muted hover:text-app-text hover:bg-app-surface/50 border-transparent transition-colors',
-  danger: 'clay-button rounded-2xl bg-gradient-to-br from-red-500 to-pink-500 text-white shadow-red-500/20'
+  primary:
+    'bg-blue-600 text-white border-transparent hover:bg-blue-500 active:bg-blue-600 shadow-sm hover:shadow-md',
+  secondary:
+    'bg-app-surface text-app-text border border-app-border hover:bg-app-surface/80',
+  outline:
+    'bg-transparent border border-app-border text-app-text hover:bg-app-surface/40',
+  ghost:
+    'bg-transparent border-transparent text-app-text-muted hover:text-app-text hover:bg-app-surface/30',
+  danger:
+    'bg-red-500 text-white border-transparent hover:bg-red-600'
 };
 
 const sizeClasses = {
@@ -38,7 +43,7 @@ export default function Button({
   ...props
 }: ButtonProps) {
   const baseClasses =
-    'rounded-2xl font-semibold tracking-wide transition-all duration-200 flex items-center justify-center gap-2 border focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400/70 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent disabled:opacity-50 disabled:cursor-not-allowed';
+    'rounded-2xl font-semibold tracking-wide transition-colors duration-200 flex items-center justify-center gap-2 border focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400/70 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent disabled:opacity-50 disabled:cursor-not-allowed';
   const widthClass = fullWidth ? 'w-full' : '';
   const combinedClasses = `${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${widthClass} ${className}`;
 
