@@ -1,50 +1,41 @@
 "use client";
 
-import React, { useRef } from "react";
+import React from "react";
 import { useTheme } from "../../contexts/ThemeContext";
 import { Sun, Moon } from "lucide-react";
 
 export default function ThemeToggle() {
   const { theme, toggleTheme } = useTheme();
-  const buttonRef = useRef<HTMLButtonElement>(null);
 
   const handleToggle = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const button = buttonRef.current;
-    if (!button) return;
+    // Create smooth fade overlay
+    const overlay = document.createElement("div");
+    overlay.className = "theme-transition-overlay";
+    document.body.appendChild(overlay);
 
-    // Get button position relative to viewport
-    const rect = button.getBoundingClientRect();
-    const x = rect.left + rect.width / 2;
-    const y = rect.top + rect.height / 2;
+    // Fade in
+    requestAnimationFrame(() => {
+      overlay.style.opacity = "1";
+    });
 
-    // Calculate distance to cover the entire screen from button position
-    const maxDistance = Math.max(
-      Math.hypot(x, y),
-      Math.hypot(window.innerWidth - x, y),
-      Math.hypot(x, window.innerHeight - y),
-      Math.hypot(window.innerWidth - x, window.innerHeight - y)
-    ) + 100; // Add buffer to ensure full coverage
-
-    // Create ripple element
-    const ripple = document.createElement("div");
-    ripple.className = "theme-ripple";
-    ripple.style.setProperty("--ripple-x", `${x}px`);
-    ripple.style.setProperty("--ripple-y", `${y}px`);
-    ripple.style.setProperty("--max-distance", `${maxDistance}px`);
-    document.body.appendChild(ripple);
-
-    // Trigger theme change
-    toggleTheme();
-
-    // Remove ripple after animation completes
+    // Switch theme at midpoint
     setTimeout(() => {
-      ripple.remove();
-    }, 900);
+      toggleTheme();
+    }, 250);
+
+    // Fade out and cleanup
+    setTimeout(() => {
+      overlay.style.opacity = "0";
+    }, 250);
+
+    // Remove overlay after animation
+    setTimeout(() => {
+      overlay.remove();
+    }, 500);
   };
 
   return (
     <button
-      ref={buttonRef}
       onClick={handleToggle}
       className="relative p-2.5 rounded-lg transition-all duration-600 ease-in-out bg-app-bg hover:bg-app-bg/80 text-app-text-muted hover:text-app-text border border-app-border/30 overflow-hidden"
       aria-label="Toggle theme"

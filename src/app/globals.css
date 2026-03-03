@@ -15,26 +15,25 @@
   --animate-blob: blob 12s infinite;
 }
 
-@keyframes theme-ripple {
-  0% {
-    clip-path: circle(0px at var(--ripple-x, 50%) var(--ripple-y, 50%));
-    opacity: 1;
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    backdrop-filter: blur(0px);
   }
-  100% {
-    clip-path: circle(var(--max-distance, 150vmax) at var(--ripple-x, 50%) var(--ripple-y, 50%));
+  to {
     opacity: 1;
+    backdrop-filter: blur(8px);
   }
 }
 
-@keyframes theme-ripple-glow {
-  0% {
-    box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.4);
+@keyframes fade-out {
+  from {
+    opacity: 1;
+    backdrop-filter: blur(8px);
   }
-  50% {
-    box-shadow: 0 0 40px 20px rgba(56, 189, 248, 0.1);
-  }
-  100% {
-    box-shadow: 0 0 80px 40px rgba(56, 189, 248, 0);
+  to {
+    opacity: 0;
+    backdrop-filter: blur(0px);
   }
 }
 
@@ -71,13 +70,13 @@
 }
 
 :root {
-  /* Default Theme: Dark - Bold Clay */
-  --app-bg: #080c14;
-  --app-surface: #161b2b;
+  /* Default Theme: Dark Purple */
+  --app-bg: #1a0a2e;
+  --app-surface: #382454;
   --app-text: #f1f5f9;
-  --app-text-muted: #64748b;
-  --app-border: rgba(255, 255, 255, 0.08);
-  --app-glass: rgba(22, 27, 43, 0.7);
+  --app-text-muted: #9370a8;
+  --app-border: rgba(147, 112, 168, 0.12);
+  --app-glass: rgba(56, 36, 84, 0.7);
 
   /* Bold Clay Shadows - Dark */
   --clay-shadow-outer: 12px 12px 24px rgba(0, 0, 0, 0.5), -4px -4px 12px rgba(255, 255, 255, 0.03);
@@ -86,13 +85,13 @@
 }
 
 .light {
-  /* Theme Override: Bold Light Clay */
-  --app-bg: #e2e8f0;
-  --app-surface: #f1f5f9;
-  --app-text: #0f172a;
-  --app-text-muted: #475569;
-  --app-border: rgba(255, 255, 255, 0.8);
-  --app-glass: rgba(241, 245, 249, 0.8);
+  /* Theme Override: Light Purple */
+  --app-bg: #ede9f6;
+  --app-surface: #f8f5ff;
+  --app-text: #2d1b4e;
+  --app-text-muted: #8b6dad;
+  --app-border: rgba(147, 112, 168, 0.3);
+  --app-glass: rgba(248, 245, 255, 0.8);
 
   /* Bold Clay Shadows - Light */
   --clay-shadow-outer: 16px 16px 32px rgba(100, 116, 139, 0.15), -8px -8px 24px rgba(255, 255, 255, 0.9);
@@ -155,7 +154,7 @@
   html {
     scroll-behavior: smooth;
     font-family: 'Outfit', 'Inter', system-ui, sans-serif;
-    transition: background-color 900ms cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: background-color 600ms cubic-bezier(0.4, 0.25, 0.46, 0.88);
   }
 
   body {
@@ -166,42 +165,37 @@
       radial-gradient(circle at 50% 50%, rgba(15, 23, 42, 0.9), transparent 70%);
     background-attachment: fixed;
     color: var(--app-text);
-    animation: theme-transition 900ms cubic-bezier(0.34, 1.56, 0.64, 1);
+    animation: theme-transition 500ms cubic-bezier(0.4, 0.25, 0.46, 0.88);
     transition-property: background-color, background-image, color, border-color, box-shadow, fill, stroke;
-    transition-duration: 900ms;
-    transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition-duration: 600ms;
+    transition-timing-function: cubic-bezier(0.4, 0.25, 0.46, 0.88);
   }
 
   * {
     transition-property: background-color, border-color, color, fill, stroke, box-shadow, opacity;
-    transition-duration: 900ms;
-    transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition-duration: 600ms;
+    transition-timing-function: cubic-bezier(0.4, 0.25, 0.46, 0.88);
   }
 }
 
 /* ============================= */
-/* Theme Ripple - Circular Reveal */
+/* Professional Theme Transition Overlay */
 /* ============================= */
 
-.theme-ripple {
+.theme-transition-overlay {
   position: fixed;
-  pointer-events: none;
   inset: 0;
   width: 100vw;
   height: 100vh;
-  background: linear-gradient(
-    135deg,
-    var(--app-bg) 0%,
-    var(--app-surface) 50%,
-    var(--app-bg) 100%
-  );
+  background: var(--app-surface);
   backdrop-filter: blur(0px);
   -webkit-backdrop-filter: blur(0px);
-  animation: 
-    theme-ripple 900ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards,
-    theme-ripple-glow 900ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  opacity: 0;
+  transition: opacity 250ms cubic-bezier(0.4, 0.25, 0.46, 0.88), 
+              backdrop-filter 250ms cubic-bezier(0.4, 0.25, 0.46, 0.88),
+              -webkit-backdrop-filter 250ms cubic-bezier(0.4, 0.25, 0.46, 0.88);
   z-index: 9999;
-  box-shadow: inset 0 0 100px rgba(255, 255, 255, 0.05);
+  pointer-events: none;
 }
 
 /* ============================= */
@@ -214,7 +208,7 @@
 
 ::-webkit-scrollbar-track {
   background: var(--app-bg);
-  transition: background-color 900ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: background-color 600ms cubic-bezier(0.4, 0.25, 0.46, 0.88);
 }
 
 ::-webkit-scrollbar-thumb {
@@ -222,7 +216,7 @@
   border-radius: 20px;
   border: 2px solid var(--app-bg);
   box-shadow: var(--clay-shadow-inner);
-  transition: background-color 900ms cubic-bezier(0.34, 1.56, 0.64, 1), border-color 900ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: background-color 600ms cubic-bezier(0.4, 0.25, 0.46, 0.88), border-color 600ms cubic-bezier(0.4, 0.25, 0.46, 0.88);
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -239,14 +233,14 @@
 
 .chat-scrollbar::-webkit-scrollbar-track {
   background: transparent;
-  transition: background-color 900ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: background-color 600ms cubic-bezier(0.4, 0.25, 0.46, 0.88);
 }
 
 .chat-scrollbar::-webkit-scrollbar-thumb {
   background: var(--app-border);
   border-radius: 10px;
   border: 1px solid var(--app-border);
-  transition: background-color 900ms cubic-bezier(0.34, 1.56, 0.64, 1), border-color 900ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: background-color 600ms cubic-bezier(0.4, 0.25, 0.46, 0.88), border-color 600ms cubic-bezier(0.4, 0.25, 0.46, 0.88);
 }
 
 .chat-scrollbar::-webkit-scrollbar-thumb:hover {

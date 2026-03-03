@@ -37,19 +37,24 @@ export default function TestimonialsSection() {
   }, []);
 
   return (
-    <section id="testimonials" className="py-20 bg-gray-100/50 dark:bg-slate-800/20">
+    <section id="testimonials" className="py-32 bg-app-bg/50 transition-colors duration-600">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="text-center mb-16"
+          viewport={{ once: true }}
+          className="text-center mb-20"
         >
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
-            Trusted by <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">Professionals</span>
+          <h2 className="text-5xl md:text-6xl font-bold text-app-text mb-6 transition-colors duration-600">
+            Trusted by
+            <br />
+            <span className="bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
+              Professionals Worldwide
+            </span>
           </h2>
-          <p className="text-xl dark:text-slate-300 light:text-gray-700 max-w-3xl mx-auto">
-            Join thousands of professionals who have transformed their productivity with StreakedIn.
+          <p className="text-xl text-app-text-muted max-w-3xl mx-auto transition-colors duration-600 font-medium">
+            Join thousands of professionals who have transformed their productivity and achieved more.
           </p>
         </motion.div>
 
@@ -57,31 +62,38 @@ export default function TestimonialsSection() {
           <AnimatePresence mode="wait">
             <motion.div
               key={activeTestimonial}
-              initial={{ opacity: 0, x: 50 }}
+              initial={{ opacity: 0, x: 100 }}
               animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -50 }}
-              transition={{ duration: 0.5 }}
-              className="bg-white/50 dark:bg-slate-800/30 backdrop-blur-md border border-gray-300/50 dark:border-slate-700/50 rounded-2xl p-8"
+              exit={{ opacity: 0, x: -100 }}
+              transition={{ duration: 0.6 }}
+              className="bg-app-surface/60 backdrop-blur-lg border border-app-border/40 rounded-3xl p-12 sm:p-16"
             >
-              <div className="flex items-start space-x-6">
+              <div className="flex flex-col items-center space-y-8 text-center">
+                {/* Avatar */}
                 <div className="flex-shrink-0">
-                  <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white light:text-slate-900 font-semibold text-lg">
+                  <div className="w-20 h-20 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center text-white font-bold text-2xl shadow-lg">
                     {testimonials[activeTestimonial].name.split(' ').map(n => n[0]).join('')}
                   </div>
                 </div>
-                <div className="flex-1">
-                  <div className="flex items-center mb-4">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
-                    ))}
-                  </div>
-                  <p className="text-lg text-gray-800 dark:text-slate-200 mb-4 italic">
+
+                {/* Rating */}
+                <div className="flex items-center justify-center gap-1">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
+                  ))}
+                </div>
+
+                {/* Testimonial */}
+                <div className="space-y-6">
+                  <p className="text-2xl leading-relaxed text-app-text/90 italic font-medium transition-colors duration-600">
                     "{testimonials[activeTestimonial].content}"
                   </p>
                   <div>
-                    <div className="font-semibold text-gray-900 dark:text-white">{testimonials[activeTestimonial].name}</div>
-                    <div className="text-gray-600 dark:text-slate-400">
-                      {testimonials[activeTestimonial].role}, {testimonials[activeTestimonial].company}
+                    <div className="font-bold text-lg text-app-text transition-colors duration-600">
+                      {testimonials[activeTestimonial].name}
+                    </div>
+                    <div className="text-app-text-muted font-medium transition-colors duration-600">
+                      {testimonials[activeTestimonial].role} at {testimonials[activeTestimonial].company}
                     </div>
                   </div>
                 </div>
@@ -90,15 +102,17 @@ export default function TestimonialsSection() {
           </AnimatePresence>
 
           {/* Testimonial Indicators */}
-          <div className="flex justify-center space-x-3 mt-8">
+          <div className="flex justify-center gap-3 mt-12">
             {testimonials.map((_, index) => (
-              <button
+              <motion.button
                 key={index}
                 onClick={() => setActiveTestimonial(index)}
-                className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                whileHover={{ scale: 1.2 }}
+                whileTap={{ scale: 0.95 }}
+                className={`transition-all duration-600 ${
                   index === activeTestimonial
-                    ? 'bg-blue-500 w-8'
-                    : 'bg-gray-400 hover:bg-gray-500 dark:bg-slate-600 dark:hover:bg-slate-500'
+                    ? 'bg-gradient-to-r from-purple-500 to-blue-500 w-8 h-3 rounded-full'
+                    : 'bg-app-border hover:bg-app-text-muted w-3 h-3 rounded-full'
                 }`}
               />
             ))}
