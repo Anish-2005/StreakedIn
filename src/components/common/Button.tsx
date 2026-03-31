@@ -13,21 +13,21 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variantClasses = {
   primary:
-    'bg-blue-600 text-white border-transparent hover:bg-blue-500 active:bg-blue-600 shadow-sm hover:shadow-md',
+    'bg-app-primary text-white border-transparent hover:brightness-110 shadow-[0_10px_22px_rgba(37,99,235,0.34)]',
   secondary:
-    'bg-app-surface text-app-text border border-app-border hover:bg-app-surface/80',
+    'bg-app-surface-strong text-app-text border border-app-border hover:border-app-border-strong',
   outline:
-    'bg-transparent border border-app-border text-app-text hover:bg-app-surface/40',
+    'bg-transparent border border-app-border text-app-text hover:bg-app-surface/45 hover:border-app-border-strong',
   ghost:
-    'bg-transparent border-transparent text-app-text-muted hover:text-app-text hover:bg-app-surface/30',
+    'bg-transparent border-transparent text-app-text-muted hover:text-app-text hover:bg-app-surface/35',
   danger:
-    'bg-red-500 text-white border-transparent hover:bg-red-600'
+    'bg-app-danger text-white border-transparent hover:brightness-110 shadow-[0_10px_22px_rgba(220,38,38,0.28)]'
 };
 
 const sizeClasses = {
-  sm: 'px-3 py-1.5 text-sm',
-  md: 'px-4 py-2 text-base',
-  lg: 'px-6 py-3 text-lg'
+  sm: 'px-3.5 py-2 text-sm',
+  md: 'px-4.5 py-2.5 text-sm',
+  lg: 'px-6 py-3 text-base'
 };
 
 export default function Button({
@@ -43,7 +43,7 @@ export default function Button({
   ...props
 }: ButtonProps) {
   const baseClasses =
-    'rounded-2xl font-semibold tracking-wide transition-colors duration-200 flex items-center justify-center gap-2 border focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400/70 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent disabled:opacity-50 disabled:cursor-not-allowed';
+    'clay-button font-semibold transition-all duration-200 flex items-center justify-center gap-2 border whitespace-nowrap focus:outline-none focus-visible:ring-2 focus-visible:ring-app-primary/45 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent disabled:opacity-55 disabled:cursor-not-allowed disabled:shadow-none';
   const widthClass = fullWidth ? 'w-full' : '';
   const combinedClasses = `${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${widthClass} ${className}`;
 
@@ -62,8 +62,8 @@ export default function Button({
       <motion.button
         className={combinedClasses}
         disabled={disabled || loading}
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.98 }}
+        whileHover={{ scale: 1.015 }}
+        whileTap={{ scale: 0.985 }}
         {...(props as any)}
       >
         {buttonContent}

@@ -6,22 +6,22 @@ interface CardProps {
   className?: string;
   hover?: boolean;
   padding?: 'none' | 'sm' | 'md' | 'lg';
-  variant?: 'default' | 'elevated' | 'outlined';
+  variant?: 'default' | 'elevated' | 'outlined' | 'glass';
   animated?: boolean;
 }
 
 const paddingClasses = {
   none: '',
   sm: 'p-4',
-  md: 'p-6',
-  lg: 'p-8'
+  md: 'p-5 sm:p-6',
+  lg: 'p-6 sm:p-8'
 };
 
 const variantClasses = {
-  default: 'clay-card rounded-xl bg-app-surface border-app-border',
-  elevated: 'clay-card rounded-xl bg-app-surface border-app-border',
-  outlined: 'clay-card rounded-xl bg-transparent border border-app-border bg-opacity-60 backdrop-blur-sm',
-  glass: 'clay-card rounded-xl bg-app-glass backdrop-blur-xl border-app-border'
+  default: 'clay-card bg-app-surface border-app-border',
+  elevated: 'clay-card bg-app-surface-strong border-app-border shadow-[0_18px_34px_rgba(2,6,23,0.2)]',
+  outlined: 'bg-transparent border border-app-border rounded-2xl',
+  glass: 'clay-card bg-app-glass backdrop-blur-xl border-app-border'
 };
 
 export default function Card({
@@ -32,9 +32,9 @@ export default function Card({
   variant = 'default',
   animated = false
 }: CardProps) {
-  const baseClasses = 'rounded-xl transition-all duration-200';
+  const baseClasses = 'rounded-2xl transition-all duration-200';
   const hoverClasses = hover
-    ? 'hover:shadow-lg'
+    ? 'hover:-translate-y-0.5 hover:border-app-border-strong'
     : '';
   const combinedClasses = `${baseClasses} ${variantClasses[variant]} ${paddingClasses[padding]} ${hoverClasses} ${className}`;
 
