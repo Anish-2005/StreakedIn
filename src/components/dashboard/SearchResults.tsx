@@ -31,7 +31,7 @@ export default function SearchResults({
   if (!searchQuery) return null;
 
   return (
-    <div className="px-4 sm:px-6 py-4 dark:border-b dark:border-slate-700/50 light:border-b light:border-gray-200 dark:bg-slate-800/20 light:bg-gray-100/20">
+    <div className="px-4 sm:px-6 py-4 border-b border-app-border/70 bg-app-surface/35">
       <div className="max-w-4xl">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-semibold text-app-text">
@@ -39,7 +39,7 @@ export default function SearchResults({
           </h2>
           <button
             onClick={onClearSearch}
-            className="text-app-text-muted dark:hover:text-white light:hover:text-gray-900 text-sm"
+            className="text-app-text-muted hover:text-app-text text-sm"
           >
             Clear
           </button>
@@ -47,23 +47,22 @@ export default function SearchResults({
 
         {isSearching ? (
           <div className="text-center py-8">
-            <div className="animate-spin rounded-full h-6 w-6 dark:border-b-2 light:border-b-2 dark:border-blue-500 light:border-blue-600 mx-auto"></div>
+            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-app-primary mx-auto"></div>
             <p className="text-app-text-muted mt-2">Searching...</p>
           </div>
         ) : (
           <div className="space-y-6">
-            {/* Goals Results */}
             {searchResults.goals.length > 0 && (
               <div>
-                <h3 className="text-md font-medium dark:text-blue-300 light:text-blue-600 mb-3 flex items-center gap-2">
-                  <span className="w-2 h-2 dark:bg-blue-500 light:bg-blue-600 rounded-full"></span>
+                <h3 className="text-md font-medium text-app-primary mb-3 flex items-center gap-2">
+                  <span className="w-2 h-2 bg-app-primary rounded-full"></span>
                   Goals ({searchResults.goals.length})
                 </h3>
                 <div className="space-y-2">
                   {searchResults.goals.slice(0, 5).map((goal) => (
                     <div
                       key={goal.id}
-                      className="p-3 dark:bg-slate-800/40 light:bg-white/60 rounded-lg dark:border dark:border-slate-700/40 light:border light:border-gray-300/40 dark:hover:border-slate-600/60 light:hover:border-gray-400/60 transition-colors cursor-pointer"
+                      className="p-3 bg-app-surface rounded-xl border border-app-border hover:border-app-border-strong transition-colors cursor-pointer"
                       onClick={() => onTabChange('goals')}
                     >
                       <div className="flex items-center justify-between">
@@ -72,10 +71,10 @@ export default function SearchResults({
                           <p className="text-sm text-app-text-muted truncate">{goal.description || 'No description'}</p>
                         </div>
                         <div className="flex items-center gap-2 ml-4">
-                          <span className="px-2 py-1 dark:bg-blue-500/20 light:bg-blue-100 dark:text-blue-300 light:text-blue-700 text-xs rounded-full">
+                          <span className="px-2 py-1 bg-app-primary-soft text-app-primary text-xs rounded-full border border-app-primary/20">
                             {goal.category}
                           </span>
-                          <span className="text-xs dark:text-slate-500 light:text-gray-500">
+                          <span className="text-xs text-app-text-muted">
                             {goal.progress}%
                           </span>
                         </div>
@@ -86,18 +85,17 @@ export default function SearchResults({
               </div>
             )}
 
-            {/* Tasks Results */}
             {searchResults.tasks.length > 0 && (
               <div>
-                <h3 className="text-md font-medium dark:text-green-300 light:text-green-600 mb-3 flex items-center gap-2">
-                  <span className="w-2 h-2 dark:bg-green-500 light:bg-green-600 rounded-full"></span>
+                <h3 className="text-md font-medium text-app-success mb-3 flex items-center gap-2">
+                  <span className="w-2 h-2 bg-app-success rounded-full"></span>
                   Tasks ({searchResults.tasks.length})
                 </h3>
                 <div className="space-y-2">
                   {searchResults.tasks.slice(0, 5).map((task) => (
                     <div
                       key={task.id}
-                      className="p-3 dark:bg-slate-800/40 light:bg-white/60 rounded-lg dark:border dark:border-slate-700/40 light:border light:border-gray-300/40 dark:hover:border-slate-600/60 light:hover:border-gray-400/60 transition-colors cursor-pointer"
+                      className="p-3 bg-app-surface rounded-xl border border-app-border hover:border-app-border-strong transition-colors cursor-pointer"
                       onClick={() => onTabChange('tasks')}
                     >
                       <div className="flex items-center justify-between">
@@ -106,15 +104,17 @@ export default function SearchResults({
                           <p className="text-sm text-app-text-muted truncate">{task.description || 'No description'}</p>
                         </div>
                         <div className="flex items-center gap-2 ml-4">
-                          <span className={`px-2 py-1 text-xs rounded-full ${
-                            task.priority === 'high' ? 'dark:bg-red-500/20 light:bg-red-100 dark:text-red-300 light:text-red-700' :
-                            task.priority === 'medium' ? 'dark:bg-yellow-500/20 light:bg-yellow-100 dark:text-yellow-300 light:text-yellow-700' :
-                            'dark:bg-green-500/20 light:bg-green-100 dark:text-green-300 light:text-green-700'
+                          <span className={`px-2 py-1 text-xs rounded-full border ${
+                            task.priority === 'high'
+                              ? 'bg-app-danger/15 text-app-danger border-app-danger/25'
+                              : task.priority === 'medium'
+                                ? 'bg-app-warning/15 text-app-warning border-app-warning/25'
+                                : 'bg-app-success/15 text-app-success border-app-success/25'
                           }`}>
                             {task.priority}
                           </span>
-                          <span className={`text-xs ${task.completed ? 'dark:text-green-400 light:text-green-600' : 'dark:text-slate-500 light:text-gray-500'}`}>
-                            {task.completed ? '✓' : '○'}
+                          <span className={`text-xs ${task.completed ? 'text-app-success' : 'text-app-text-muted'}`}>
+                            {task.completed ? 'done' : 'open'}
                           </span>
                         </div>
                       </div>
@@ -124,11 +124,10 @@ export default function SearchResults({
               </div>
             )}
 
-            {/* No Results */}
             {searchResults.goals.length === 0 && searchResults.tasks.length === 0 && !isSearching && (
               <div className="text-center py-8">
                 <p className="text-app-text-muted">No results found for "{searchQuery}"</p>
-                <p className="dark:text-slate-500 light:text-gray-400 text-sm mt-1">Try searching for goals, tasks, or categories</p>
+                <p className="text-app-text-muted/70 text-sm mt-1">Try searching for goals, tasks, or categories</p>
               </div>
             )}
           </div>

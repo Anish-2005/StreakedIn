@@ -10,7 +10,7 @@ interface NavigationProps {
   setIsMenuOpen: (open: boolean) => void;
 }
 
-const navigationItems = ['Features', 'How It Works', 'Testimonials'];
+const navigationItems = ['Features', 'Testimonials', 'Get Started'];
 
 export default function Navigation({ isMenuOpen, setIsMenuOpen }: NavigationProps) {
   return (

@@ -34,19 +34,19 @@ export default function AIPromptModal({
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.9, opacity: 0 }}
-        className="bg-slate-800 light:bg-white/90 backdrop-blur-md border border-slate-600 light:border-slate-300/50 rounded-xl p-4 sm:p-6 w-full max-w-md mx-4"
+        className="bg-app-surface backdrop-blur-md border border-app-border rounded-xl p-4 sm:p-6 w-full max-w-md mx-4"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-purple-500/20 rounded-lg">
-              <Sparkles className="w-5 h-5 text-purple-400" />
+            <div className="p-2 bg-app-primary-soft rounded-lg">
+              <Sparkles className="w-5 h-5 text-app-primary" />
             </div>
             <h3 className="text-lg font-semibold text-app-text">AI Task Creation</h3>
           </div>
           <button
             onClick={onClose}
-            className="p-1 text-slate-400 light:text-slate-600 hover:text-white transition-colors"
+            className="p-1 text-app-text-muted hover:text-app-text transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -61,7 +61,7 @@ export default function AIPromptModal({
           value={aiPrompt}
           onChange={(e) => onPromptChange(e.target.value)}
           onKeyPress={(e) => e.key === 'Enter' && !e.shiftKey && onSubmit()}
-          className="w-full bg-slate-700 light:bg-slate-100/50 border border-slate-600 light:border-slate-300 rounded-lg px-4 py-3 text-app-text placeholder-slate-400 resize-none focus:outline-none focus:ring-2 focus:ring-purple-500/50 mb-4"
+          className="w-full bg-app-bg border border-app-border rounded-lg px-4 py-3 text-app-text placeholder-app-text-muted resize-none focus:outline-none focus:ring-2 focus:ring-app-primary/35 mb-4"
           rows={3}
         />
 
@@ -76,7 +76,7 @@ export default function AIPromptModal({
           <Button
             onClick={onSubmit}
             disabled={!aiPrompt.trim() || isGeneratingAI}
-            className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-app-text px-6 py-2 w-full sm:w-auto"
+            className="text-app-text px-6 py-2 w-full sm:w-auto"
           >
             {isGeneratingAI ? (
               <div className="flex items-center gap-2">

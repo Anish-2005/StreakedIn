@@ -1,6 +1,6 @@
 "use client";
 import { motion } from 'framer-motion';
-import { Sparkles } from 'lucide-react';
+import { Sparkles, X } from 'lucide-react';
 import { Button } from '../../common';
 
 interface AIPromptModalProps {
@@ -39,8 +39,8 @@ export default function AIPromptModal({
       >
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-purple-500/20 rounded-lg">
-              <div className="w-4 h-4 bg-gradient-to-r from-purple-500 to-pink-500 rounded" />
+            <div className="p-2 bg-app-primary-soft rounded-lg">
+              <Sparkles className="w-4 h-4 text-app-primary" />
             </div>
             <h3 className="text-lg font-semibold text-app-text">AI Goal Creation</h3>
           </div>
@@ -48,7 +48,7 @@ export default function AIPromptModal({
             onClick={onClose}
             className="p-1 text-app-text-muted hover:text-app-text transition-colors"
           >
-            <span className="sr-only">Close</span>
+            <X className="w-5 h-5" />
           </button>
         </div>
 
@@ -61,7 +61,7 @@ export default function AIPromptModal({
           value={aiPrompt}
           onChange={(e) => onPromptChange(e.target.value)}
           onKeyPress={(e) => e.key === 'Enter' && !e.shiftKey && onSubmit()}
-          className="w-full bg-app-bg border border-app-border rounded-lg px-4 py-3 text-app-text placeholder-app-text-muted resize-none focus:outline-none focus:ring-2 focus:ring-purple-500/50 mb-4"
+          className="w-full bg-app-bg border border-app-border rounded-lg px-4 py-3 text-app-text placeholder-app-text-muted resize-none focus:outline-none focus:ring-2 focus:ring-app-primary/35 mb-4"
           rows={3}
         />
 
@@ -76,7 +76,7 @@ export default function AIPromptModal({
           <Button
             onClick={onSubmit}
             disabled={!aiPrompt.trim() || isGeneratingAI}
-            className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-app-text px-6 py-2 w-full sm:w-auto"
+            className="text-app-text px-6 py-2 w-full sm:w-auto"
           >
             {isGeneratingAI ? (
               <div className="flex items-center gap-2">
