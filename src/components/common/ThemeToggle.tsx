@@ -7,7 +7,7 @@ import { Sun, Moon } from "lucide-react";
 export default function ThemeToggle() {
   const { theme, toggleTheme } = useTheme();
 
-  const handleToggle = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleToggle = () => {
     // Create smooth fade overlay
     const overlay = document.createElement("div");
     overlay.className = "theme-transition-overlay";
@@ -16,28 +16,27 @@ export default function ThemeToggle() {
     // Fade in
     requestAnimationFrame(() => {
       overlay.style.opacity = "1";
+      overlay.style.backdropFilter = "blur(6px)";
     });
 
-    // Switch theme at midpoint
     setTimeout(() => {
       toggleTheme();
-    }, 250);
+    }, 110);
 
-    // Fade out and cleanup
     setTimeout(() => {
       overlay.style.opacity = "0";
-    }, 250);
+      overlay.style.backdropFilter = "blur(0px)";
+    }, 130);
 
-    // Remove overlay after animation
     setTimeout(() => {
       overlay.remove();
-    }, 500);
+    }, 280);
   };
 
   return (
     <button
       onClick={handleToggle}
-      className="relative p-2.5 rounded-lg transition-all duration-600 ease-in-out bg-app-bg hover:bg-app-bg/80 text-app-text-muted hover:text-app-text border border-app-border/30 overflow-hidden"
+      className="relative p-2.5 rounded-xl transition-all duration-200 ease-in-out bg-app-surface hover:bg-app-surface-strong text-app-text-muted hover:text-app-text border border-app-border overflow-hidden"
       aria-label="Toggle theme"
       title={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
     >

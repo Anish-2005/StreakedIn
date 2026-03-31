@@ -1,6 +1,7 @@
 "use client";
 
 import { useTheme } from '../../contexts/ThemeContext';
+import type { CSSProperties } from 'react';
 
 interface AppLogoProps {
   size?: 'sm' | 'md' | 'lg';
@@ -23,14 +24,17 @@ export default function AppLogo({
   };
 
   const current = sizeMap[size];
+  const primary = isDark ? '#60a5fa' : '#2563eb';
+  const secondary = isDark ? '#34d399' : '#0f766e';
+  const ring = isDark ? '#8fb3e8' : '#64748b';
 
   return (
     <div className="flex items-center gap-2">
       <div
-        className={`${current.container} rounded-2xl flex items-center justify-center transition-colors duration-600 ${
+        className={`${current.container} rounded-2xl flex items-center justify-center transition-colors duration-300 ${
           withGradientBg
-            ? 'bg-gradient-to-r from-purple-500/20 to-blue-500/20 border border-purple-400/30'
-            : 'bg-transparent'
+            ? 'bg-gradient-to-br from-app-primary-soft to-emerald-500/20 border border-app-border'
+            : 'bg-transparent border border-app-border/70'
         }`}
       >
         <svg
@@ -39,137 +43,104 @@ export default function AppLogo({
           viewBox="0 0 64 64"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
-          className="drop-shadow-lg"
+          className="drop-shadow-sm"
         >
-          {/* Outer circle background */}
           <circle
             cx="32"
             cy="32"
             r="30"
-            fill={isDark ? '#382454' : '#f8f5ff'}
-            opacity="0.3"
-            className="transition-all duration-600"
+            fill={isDark ? '#0f1d33' : '#eef4ff'}
+            opacity="0.95"
+            className="transition-all duration-300"
           />
-
-          {/* Inner circle accent */}
           <circle
             cx="32"
             cy="32"
             r="26"
             fill="none"
-            stroke={isDark ? '#9370a8' : '#8b6dad'}
-            strokeWidth="0.5"
-            opacity="0.4"
-            className="transition-all duration-600"
+            stroke={ring}
+            strokeWidth="0.75"
+            opacity="0.5"
+            className="transition-all duration-300"
           />
-
-          {/* Flame/Streak base - left side */}
           <path
-            d="M 20 42 Q 18 32 22 24 Q 24 18 32 16 Q 30 24 28 32 Q 26 38 24 42 Z"
-            fill="url(#flameGradient)"
-            className="transition-all duration-600"
+            d="M 21 43 Q 20 34 24 26 Q 27 20 33 19 Q 31 28 30 35 Q 29 40 27 44 Z"
+            fill="url(#streakPrimary)"
+            className="transition-all duration-300"
           />
-
-          {/* Flame/Streak middle - right side */}
           <path
-            d="M 32 42 Q 30 34 34 24 Q 36 16 42 12 Q 40 22 38 32 Q 36 38 34 42 Z"
-            fill="url(#flameGradient2)"
-            opacity="0.85"
-            className="transition-all duration-600"
+            d="M 33 43 Q 31 35 35 24 Q 38 16 44 14 Q 42 24 39 34 Q 37 40 35 44 Z"
+            fill="url(#streakSecondary)"
+            opacity="0.88"
+            className="transition-all duration-300"
           />
-
-          {/* Upward arrow path for momentum */}
           <path
-            d="M 32 16 L 32 38"
-            stroke={isDark ? '#9370a8' : '#8b6dad'}
-            strokeWidth="1.5"
+            d="M 32 16 L 32 36"
+            stroke={ring}
+            strokeWidth="1.4"
             strokeLinecap="round"
-            opacity="0.6"
-            className="transition-all duration-600"
+            opacity="0.64"
+            className="transition-all duration-300"
           />
-
-          {/* Arrow tip - up */}
           <path
             d="M 32 16 L 28 22 M 32 16 L 36 22"
-            stroke={isDark ? '#9370a8' : '#8b6dad'}
-            strokeWidth="1.5"
+            stroke={ring}
+            strokeWidth="1.4"
             strokeLinecap="round"
             strokeLinejoin="round"
-            opacity="0.6"
-            className="transition-all duration-600"
+            opacity="0.64"
+            className="transition-all duration-300"
           />
-
-          {/* Central dot */}
           <circle
             cx="32"
             cy="32"
-            r="3"
-            fill={isDark ? '#9370a8' : '#8b6dad'}
-            opacity="0.8"
-            className="transition-all duration-600"
+            r="2.8"
+            fill={ring}
+            opacity="0.92"
+            className="transition-all duration-300"
           />
-
-          {/* Decorative rings for momentum */}
           <circle
             cx="32"
             cy="42"
             r="8"
             fill="none"
-            stroke={isDark ? '#9370a8' : '#8b6dad'}
+            stroke={ring}
             strokeWidth="0.75"
             opacity="0.3"
-            className="transition-all duration-600"
+            className="transition-all duration-300"
           />
-
           <circle
             cx="32"
             cy="42"
             r="12"
             fill="none"
-            stroke={isDark ? '#9370a8' : '#8b6dad'}
+            stroke={ring}
             strokeWidth="0.5"
-            opacity="0.15"
-            className="transition-all duration-600"
+            opacity="0.18"
+            className="transition-all duration-300"
           />
 
-          {/* Gradient definitions */}
           <defs>
             <linearGradient
-              id="flameGradient"
+              id="streakPrimary"
               x1="0%"
               y1="0%"
               x2="0%"
               y2="100%"
             >
-              <stop
-                offset="0%"
-                stopColor={isDark ? '#a78bfa' : '#c084fc'}
-                stopOpacity="1"
-              />
-              <stop
-                offset="100%"
-                stopColor={isDark ? '#7c3aed' : '#9333ea'}
-                stopOpacity="0.6"
-              />
+              <stop offset="0%" stopColor={primary} stopOpacity="1" />
+              <stop offset="100%" stopColor={primary} stopOpacity="0.55" />
             </linearGradient>
 
             <linearGradient
-              id="flameGradient2"
+              id="streakSecondary"
               x1="0%"
               y1="0%"
               x2="0%"
               y2="100%"
             >
-              <stop
-                offset="0%"
-                stopColor={isDark ? '#60a5fa' : '#93c5fd'}
-                stopOpacity="1"
-              />
-              <stop
-                offset="100%"
-                stopColor={isDark ? '#3b82f6' : '#60a5fa'}
-                stopOpacity="0.6"
-              />
+              <stop offset="0%" stopColor={secondary} stopOpacity="1" />
+              <stop offset="100%" stopColor={secondary} stopOpacity="0.58" />
             </linearGradient>
           </defs>
         </svg>
@@ -178,7 +149,7 @@ export default function AppLogo({
       {showText && (
         <div className="flex flex-col">
           <span
-            className={`font-bold tracking-tight transition-colors duration-600 ${
+            className={`font-bold tracking-tight transition-colors duration-300 ${
               size === 'sm'
                 ? 'text-sm'
                 : size === 'md'
@@ -186,12 +157,12 @@ export default function AppLogo({
                   : 'text-lg'
             }`}
             style={{
-              background: isDark ? 'linear-gradient(to right, #c084fc, #60a5fa)' : undefined,
+              background: isDark ? 'linear-gradient(to right, #93c5fd, #34d399)' : undefined,
               WebkitBackgroundClip: isDark ? 'text' : undefined,
               WebkitTextFillColor: isDark ? 'transparent' : undefined,
               backgroundClip: isDark ? 'text' : undefined,
-              color: !isDark ? '#2d1b4e' : undefined,
-            } as React.CSSProperties}
+              color: !isDark ? '#0f172a' : undefined,
+            } as CSSProperties}
           >
             StreakedIn
           </span>

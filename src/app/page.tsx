@@ -1,7 +1,6 @@
 // pages/index.js
 "use client";
 import { useState, useEffect } from 'react';
-import Head from 'next/head';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '../contexts/AuthContext';
 import Navigation from '../components/landing/Navigation';
@@ -35,18 +34,11 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-app-bg text-app-text transition-colors duration-500 relative overflow-hidden">
-      {/* Major Clay Blobs */}
-      <div className="fixed top-[-20%] left-[-10%] w-[60%] h-[60%] bg-blue-600/10 rounded-full blur-[150px] animate-float z-0"></div>
-      <div className="fixed bottom-[-20%] right-[-10%] w-[60%] h-[60%] bg-purple-600/10 rounded-full blur-[150px] animate-pulse-slow z-0"></div>
-      <div className="fixed top-[40%] right-[10%] w-[30%] h-[30%] bg-pink-500/5 rounded-full blur-[100px] animate-float z-0"></div>
+    <div className="min-h-screen bg-app-bg text-app-text transition-colors duration-300 relative overflow-hidden">
+      <div className="fixed top-[-28rem] right-[-16rem] w-[52rem] h-[52rem] rounded-full bg-app-primary/12 blur-[150px] z-0" />
+      <div className="fixed bottom-[-24rem] left-[-14rem] w-[48rem] h-[48rem] rounded-full bg-emerald-500/10 blur-[140px] z-0" />
 
       <div className="relative z-10">
-        <Head>
-          <title>StreakedIn - Master Your Productivity</title>
-          <meta name="description" content="Professional productivity tracking and goal management platform" />
-        </Head>
-
         <Navigation isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
         <HeroSection />
         <FeaturesSection />
