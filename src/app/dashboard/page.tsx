@@ -192,7 +192,9 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-app-bg text-app-text transition-colors duration-500 relative overflow-hidden">
+    <div className="min-h-screen bg-app-bg text-app-text transition-colors duration-300 relative overflow-hidden">
+      <div className="pointer-events-none absolute top-[-16rem] right-[-10rem] w-[32rem] h-[32rem] rounded-full bg-app-primary/10 blur-[120px]" />
+      <div className="pointer-events-none absolute bottom-[-14rem] left-[-9rem] w-[28rem] h-[28rem] rounded-full bg-emerald-500/10 blur-[120px]" />
       <div className="relative z-10 flex flex-col md:flex-row min-h-screen">
         <Sidebar
           activeTab={activeTab}
@@ -235,7 +237,7 @@ export default function Dashboard() {
               onTabChange={setActiveTab}
             />
 
-            <div className="clay-card rounded-xl border-app-border/40 flex-1">
+            <div className="clay-card rounded-2xl border-app-border flex-1">
               <TabContainer
                 activeTab={activeTab}
                 setActiveTab={handleTabChange}

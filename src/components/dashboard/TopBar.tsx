@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { User } from "firebase/auth";
-import { Menu, Search, Zap } from "lucide-react";
+import { Menu, Search } from "lucide-react";
 import { AppLogo } from "../common";
 import SearchBar from "./SearchBar";
 import NotificationsBell from "./NotificationsBell";
@@ -39,15 +39,14 @@ export default function TopBar({
   return (
     <>
       <header className="relative h-16 sm:h-18 mb-4">
-        <div className="absolute inset-0 border-b border-app-border/40 bg-app-bg/80 backdrop-blur-xl" />
+        <div className="absolute inset-0 border-b border-app-border bg-app-glass backdrop-blur-xl" />
 
         <div className="relative h-full flex items-center justify-between px-3 sm:px-4 lg:px-6">
-          {/* LEFT */}
           <div className="flex items-center gap-4 min-w-0 flex-1">
             {isMobile && onMenuClick && (
               <button
                 onClick={onMenuClick}
-                className="p-2.5 rounded-xl transition hover:bg-app-surface/30"
+                className="p-2.5 rounded-xl transition hover:bg-app-surface"
               >
                 <Menu className="w-5 h-5 text-app-text" />
               </button>
@@ -60,8 +59,8 @@ export default function TopBar({
                 <h1 className="text-base sm:text-lg font-semibold truncate text-app-text">
                   {formatTabName(activeTab)}
                 </h1>
-                <p className="text-[11px] text-app-text-muted hidden sm:block">
-                  Professional Dashboard
+                <p className="text-[11px] text-app-text-muted hidden sm:block tracking-[0.04em] uppercase">
+                  Command Workspace
                 </p>
               </div>
             </div>
@@ -71,7 +70,7 @@ export default function TopBar({
             {isMobile && (
               <button
                 onClick={() => setShowMobileSearch((v) => !v)}
-                className="p-2.5 rounded-xl transition hover:bg-app-surface/30 sm:hidden"
+                className="p-2.5 rounded-xl transition hover:bg-app-surface sm:hidden"
               >
                 <Search className="w-5 h-5 text-app-text" />
               </button>
@@ -113,7 +112,7 @@ export default function TopBar({
             onClear={onClearSearch}
           />
         </div>
-      )}
+          )}
     </>
   );
 }

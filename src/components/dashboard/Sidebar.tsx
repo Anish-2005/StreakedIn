@@ -1,5 +1,5 @@
 "use client";
-import { ChevronRight, Sparkles } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 import { AppLogo } from '../common';
 import { useAuth } from '../../contexts/AuthContext';
 import { db } from '../../lib/firebase';
@@ -53,7 +53,7 @@ export default function Sidebar({ activeTab, setActiveTab, isSidebarOpen, setIsS
       }`}
     >
       <div
-        className="absolute inset-0 bg-app-surface/95 border-r border-app-border/40 rounded-r-3xl backdrop-blur-xl"
+        className="absolute inset-0 bg-app-glass border-r border-app-border rounded-r-3xl backdrop-blur-xl"
         style={{ borderRadius: '0 1.75rem 1.75rem 0' }}
       />
 
@@ -64,7 +64,7 @@ export default function Sidebar({ activeTab, setActiveTab, isSidebarOpen, setIsS
             {isSidebarOpen && (
               <div className="flex flex-col">
                 <span className="text-lg font-semibold tracking-tight text-app-text leading-tight">
-                  Streaked<span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">In</span>
+                  Streaked<span className="text-transparent bg-clip-text bg-gradient-to-r from-app-primary to-cyan-500">In</span>
                 </span>
                 <span className="text-[10px] font-medium uppercase tracking-[0.18em] text-app-text-muted">
                   Dashboard
@@ -82,11 +82,11 @@ export default function Sidebar({ activeTab, setActiveTab, isSidebarOpen, setIsS
           />
         </div>
 
-        <div className={`flex flex-col gap-3 border-t border-app-border/30 ${isSidebarOpen ? 'px-4 py-4' : 'items-center py-4'}`}>
+        <div className={`flex flex-col gap-3 border-t border-app-border ${isSidebarOpen ? 'px-4 py-4' : 'items-center py-4'}`}>
           <div className="flex items-center gap-2" style={isSidebarOpen ? {} : { flexDirection: 'column' }}>
             <button
               onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-              className="w-9 h-9 rounded-xl flex items-center justify-center text-app-text-muted hover:text-app-text hover:bg-app-bg/60 transition-colors"
+              className="w-9 h-9 rounded-xl flex items-center justify-center text-app-text-muted hover:text-app-text hover:bg-app-surface transition-colors"
               title={isSidebarOpen ? "Collapse" : "Expand"}
             >
               <ChevronRight className={`w-5 h-5 transition-transform duration-500 ${isSidebarOpen ? 'rotate-180' : ''}`} />
