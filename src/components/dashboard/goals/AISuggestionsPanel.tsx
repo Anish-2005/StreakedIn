@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from 'framer-motion';
-import { Brain, Target, Sparkles, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Brain, Sparkles, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '../../common';
 import React from 'react';
 
@@ -82,7 +82,7 @@ export default function AISuggestionsPanel({ aiSuggestions, currentSuggestionInd
                   onClick={onPrev}
                   variant="ghost"
                   size="sm"
-                  className="text-app-text-muted hover:text-white hover:bg-slate-700/50 p-2 flex-shrink-0"
+                  className="text-app-text-muted hover:text-app-text hover:bg-app-surface p-2 flex-shrink-0"
                 >
                   <ChevronLeft className="w-4 h-4" />
                 </Button>
@@ -94,8 +94,8 @@ export default function AISuggestionsPanel({ aiSuggestions, currentSuggestionInd
                       onClick={() => onSelectSuggestion(aiSuggestions[index])}
                       className={`flex-shrink-0 w-2 h-2 rounded-full transition-all duration-200 ${
                         index === currentSuggestionIndex
-                          ? 'bg-blue-500 w-4 sm:w-6'
-                          : 'bg-app-border hover:bg-blue-500/80'
+                          ? 'bg-app-primary w-4 sm:w-6'
+                          : 'bg-app-border hover:bg-app-primary/80'
                       }`}
                     />
                   ))}
@@ -105,7 +105,7 @@ export default function AISuggestionsPanel({ aiSuggestions, currentSuggestionInd
                   onClick={onNext}
                   variant="ghost"
                   size="sm"
-                  className="text-app-text-muted hover:text-white hover:bg-slate-700/50 p-2 flex-shrink-0"
+                  className="text-app-text-muted hover:text-app-text hover:bg-app-surface p-2 flex-shrink-0"
                 >
                   <ChevronRight className="w-4 h-4" />
                 </Button>
@@ -123,7 +123,7 @@ export default function AISuggestionsPanel({ aiSuggestions, currentSuggestionInd
         >
           {isGeneratingSuggestions ? (
             <div className="flex items-center justify-center gap-2">
-              <div className="w-4 h-4 border-2 border-purple-300 border-t-transparent rounded-full animate-spin" />
+              <div className="w-4 h-4 border-2 border-app-text border-t-transparent rounded-full animate-spin" />
               <span className="font-medium">Generating...</span>
             </div>
           ) : (

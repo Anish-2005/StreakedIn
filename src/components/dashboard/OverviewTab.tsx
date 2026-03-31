@@ -106,7 +106,7 @@ export default function OverviewTab({ setActiveTab }: OverviewTabProps) {
           value={loading ? "..." : `+${userStats?.networkGrowth || 0}`}
           change="This week"
           icon={<Users className="w-6 h-6" />}
-          color="text-purple-400"
+          color="text-cyan-400"
         />
       </div>
 
@@ -284,7 +284,7 @@ export default function OverviewTab({ setActiveTab }: OverviewTabProps) {
                   {aiSuggestions.slice(0, 2).map((suggestion, index) => (
                     <div key={index} className="bg-app-surface/50 dark:border light:border border-app-border rounded-lg p-4">
                       <div className="flex items-start gap-3">
-                        <Brain className="w-5 h-5 dark:text-purple-400 light:text-purple-600 mt-0.5 flex-shrink-0" />
+                        <Brain className="w-5 h-5 text-app-primary mt-0.5 flex-shrink-0" />
                         <p className="text-app-text-muted text-sm leading-relaxed">{suggestion}</p>
                       </div>
                     </div>

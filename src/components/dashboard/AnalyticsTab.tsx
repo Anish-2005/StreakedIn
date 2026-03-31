@@ -174,7 +174,7 @@ export default function AnalyticsTab({}: AnalyticsTabProps) {
         <StatsCard
           title="Tasks Done"
           value={`${getCompletedTasks()}/${getTotalTasks()}`}
-          icon={<CheckSquare className="w-5 h-5 text-purple-400" />}
+          icon={<CheckSquare className="w-5 h-5 text-cyan-400" />}
           change={getCompletedTasks() > 0 ? `+${getCompletedTasks()}` : '0'}
         />
         <StatsCard
