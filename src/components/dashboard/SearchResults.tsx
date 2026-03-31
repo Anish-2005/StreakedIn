@@ -35,7 +35,7 @@ export default function SearchResults({
       <div className="max-w-4xl">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-semibold text-app-text">
-            Search Results for "{searchQuery}"
+            Search Results for &quot;{searchQuery}&quot;
           </h2>
           <button
             onClick={onClearSearch}
@@ -126,7 +126,7 @@ export default function SearchResults({
 
             {searchResults.goals.length === 0 && searchResults.tasks.length === 0 && !isSearching && (
               <div className="text-center py-8">
-                <p className="text-app-text-muted">No results found for "{searchQuery}"</p>
+                <p className="text-app-text-muted">No results found for &quot;{searchQuery}&quot;</p>
                 <p className="text-app-text-muted/70 text-sm mt-1">Try searching for goals, tasks, or categories</p>
               </div>
             )}

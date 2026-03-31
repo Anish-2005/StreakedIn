@@ -83,7 +83,7 @@ export default function TestimonialsSection() {
 
                 <div className="space-y-6">
                   <p className="text-xl sm:text-2xl leading-relaxed text-app-text/95 italic font-medium transition-colors duration-300">
-                    "{testimonials[activeTestimonial].content}"
+                    &ldquo;{testimonials[activeTestimonial].content}&rdquo;
                   </p>
                   <div>
                     <div className="font-semibold text-lg text-app-text transition-colors duration-300">

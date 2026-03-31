@@ -1,7 +1,10 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface ButtonProps extends Omit<
+  React.ButtonHTMLAttributes<HTMLButtonElement>,
+  'onAnimationStart' | 'onAnimationEnd'
+> {
   children: React.ReactNode;
   variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger';
   size?: 'sm' | 'md' | 'lg';
@@ -64,7 +67,7 @@ export default function Button({
         disabled={disabled || loading}
         whileHover={{ scale: 1.015 }}
         whileTap={{ scale: 0.985 }}
-        {...(props as any)}
+        {...props}
       >
         {buttonContent}
       </motion.button>

@@ -48,7 +48,6 @@ export function Select({
   onChange,
   placeholder,
   disabled,
-  ...props
 }: SelectProps) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);

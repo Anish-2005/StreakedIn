@@ -19,17 +19,15 @@ const applyThemeClass = (theme: Theme) => {
 };
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setThemeState] = React.useState<Theme>('dark');
+  const [theme, setThemeState] = React.useState<Theme>(() => {
+    if (typeof window === 'undefined') return 'dark';
+    const storedTheme = localStorage.getItem('theme') as Theme | null;
+    return storedTheme || 'dark';
+  });
 
   useLayoutEffect(() => {
-    const storedTheme = localStorage.getItem('theme') as Theme | null;
-    if (storedTheme) {
-      setThemeState(storedTheme);
-      applyThemeClass(storedTheme);
-    } else {
-      applyThemeClass('dark');
-    }
-  }, []);
+    applyThemeClass(theme);
+  }, [theme]);
 
   const setTheme = (newTheme: Theme) => {
     setThemeState(newTheme);

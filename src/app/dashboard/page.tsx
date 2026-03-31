@@ -1,7 +1,6 @@
 // pages/dashboard.js
 "use client";
 import { useState, useEffect, useCallback } from 'react';
-import Head from 'next/head';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '../../contexts/AuthContext';
 import { GoalsService, TasksService } from '../../lib/services';
