@@ -29,12 +29,12 @@ export default function ProgressBar({
   const percentage = Math.min((value / max) * 100, 100);
 
   const progressBar = (
-    <div className={`w-full bg-slate-700 light:bg-slate-100/40 rounded-full overflow-hidden ${sizeClasses[size]} ${className}`}>
+    <div className={`w-full bg-app-bg-subtle rounded-full overflow-hidden ${sizeClasses[size]} ${className}`}>
       <motion.div
         className={`h-full rounded-full transition-all duration-500 ${
           variant === 'gradient'
-            ? 'bg-gradient-to-r from-blue-500 to-purple-600'
-            : 'bg-blue-500'
+            ? 'bg-gradient-to-r from-app-primary to-cyan-500'
+            : 'bg-app-primary'
         }`}
         initial={{ width: 0 }}
         animate={{ width: animated ? `${percentage}%` : `${percentage}%` }}
@@ -47,7 +47,7 @@ export default function ProgressBar({
     return (
       <div className="space-y-2">
         {progressBar}
-        <div className="flex justify-between text-sm text-slate-400 light:text-slate-600">
+        <div className="flex justify-between text-sm text-app-text-muted">
           <span>Progress</span>
           <span>{Math.round(percentage)}%</span>
         </div>

@@ -9,18 +9,18 @@ interface BadgeProps {
 }
 
 const variantClasses = {
-  default: 'bg-app-surface border border-app-border text-app-text-muted shadow-sm',
-  primary: 'bg-blue-500/10 border border-blue-500/20 text-blue-400 light:text-blue-600 shadow-inner-clay rounded-xl',
-  success: 'bg-green-500/10 border border-green-500/20 text-green-400 light:text-green-600 shadow-inner-clay rounded-xl',
-  warning: 'bg-yellow-500/10 border border-yellow-500/20 text-yellow-400 light:text-yellow-600 shadow-inner-clay rounded-xl',
-  danger: 'bg-red-500/10 border border-red-500/20 text-red-400 light:text-red-600 shadow-inner-clay rounded-xl',
-  purple: 'bg-purple-500/10 border border-purple-500/20 text-purple-400 light:text-purple-600 shadow-inner-clay rounded-xl'
+  default: 'bg-app-surface border border-app-border text-app-text-muted',
+  primary: 'bg-app-primary-soft border border-app-primary/30 text-app-primary',
+  success: 'bg-app-success/15 border border-app-success/30 text-app-success',
+  warning: 'bg-app-warning/15 border border-app-warning/30 text-app-warning',
+  danger: 'bg-app-danger/15 border border-app-danger/30 text-app-danger',
+  purple: 'bg-sky-500/15 border border-sky-500/30 text-sky-500'
 };
 
 const sizeClasses = {
   sm: 'px-2 py-0.5 text-xs',
-  md: 'px-2.5 py-1 text-sm',
-  lg: 'px-3 py-1.5 text-base'
+  md: 'px-2.5 py-1 text-xs',
+  lg: 'px-3 py-1.5 text-sm'
 };
 
 export default function Badge({
@@ -30,7 +30,7 @@ export default function Badge({
   icon,
   className = ''
 }: BadgeProps) {
-  const baseClasses = 'inline-flex items-center space-x-1 rounded-full border font-medium';
+  const baseClasses = 'inline-flex items-center space-x-1 rounded-full border font-medium tracking-wide';
   const combinedClasses = `${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${className}`;
 
   return (

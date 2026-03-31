@@ -20,12 +20,12 @@ interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement
 }
 
 const baseClasses =
-  "w-full px-4 py-3 rounded-xl bg-app-surface/70 text-app-text placeholder-app-text-muted border border-app-border focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500/40 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed";
+  "w-full px-4 py-2.5 rounded-xl bg-app-surface text-app-text placeholder-app-text-muted border border-app-border focus:outline-none focus:ring-2 focus:ring-app-primary/30 focus:border-app-primary/60 transition-all duration-200 disabled:opacity-55 disabled:cursor-not-allowed";
 
 const variantClasses: Record<'default' | 'filled' | 'error', string> = {
   default: "",
-  filled: "bg-app-surface/80 border-transparent",
-  error: "border-red-500/50 focus:ring-red-500/20 shadow-[inset_0_0_10px_rgba(239,68,68,0.1)]",
+  filled: "bg-app-surface-strong",
+  error: "border-app-danger/55 focus:ring-app-danger/25 focus:border-app-danger/70",
 };
 
 export function Input({ variant = 'default', error, className = '', ...props }: InputProps) {
@@ -34,12 +34,22 @@ export function Input({ variant = 'default', error, className = '', ...props }: 
   return (
     <div className="space-y-1">
       <input className={combinedClasses} {...props} />
-      {error && <p className="dark:text-red-400 light:text-red-600 text-sm">{error}</p>}
+      {error && <p className="text-app-danger text-sm">{error}</p>}
     </div>
   );
 }
 
-export function Select({ variant = 'default', error, className = '', children, value, onChange, placeholder, disabled, onClick, ...props }: SelectProps) {
+export function Select({
+  variant = 'default',
+  error,
+  className = '',
+  children,
+  value,
+  onChange,
+  placeholder,
+  disabled,
+  ...props
+}: SelectProps) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -67,7 +77,7 @@ export function Select({ variant = 'default', error, className = '', children, v
     setIsOpen(false);
   };
 
-  const combinedClasses = `w-full px-4 py-3 border rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500/60 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed text-base text-left flex items-center justify-between ${variantClasses[variant]} ${error ? 'dark:border-red-500/50 light:border-red-500 dark:focus:ring-red-500/60 light:focus:ring-red-500/40' : ''} ${className}`;
+  const combinedClasses = `w-full px-4 py-2.5 border rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-app-primary/30 focus:border-app-primary/60 disabled:opacity-55 disabled:cursor-not-allowed text-sm text-left flex items-center justify-between bg-app-surface text-app-text ${variantClasses[variant]} ${error ? 'border-app-danger/55 focus:ring-app-danger/25 focus:border-app-danger/70' : 'border-app-border'} ${className}`;
 
   return (
     <div className="space-y-1" ref={dropdownRef}>
@@ -78,14 +88,14 @@ export function Select({ variant = 'default', error, className = '', children, v
           className={combinedClasses}
           disabled={disabled}
         >
-          <span className={selectedText === 'Select...' ? 'dark:text-slate-400 light:text-gray-500' : 'dark:text-white light:text-gray-900'}>
+          <span className={selectedText === 'Select...' ? 'text-app-text-muted' : 'text-app-text'}>
             {selectedText}
           </span>
-          <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''} ${disabled ? 'opacity-50' : 'dark:text-slate-400 light:text-gray-600'}`} />
+          <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''} ${disabled ? 'opacity-50' : 'text-app-text-muted'}`} />
         </button>
 
         {isOpen && (
-          <div className="absolute z-50 w-full mt-1 dark:bg-slate-800/95 light:bg-white/95 backdrop-blur-md dark:border dark:border-slate-600/60 light:border light:border-gray-300 rounded-lg shadow-xl max-h-60 overflow-auto">
+          <div className="absolute z-50 w-full mt-1 bg-app-surface border border-app-border rounded-xl shadow-[0_16px_24px_rgba(2,6,23,0.24)] max-h-60 overflow-auto">
             {React.Children.map(children, (child) => {
               if (!React.isValidElement(child)) return null;
 
@@ -96,8 +106,11 @@ export function Select({ variant = 'default', error, className = '', children, v
                   key={childProps.value}
                   type="button"
                   onClick={() => handleSelect(childProps.value)}
-                  className={`w-full px-4 py-3 text-left transition-colors duration-150 dark:hover:bg-slate-700/60 light:hover:bg-gray-100 ${isSelected ? 'dark:bg-blue-500/20 dark:text-blue-300 light:bg-blue-100 light:text-blue-700' : 'dark:text-white light:text-gray-900'
-                    } first:rounded-t-lg last:rounded-b-lg`}
+                  className={`w-full px-4 py-2.5 text-left text-sm transition-colors duration-150 ${
+                    isSelected
+                      ? 'bg-app-primary-soft text-app-primary'
+                      : 'text-app-text hover:bg-app-bg-subtle'
+                  } first:rounded-t-xl last:rounded-b-xl`}
                 >
                   {childProps.children}
                 </button>
@@ -106,18 +119,18 @@ export function Select({ variant = 'default', error, className = '', children, v
           </div>
         )}
       </div>
-      {error && <p className="text-red-400 text-sm">{error}</p>}
+      {error && <p className="text-app-danger text-sm">{error}</p>}
     </div>
   );
 }
 
 export function Textarea({ variant = 'default', error, className = '', ...props }: TextareaProps) {
-  const combinedClasses = `w-full px-4 py-3 border rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500/60 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed resize-none text-base ${variantClasses[variant]} ${error ? 'border-red-500/50 focus:ring-red-500/60' : ''} ${className}`;
+  const combinedClasses = `w-full px-4 py-2.5 border rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-app-primary/30 focus:border-app-primary/60 disabled:opacity-55 disabled:cursor-not-allowed resize-none text-sm bg-app-surface text-app-text placeholder-app-text-muted ${variantClasses[variant]} ${error ? 'border-app-danger/55 focus:ring-app-danger/25 focus:border-app-danger/70' : 'border-app-border'} ${className}`;
 
   return (
     <div className="space-y-1">
       <textarea className={combinedClasses} {...props} />
-      {error && <p className="text-red-400 text-sm">{error}</p>}
+      {error && <p className="text-app-danger text-sm">{error}</p>}
     </div>
   );
 }
@@ -126,7 +139,7 @@ export function Checkbox({ className = '', ...props }: React.InputHTMLAttributes
   return (
     <input
       type="checkbox"
-      className={`w-5 h-5 rounded border-2 border-slate-600 light:border-slate-300 bg-slate-700 light:bg-slate-100/50 text-blue-500 focus:ring-blue-500/60 focus:ring-2 transition-all duration-200 ${className}`}
+      className={`w-4 h-4 rounded border border-app-border bg-app-surface text-app-primary focus:ring-app-primary/40 focus:ring-2 transition-all duration-200 ${className}`}
       {...props}
     />
   );
