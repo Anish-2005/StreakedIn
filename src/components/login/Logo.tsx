@@ -12,10 +12,10 @@ export default function Logo() {
         transition={{ duration: 0.5 }}
         className="flex justify-center mb-4"
       >
-        <AppLogo size="lg" />
+        <AppLogo size="lg" withGradientBg />
       </motion.div>
-      <h1 className="text-3xl font-bold text-app-text mb-2 transition-colors duration-600">StreakedIn</h1>
-      <p className="text-app-text-muted transition-colors duration-600">Professional Productivity Dashboard</p>
+      <h1 className="text-3xl font-semibold text-app-text mb-2 transition-colors duration-300 tracking-tight">StreakedIn</h1>
+      <p className="text-app-text-muted transition-colors duration-300">Professional Productivity Dashboard</p>
     </div>
   );
 }

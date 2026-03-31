@@ -37,23 +37,23 @@ export default function TestimonialsSection() {
   }, []);
 
   return (
-    <section id="testimonials" className="py-32 bg-app-bg/50 transition-colors duration-600">
+    <section id="testimonials" className="py-28 bg-app-bg/40 transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: 0.6 }}
           viewport={{ once: true }}
-          className="text-center mb-20"
+          className="text-center mb-16"
         >
-          <h2 className="text-5xl md:text-6xl font-bold text-app-text mb-6 transition-colors duration-600">
-            Trusted by
+          <h2 className="text-4xl md:text-5xl font-semibold text-app-text mb-5 transition-colors duration-300 tracking-tight">
+            Trusted By
             <br />
-            <span className="bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
-              Professionals Worldwide
+            <span className="bg-gradient-to-r from-app-primary to-cyan-500 bg-clip-text text-transparent">
+              Teams That Execute
             </span>
           </h2>
-          <p className="text-xl text-app-text-muted max-w-3xl mx-auto transition-colors duration-600 font-medium">
+          <p className="text-lg text-app-text-muted max-w-3xl mx-auto transition-colors duration-300">
             Join thousands of professionals who have transformed their productivity and achieved more.
           </p>
         </motion.div>
@@ -62,37 +62,34 @@ export default function TestimonialsSection() {
           <AnimatePresence mode="wait">
             <motion.div
               key={activeTestimonial}
-              initial={{ opacity: 0, x: 100 }}
+              initial={{ opacity: 0, x: 60 }}
               animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -100 }}
-              transition={{ duration: 0.6 }}
-              className="bg-app-surface/60 backdrop-blur-lg border border-app-border/40 rounded-3xl p-12 sm:p-16"
+              exit={{ opacity: 0, x: -60 }}
+              transition={{ duration: 0.45 }}
+              className="clay-card rounded-3xl p-10 sm:p-12"
             >
               <div className="flex flex-col items-center space-y-8 text-center">
-                {/* Avatar */}
                 <div className="flex-shrink-0">
-                  <div className="w-20 h-20 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center text-white font-bold text-2xl shadow-lg">
+                  <div className="w-20 h-20 bg-gradient-to-r from-app-primary to-cyan-500 rounded-full flex items-center justify-center text-white font-bold text-2xl shadow-lg shadow-blue-500/25">
                     {testimonials[activeTestimonial].name.split(' ').map(n => n[0]).join('')}
                   </div>
                 </div>
 
-                {/* Rating */}
                 <div className="flex items-center justify-center gap-1">
                   {[...Array(5)].map((_, i) => (
                     <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
                   ))}
                 </div>
 
-                {/* Testimonial */}
                 <div className="space-y-6">
-                  <p className="text-2xl leading-relaxed text-app-text/90 italic font-medium transition-colors duration-600">
+                  <p className="text-xl sm:text-2xl leading-relaxed text-app-text/95 italic font-medium transition-colors duration-300">
                     "{testimonials[activeTestimonial].content}"
                   </p>
                   <div>
-                    <div className="font-bold text-lg text-app-text transition-colors duration-600">
+                    <div className="font-semibold text-lg text-app-text transition-colors duration-300">
                       {testimonials[activeTestimonial].name}
                     </div>
-                    <div className="text-app-text-muted font-medium transition-colors duration-600">
+                    <div className="text-app-text-muted transition-colors duration-300">
                       {testimonials[activeTestimonial].role} at {testimonials[activeTestimonial].company}
                     </div>
                   </div>
@@ -101,18 +98,17 @@ export default function TestimonialsSection() {
             </motion.div>
           </AnimatePresence>
 
-          {/* Testimonial Indicators */}
-          <div className="flex justify-center gap-3 mt-12">
+          <div className="flex justify-center gap-2.5 mt-10">
             {testimonials.map((_, index) => (
               <motion.button
                 key={index}
                 onClick={() => setActiveTestimonial(index)}
-                whileHover={{ scale: 1.2 }}
-                whileTap={{ scale: 0.95 }}
-                className={`transition-all duration-600 ${
+                whileHover={{ scale: 1.15 }}
+                whileTap={{ scale: 0.98 }}
+                className={`transition-all duration-200 ${
                   index === activeTestimonial
-                    ? 'bg-gradient-to-r from-purple-500 to-blue-500 w-8 h-3 rounded-full'
-                    : 'bg-app-border hover:bg-app-text-muted w-3 h-3 rounded-full'
+                    ? 'bg-gradient-to-r from-app-primary to-cyan-500 w-8 h-2.5 rounded-full'
+                    : 'bg-app-border hover:bg-app-text-muted w-2.5 h-2.5 rounded-full'
                 }`}
               />
             ))}

@@ -1,31 +1,49 @@
 import React, { useRef } from 'react';
 import { motion } from 'framer-motion';
-import { Target, BarChart3, TrendingUp, Calendar } from 'lucide-react';
+import { Target, BarChart3, TrendingUp, Calendar, Brain, Shield } from 'lucide-react';
 
 const features = [
   {
     icon: <Target className="w-8 h-8" />,
-    title: "Goal Setting",
-    description: "Set SMART goals and break them down into achievable daily tasks with our intuitive goal management system.",
-    color: "from-blue-500 to-cyan-500"
+    title: "Structured Goal Planning",
+    description: "Set measurable goals with checkpoints, owners, and timelines that keep execution realistic and accountable.",
+    color: "from-blue-500 to-cyan-500",
+    glow: "shadow-blue-500/25"
   },
   {
     icon: <BarChart3 className="w-8 h-8" />,
-    title: "Progress Analytics",
-    description: "Track your productivity trends with detailed analytics and visual progress reports.",
-    color: "from-green-500 to-emerald-500"
+    title: "Real-Time Analytics",
+    description: "Monitor trends, completion velocity, and execution quality with dashboard-grade analytics that surface bottlenecks early.",
+    color: "from-emerald-500 to-teal-500",
+    glow: "shadow-emerald-500/25"
   },
   {
-    icon: <TrendingUp className="w-8 h-8" />,
-    title: "Performance Metrics",
-    description: "Measure your productivity through multiple metrics and get personalized insights.",
-    color: "from-purple-500 to-pink-500"
+    icon: <Brain className="w-8 h-8" />,
+    title: "AI Workflow Assistant",
+    description: "Generate execution plans, break down complex objectives, and get context-aware suggestions instantly.",
+    color: "from-indigo-500 to-blue-500",
+    glow: "shadow-indigo-500/25"
   },
   {
     icon: <Calendar className="w-8 h-8" />,
-    title: "Daily Planning",
-    description: "Plan your day with our intelligent task scheduler that adapts to your productivity patterns.",
-    color: "from-orange-500 to-red-500"
+    title: "Priority-Based Planning",
+    description: "Coordinate priorities, deadlines, and reminders in a single planning layer designed for high-output routines.",
+    color: "from-amber-500 to-orange-500",
+    glow: "shadow-amber-500/25"
+  },
+  {
+    icon: <TrendingUp className="w-8 h-8" />,
+    title: "Performance Signals",
+    description: "Track momentum, consistency, and completion confidence so you can course-correct before targets slip.",
+    color: "from-sky-500 to-blue-500",
+    glow: "shadow-sky-500/25"
+  },
+  {
+    icon: <Shield className="w-8 h-8" />,
+    title: "Reliable Execution Layer",
+    description: "Built for daily usage with clean interaction patterns, resilient data sync, and predictable team-wide visibility.",
+    color: "from-slate-500 to-slate-700",
+    glow: "shadow-slate-500/20"
   }
 ];
 
@@ -33,51 +51,48 @@ export default function FeaturesSection() {
   const featuresRef = useRef(null);
 
   return (
-    <section id="features" className="py-32 relative bg-app-bg transition-colors duration-600" ref={featuresRef}>
+    <section id="features" className="py-28 relative bg-app-bg transition-colors duration-300" ref={featuresRef}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: 0.65 }}
           viewport={{ once: true }}
-          className="text-center mb-20"
+          className="text-center mb-16"
         >
-          <h2 className="text-5xl md:text-6xl font-bold text-app-text mb-6 transition-colors duration-600">
-            Powerful Features
+          <h2 className="text-4xl md:text-5xl font-semibold text-app-text mb-5 transition-colors duration-300 tracking-tight">
+            Everything Needed To Operate
             <br />
-            <span className="bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
-              For Professional Growth
+            <span className="bg-gradient-to-r from-app-primary to-cyan-500 bg-clip-text text-transparent">
+              At Professional Scale
             </span>
           </h2>
-          <p className="text-xl text-app-text-muted max-w-3xl mx-auto transition-colors duration-600 font-medium">
-            Everything you need to set, track, and achieve your productivity goals with precision and insight. Designed for professionals who demand results.
+          <p className="text-lg text-app-text-muted max-w-3xl mx-auto transition-colors duration-300">
+            Purpose-built capabilities for planning, execution, and insight, designed to reduce friction and keep teams focused on outcomes.
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
           {features.map((feature, index) => (
             <motion.div
               key={index}
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              whileHover={{ y: -8, transition: { duration: 0.3 } }}
+              transition={{ duration: 0.45, delay: index * 0.05 }}
+              whileHover={{ y: -5, transition: { duration: 0.2 } }}
               viewport={{ once: true }}
               className="group"
             >
-              <div className="relative h-full bg-app-surface/40 hover:bg-app-surface/70 border border-app-border/40 hover:border-purple-400/40 rounded-2xl p-8 transition-all duration-600 backdrop-blur-sm overflow-hidden">
-                {/* Background gradient on hover */}
-                <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-600" />
-                
-                {/* Content */}
+              <div className="relative h-full clay-card rounded-2xl p-7 overflow-hidden">
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-br from-app-primary/10 to-transparent" />
                 <div className="relative z-10 space-y-4">
-                  <div className={`w-14 h-14 bg-gradient-to-r ${feature.color} rounded-xl flex items-center justify-center text-white mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg shadow-${feature.color.split('-')[2]}/30`}>
+                  <div className={`w-14 h-14 bg-gradient-to-r ${feature.color} ${feature.glow} rounded-xl flex items-center justify-center text-white mb-4 group-hover:scale-105 transition-transform duration-200 shadow-lg`}>
                     {feature.icon}
                   </div>
-                  <h3 className="text-xl font-bold text-app-text transition-colors duration-600">
+                  <h3 className="text-xl font-semibold text-app-text transition-colors duration-300">
                     {feature.title}
                   </h3>
-                  <p className="text-app-text-muted leading-relaxed transition-colors duration-600 font-medium">
+                  <p className="text-app-text-muted leading-relaxed transition-colors duration-300">
                     {feature.description}
                   </p>
                 </div>

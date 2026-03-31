@@ -46,17 +46,17 @@ export default function GoogleSignInButton({ onClick, loading }: GoogleSignInBut
     <div className="mt-6">
       <div className="relative">
         <div className="absolute inset-0 flex items-center">
-          <div className="w-full border-t border-app-text/10 transition-colors duration-600" />
+          <div className="w-full border-t border-app-border transition-colors duration-300" />
         </div>
         <div className="relative flex justify-center text-sm">
-          <span className="px-2 bg-app-surface/30 text-app-text-muted transition-colors duration-600">Or continue with</span>
+          <span className="px-2 bg-app-surface text-app-text-muted transition-colors duration-300">Or continue with</span>
         </div>
       </div>
 
       <button
         onClick={onClick}
         disabled={loading}
-        className="w-full mt-4 flex items-center justify-center space-x-3 px-4 py-3 border border-app-text/10 rounded-lg bg-app-surface/30 text-app-text hover:bg-app-surface/60 transition-colors disabled:opacity-50"
+        className="w-full mt-4 flex items-center justify-center space-x-3 px-4 py-2.5 border border-app-border rounded-xl bg-app-surface text-app-text hover:bg-app-surface-strong transition-colors disabled:opacity-50"
       >
         <GoogleLogo className="w-5 h-5" />
         <span>Google</span>

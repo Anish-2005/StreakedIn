@@ -50,12 +50,13 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-app-bg flex items-center justify-center p-4 text-app-text transition-colors duration-600">
-
+    <div className="min-h-screen bg-app-bg flex items-center justify-center p-4 text-app-text transition-colors duration-300 relative overflow-hidden">
+      <div className="absolute top-[-18rem] right-[-14rem] w-[38rem] h-[38rem] rounded-full bg-app-primary/15 blur-[130px]" />
+      <div className="absolute bottom-[-18rem] left-[-14rem] w-[36rem] h-[36rem] rounded-full bg-emerald-500/12 blur-[120px]" />
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-md"
+        className="w-full max-w-md relative z-10"
       >
         <Logo />
 
